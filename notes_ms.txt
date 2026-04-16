@@ -1,0 +1,31 @@
+Resources:
+	Write your own shell 
+		https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
+
+
+Shell:
+	tiny interactive program like a shell:
+		show prompt
+			→ wait for user input
+			→ read one full line
+			→ process it
+			→ show prompt again
+
+
+Ownership rules:
+lexer!
+	input
+		owned by main
+		lexer only reads
+		lexer never frees
+
+	value returned by read_word() / read_operator()
+			newly allocated
+			temp owned by lexer_tokenize
+		after token_new(value, type) succeeds:
+			ownership moves into the token node
+		if token_new() fails:
+			lexer_tokenize must free value
+	tokens
+		owned by the caller after lexer_tokenize() returns
+		caler must eventually call token_clear(&tokens)

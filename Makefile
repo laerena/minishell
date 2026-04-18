@@ -11,7 +11,13 @@ SRC = src/main.c \
 		src/lexer/lexer_utils.c \
 		src/lexer/lexer_operator.c \
 		src/lexer/token_list.c \
-		src/utils/debug.c
+		src/utils/debug.c\
+		src/parser/syntax_check.c\
+		src/parser/parser.c \
+		src/parser/parser_utils.c \
+		src/parser/ast_utils.c \
+		src/parser/ast_free.c \
+		src/utils/debug_ast.c
 
 OBJ = $(SRC:.c=.o)
 

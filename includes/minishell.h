@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 18:12:16 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 12:51:52 by leilai           ###   ########.fr       */
+/*   Updated: 2026/04/18 15:56:16 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,10 @@ t_token	*lexer_tokenize(const char *input);
 void	token_clear(t_token **lst);
 void	print_tokens(t_token *tokens);
 
+/* parser */
+int		check_syntax(t_token *tokens);
+t_ast	*parse_expression(t_token *tokens);
+void	ast_clear(t_ast **root);
+void	print_ast(t_ast *root);
 
 #endif

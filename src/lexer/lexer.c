@@ -6,11 +6,10 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 14:08:19 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 12:47:02 by leilai           ###   ########.fr       */
+/*   Updated: 2026/04/16 15:56:31 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "lexer.h"
 
 /*

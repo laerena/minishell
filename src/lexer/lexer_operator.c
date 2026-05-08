@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 19:04:19 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 12:43:34 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/08 15:53:33 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 /* allocate one-char op string and index++ */
 static char	*read_single_op(const char *input, int *i, t_token_type *type)
 {
-	if (input[*i] == '|')
+	if (input[*i] == '(')
+		*type = T_LPAREN;
+	else if (input[*i] == ')')
+		*type = T_RPAREN;
+	else if (input[*i] == '|')
 		*type = T_PIPE;
 	else if (input[*i] == '<')
 		*type = T_REDIR_IN;
@@ -28,7 +32,11 @@ static char	*read_single_op(const char *input, int *i, t_token_type *type)
 /* allocate two-char op*/
 static char	*read_double_op(const char *input, int *i, t_token_type *type)
 {
-	if (input[*i] == '<')
+	if (input[*i] == '|')
+		*type = T_OR;
+	else if (input[*i] == '&')
+		*type = T_AND;
+	else if (input[*i] == '<')
 		*type = T_HEREDOC;
 	else
 		*type = T_APPEND;
@@ -39,7 +47,9 @@ static char	*read_double_op(const char *input, int *i, t_token_type *type)
 char	*read_operator(const char *input, int *i, t_token_type *type)
 {
 	if ((input[*i] == '<' && input[*i + 1] == '<')
-		|| (input[*i] == '>' && input[*i + 1] == '>'))
+		|| (input[*i] == '>' && input[*i + 1] == '>')
+		|| (input[*i] == '|' && input[*i + 1] == '|')
+		|| (input[*i] == '&' && input[*i + 1] == '&'))
 		return (read_double_op(input, i, type));
 	return (read_single_op(input, i, type));
 }

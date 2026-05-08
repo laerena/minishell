@@ -1,40 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ast_free.c                                         :+:      :+:    :+:   */
+/*   parser_imple.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/16 16:59:38 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 17:07:50 by leilai           ###   ########.fr       */
+/*   Created: 2026/04/16 15:58:35 by leilai            #+#    #+#             */
+/*   Updated: 2026/05/08 15:37:43 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "parser.h"
 
-static void	free_av(char **av)
+/* public parser entry point */
+t_cmd	*parse_expression(t_token *tokens)
 {
-	int	i;
-
-	if (!av)
-		return ;
-	i = 0;
-	while (av[i])
-	{
-		free(av[i]);
-		i++;
-	}
-	free(av);
-}
-
-/* free ast recursively and clears the root pointer */
-void	ast_clear(t_ast **root)
-{
-	if (!root || !*root)
-		return ;
-	ast_clear(&(*root)->left);
-	ast_clear(&(*root)->right);
-	free_av((*root)->av);
-	free(*root);
-	*root = NULL;
+	if (!tokens)
+		return (NULL);
+	return (parse_or(tokens, NULL));
 }

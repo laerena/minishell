@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 16:03:33 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 12:00:21 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/04 15:38:41 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	is_space(char c)
 
 int	is_operator(char c)
 {
-	return (c == '|' || c == '<' || c == '>');
+	return (c == '|' || c == '<' || c == '>'
+		|| c == '&' || c == '(' || c == ')');
 }
 
 void	skip_spaces(const char *input, int *i)

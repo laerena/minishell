@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/13 18:12:16 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/18 15:56:16 by leilai           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -16,15 +5,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libft/libft.h"
-/*
-** Quotes affect how a word is read
-** Not yet included here
-*/
+# include "../libft/include/libft.h"
 
-/* eg. state == 2 --> state == REJECTED */
 typedef enum e_token_type
 {
 	T_WORD,
@@ -33,8 +18,12 @@ typedef enum e_token_type
 	T_REDIR_OUT,
 	T_APPEND, /* >> */
 	T_HEREDOC,
+	T_AND,
+	T_OR,
+	T_LPAREN,
+	T_RPAREN,
+	T_UNKNOWN
 }	t_token_type;
-
 
 typedef struct s_token
 {
@@ -44,42 +33,67 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
-/* AST node type */
 typedef enum e_node_type
 {
-	NODE_CMD,
-	NODE_PIPE,
-	NODE_REDIR_IN,
-	NODE_REDIR_OUT,
-	NODE_APPEND,
-	NODE_HEREDOC
+	N_EXEC,
+	N_PIPE,
+	N_AND,
+	N_OR,
+	N_REDIR,
+	N_SUBSHELL,
 }	t_node_type;
 
-/* AST node (treeee) */
-typedef struct s_ast
+typedef enum e_redir_mode
 {
-	t_node_type		type;
-	char			**av;
-	char			*file;
-	struct s_ast	*left;
-	struct s_ast	*right;
-}	t_ast;
+	R_INPUT,
+	R_OUTPUT,
+	R_APPEND,
+	R_HEREDOC
+}	t_redir_mode;
 
-typedef struct s_shell
+typedef struct s_cmd	t_cmd;
+
+typedef struct s_execmd
+{
+	char	**av;
+}	t_execmd;
+
+typedef struct s_binopcmd
+{
+	t_cmd	*left;
+	t_cmd	*right;
+}	t_binopcmd;
+
+typedef struct s_redircmd
+{
+	t_cmd			*cmd;
+	char			*file;
+	t_redir_mode	mode;
+	//int				fd;
+}	t_redircmd;
+
+typedef struct s_subshellcmd
+{
+	t_cmd		*child;
+}	t_subshellcmd;
+
+typedef struct s_cmd
+{
+	t_node_type	type;
+	union
+	{
+		t_execmd		exec;
+		t_binopcmd		binop;
+		t_redircmd		redir;
+		t_subshellcmd	subshell;
+	}	u_cmd;
+}	t_cmd;
+
+typedef struct s_ctx
 {
 	char	**envp;
-	int		last_exit_status; /* echo $? */
-}	t_shell;
-
-/* lexer */
-t_token	*lexer_tokenize(const char *input);
-void	token_clear(t_token **lst);
-void	print_tokens(t_token *tokens);
-
-/* parser */
-int		check_syntax(t_token *tokens);
-t_ast	*parse_expression(t_token *tokens);
-void	ast_clear(t_ast **root);
-void	print_ast(t_ast *root);
+	t_cmd	*ast_head;
+	int		last_exit_status;
+}	t_ctx;
 
 #endif

@@ -6,24 +6,30 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:55:45 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/18 15:59:16 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/06 09:50:26 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_token	*find_last_pipe(t_token *start, t_token *end)
+t_token	*find_last_top_level(t_token *start, t_token *end, t_token_type type)
 {
-	t_token	*last_pipe;
+	t_token	*last;
+	int		depth;
 
-	last_pipe = NULL;
+	last = NULL;
+	depth = 0;
 	while (start && start != end)
 	{
-		if (start->type == T_PIPE)
-			last_pipe = start;
+		if (start->type == T_LPAREN)
+			depth++;
+		else if (start->type == T_RPAREN)
+			depth--;
+		else if (depth == 0 && start->type == type)
+			last = start;
 		start = start->next;
 	}
-	return (last_pipe);
+	return (last);
 }
 
 static int	count_words(t_token *start, t_token *end)
@@ -33,7 +39,12 @@ static int	count_words(t_token *start, t_token *end)
 	count = 0;
 	while (start && start != end)
 	{
-		if (start->type == T_WORD)
+		if (is_redirection(start->type))
+		{
+			if (start->next && start->next != end)
+				start = start->next;
+		}
+		else if (start->type == T_WORD)
 			count++;
 		start = start->next;
 	}
@@ -63,7 +74,12 @@ char	**tokens_to_av(t_token *start, t_token *end)
 	i = 0;
 	while (start && start != end)
 	{
-		if (start->type == T_WORD)
+		if (is_redirection(start->type))
+		{
+			if (start->next && start->next != end)
+				start = start->next;
+		}
+		else if (start->type == T_WORD)
 		{
 			av[i] = ft_strdup(start->value);
 			if (!av[i])
@@ -75,3 +91,4 @@ char	**tokens_to_av(t_token *start, t_token *end)
 	av[i] = NULL;
 	return (av);
 }
+

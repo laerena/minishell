@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 15:11:21 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 12:47:08 by leilai           ###   ########.fr       */
+/*   Updated: 2026/04/27 13:10:04 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include "minishell.h"
 
+t_token	*lexer_tokenize(const char *input);
+void	token_clear(t_token **lst);
+
+/* internal */
 int		is_space(char c);
 int		is_operator(char c);
 void	skip_spaces(const char *input, int *i);

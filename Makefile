@@ -15,9 +15,11 @@ SRC = src/main.c \
 		src/parser/syntax_check.c\
 		src/parser/parser.c \
 		src/parser/parser_utils.c \
-		src/parser/ast_utils.c \
-		src/parser/ast_free.c \
-		src/utils/debug_ast.c
+		src/parser/parser_utils_redir.c\
+		src/parser/cmd_new.c \
+		src/parser/cmd_free.c \
+		src/utils/debug_ast.c\
+		src/utils/free_split.c
 
 OBJ = $(SRC:.c=.o)
 

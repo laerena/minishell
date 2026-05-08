@@ -25,25 +25,57 @@ static void	print_av(char **av)
 	}
 }
 
-/* p one ast node and its children */
-static void	print_ast_node(t_ast *root, int depth)
+static char	*redir_mode_name(t_redir_mode mode)
 {
-	if (!root)
-		return ;
-	print_indent(depth);
-	if (root->type == NODE_PIPE)
-		printf("PIPE\n");
-	else
-	{
-		printf("CMD ");
-		print_av(root->av);
-		printf("\n");
-	}
-	print_ast_node(root->left, depth + 1);
-	print_ast_node(root->right, depth + 1);
+	if (mode == R_INPUT)
+		return ("IN");
+	if (mode == R_OUTPUT)
+		return ("OUT");
+	if (mode == R_APPEND)
+		return ("APPEND");
+	if (mode == R_HEREDOC)
+		return ("HEREDOC");
+	return ("UNKNOWN");
 }
 
-void	print_ast(t_ast *root)
+/*
+** recursively prints the AST
+** supports(for now):
+** - N_EXEC
+** - N_PIPE
+**
+** REDIR / AND / OR / SUBSHELL need to be added later
+*/
+static void	print_ast_node(t_cmd *cmd, int depth)
 {
-	print_ast_node(root, 0);
+	if (!cmd)
+		return ;
+	print_indent(depth);
+	if (cmd->type == N_EXEC)
+	{
+		printf("EXEC ");
+		print_av(cmd->u_cmd.exec.av);
+		printf("\n");
+	}
+	else if (cmd->type == N_PIPE)
+	{
+		printf("PIPE\n");
+		print_ast_node(cmd->u_cmd.binop.left, depth + 1);
+		print_ast_node(cmd->u_cmd.binop.right, depth + 1);
+	}
+	else if (cmd->type == N_REDIR)
+	{
+		printf("REDIR %s file=[%s]\n",
+			redir_mode_name(cmd->u_cmd.redir.mode),
+			cmd->u_cmd.redir.file);
+		print_ast_node(cmd->u_cmd.redir.cmd, depth + 1);
+	}
+	else
+		printf("UNKNOWN NODE\n");
+}
+
+/* public */
+void	print_ast(t_cmd *cmd)
+{
+	print_ast_node(cmd, 0);
 }

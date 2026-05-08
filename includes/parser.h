@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:56:07 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/18 15:52:26 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/06 09:50:53 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,21 @@
 # define PARSER_H
 
 # include "minishell.h"
+# include "utils.h"
 
-t_ast	*ast_new_node(t_node_type type); /* initialize */
-t_token	*find_last_pipe(t_token *start, t_token *end);
-char	**tokens_to_av(t_token *start, t_token *end);
+int				check_syntax(t_token *tokens);
+t_cmd			*parse_expression(t_token *tokens);
+void			cmd_clear(t_cmd **cmd);
+
+int				is_redirection(t_token_type type);
+t_redir_mode	token_to_redir_mode(t_token_type type);
+
+t_token			*find_last_top_level(t_token *start, t_token *end, t_token_type type);
+char			**tokens_to_av(t_token *start, t_token *end);
+
+t_cmd			*new_exec_node(char **av);
+t_cmd			*new_binop_node(t_node_type type, t_cmd *left, t_cmd *right);
+t_cmd			*new_redir_node(t_cmd *child, char *file, t_redir_mode mode);
+t_cmd			*new_subshell_node(t_cmd *child);
 
 #endif

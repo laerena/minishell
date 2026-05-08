@@ -6,17 +6,11 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 13:28:58 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 16:08:12 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/02 14:17:29 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-int	is_redirection(t_token_type type)
-{
-	return (type == T_REDIR_IN || type == T_REDIR_OUT
-		|| type == T_APPEND || type == T_HEREDOC);
-}
 
 /* returns 1 if the token stream starts or ends with an invalid pipe */
 static int	check_pipe_edges(t_token *tokens)

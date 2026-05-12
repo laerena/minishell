@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 09:32:37 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/11 20:05:53 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/12 14:37:37 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,13 @@
 */
 static t_cmd	*wrap_redir(t_cmd *child, t_token *redir)
 {
-	t_cmd	*new_node;
 	char	*file;
 
 	file = ft_strdup(redir->next->value);
 	if (!file)
 		return (cmd_clear(&child), NULL);
-	new_node = new_redir_node(child, file,
-			token_to_redir_mode(redir->type));
-	if (!new_node)
-	{
-		free(file);
-		cmd_clear(&child);
-		return (NULL);
-	}
-	return (new_node);
+	return (new_redir_node(child, file,
+			token_to_redir_mode(redir->type)));
 }
 
 /*

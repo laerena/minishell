@@ -13,7 +13,8 @@ SRC = src/main.c \
 		src/lexer/token_list.c \
 		src/utils/debug.c\
 		src/parser/syntax_check.c\
-		src/parser/parser.c \
+		src/parser/parse.c \
+		src/parser/parser_imple.c \
 		src/parser/parser_utils.c \
 		src/parser/parser_utils_redir.c\
 		src/parser/cmd_new.c \

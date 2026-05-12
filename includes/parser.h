@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:56:07 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/06 09:50:53 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/11 19:38:15 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "utils.h"
 
 int				check_syntax(t_token *tokens);
+t_cmd			*parse_or(t_token *start, t_token *end);
+t_cmd			*parse_primary(t_token *start, t_token *end);
 t_cmd			*parse_expression(t_token *tokens);
 void			cmd_clear(t_cmd **cmd);
 

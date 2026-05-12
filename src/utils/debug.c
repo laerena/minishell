@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 13:29:25 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 13:29:26 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/12 12:51:24 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ static char	*token_type_name(t_token_type type)
 		return ("APPEND");
 	if (type == T_HEREDOC)
 		return ("HEREDOC");
+	if (type == T_AND)
+		return ("AND");
+	if (type == T_OR)
+		return ("OR");
+	if (type == T_LPAREN)
+		return ("LPAREN");
+	if (type == T_RPAREN)
+		return ("RPAREN");
 	return ("UNKNOWN");
 }
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug_ast.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/12 12:55:36 by leilai            #+#    #+#             */
+/*   Updated: 2026/05/12 12:55:37 by leilai           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* p indentation */
@@ -69,6 +81,23 @@ static void	print_ast_node(t_cmd *cmd, int depth)
 			redir_mode_name(cmd->u_cmd.redir.mode),
 			cmd->u_cmd.redir.file);
 		print_ast_node(cmd->u_cmd.redir.cmd, depth + 1);
+	}
+	else if (cmd->type == N_AND)
+	{
+		printf("AND\n");
+		print_ast_node(cmd->u_cmd.binop.left, depth + 1);
+		print_ast_node(cmd->u_cmd.binop.right, depth + 1);
+	}
+	else if (cmd->type == N_OR)
+	{
+		printf("OR\n");
+		print_ast_node(cmd->u_cmd.binop.left, depth + 1);
+		print_ast_node(cmd->u_cmd.binop.right, depth + 1);
+	}
+	else if (cmd->type == N_SUBSHELL)
+	{
+		printf("SUBSHELL\n");
+		print_ast_node(cmd->u_cmd.subshell.child, depth + 1);
 	}
 	else
 		printf("UNKNOWN NODE\n");

@@ -1,3 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
+/*   Updated: 2026/05/21 15:54:57 by leilai           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include "parser.h"
+#include "lexer.h"
+#include "utils.h"
+
 int	main(int ac, char **av, char **envp)
 {
 	t_ctx	ctx;

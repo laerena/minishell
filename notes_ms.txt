@@ -12,20 +12,101 @@ Shell:
 			→ show prompt again
 
 
+Basics:
+	just in case...
+	caller
+		the function that calls another function
+		if a function returns allocated memory
+			caller usually owns it
+	
+	borrowed 
+		pointer can be read/used
+		but must not be freed
+		ownership stays somewhere else
+
+	owned
+		this code is responsible for freeing it
+			or transferring it to another owner
+	
+	transferring
+		ownership moves from one place to another
+		old owner must not free it anymore
+		new owner must free it later
+
+
 Ownership rules:
 lexer!
-	input
-		owned by main
-		lexer only reads
-		lexer never frees
+	logic:
+		input
+			owned by main
+			lexer only reads
+			lexer never frees
 
-	value returned by read_word() / read_operator()
-			newly allocated
-			temp owned by lexer_tokenize
-		after token_new(value, type) succeeds:
-			ownership moves into the token node
-		if token_new() fails:
-			lexer_tokenize must free value
-	tokens
-		owned by the caller after lexer_tokenize() returns
-		caler must eventually call token_clear(&tokens)
+		value returned by read_word() / read_operator()
+				newly allocated
+				temp owned by lexer_tokenize
+			after token_new(value, type) succeeds:
+				ownership moves into the token node
+			if token_new() fails:
+				lexer_tokenize must free value
+		tokens
+			owned by the caller after lexer_tokenize() returns
+			caller must eventually call token_clear(&tokens)
+
+parser!
+	basics:
+		tokens are borrowed from main
+		parser reads tokens but never frees them
+
+		parser creates AST nodes
+		returned AST is owned by caller
+
+		token values are borrowed
+		parser must ft_strdup them before storing in AST
+
+		AST owns its own copies:
+			exec.av
+			redir.file
+			child/left/right nodes
+
+		cmd_clear frees everything owned by AST
+
+	details:
+		tokens
+			owned by caller / main
+			parser only reads token list
+			parser never frees tokens
+			parser never stores token->value directly in AST
+
+		parse_expressions(tokens)
+			input tokens:
+				borrowed
+			return value:
+				newly allocated AST
+				owned by caller after parse_expression() returns
+				caller must eventually call cmd_clear(&cmd)
+
+		tokens_to_av(start, end)
+			creates new char **av
+			creates ft_strdup copies of WORD token values
+			on success:
+				av owned by caller
+			on failure:
+				frees all partial strings and av itself
+
+		new_exec_node(av)
+			on success:
+				ownership of av moves into N_EXEC node
+			on failure:
+				caller must free av
+
+		new_*_node functions consume ownership of their arguments.
+
+		if new_*_node succeeds:
+			arguments belong to the new AST node
+
+		if new_*_node fails:
+			arguments are freed inside new_*_node
+
+		after calling new_*_node:
+			caller must not use/free the passed arguments again

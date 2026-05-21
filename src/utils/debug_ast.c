@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 12:55:36 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/12 12:55:37 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 15:04:25 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ static void	print_av(char **av)
 	}
 }
 
-static char	*redir_mode_name(t_redir_mode mode)
+static char	*redir_type_name(t_redir_type type)
 {
-	if (mode == R_INPUT)
+	if (type == R_INPUT)
 		return ("IN");
-	if (mode == R_OUTPUT)
+	if (type == R_OUTPUT)
 		return ("OUT");
-	if (mode == R_APPEND)
+	if (type == R_APPEND)
 		return ("APPEND");
-	if (mode == R_HEREDOC)
+	if (type == R_HEREDOC)
 		return ("HEREDOC");
 	return ("UNKNOWN");
 }
@@ -78,7 +78,7 @@ static void	print_ast_node(t_cmd *cmd, int depth)
 	else if (cmd->type == N_REDIR)
 	{
 		printf("REDIR %s file=[%s]\n",
-			redir_mode_name(cmd->u_cmd.redir.mode),
+			redir_type_name(cmd->u_cmd.redir.type),
 			cmd->u_cmd.redir.file);
 		print_ast_node(cmd->u_cmd.redir.cmd, depth + 1);
 	}

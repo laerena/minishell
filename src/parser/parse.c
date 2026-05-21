@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 09:32:37 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/11 20:05:53 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 15:04:07 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_cmd	*wrap_redir(t_cmd *child, t_token *redir)
 	if (!file)
 		return (cmd_clear(&child), NULL);
 	new_node = new_redir_node(child, file,
-			token_to_redir_mode(redir->type));
+			token_to_redir_type(redir->type));
 	if (!new_node)
 	{
 		free(file);

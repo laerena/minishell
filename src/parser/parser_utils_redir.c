@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/02 14:11:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/02 14:19:51 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 15:04:13 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	is_redirection(t_token_type type)
 		|| type == T_APPEND || type == T_HEREDOC);
 }
 
-/* converts token type into redirection mode */
-t_redir_mode	token_to_redir_mode(t_token_type type)
+/* converts token type into redirection type */
+t_redir_type	token_to_redir_type(t_token_type type)
 {
 	if (type == T_REDIR_IN)
 		return (R_INPUT);

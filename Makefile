@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -Iincludes -Ilibft
+INCLUDE = -Iinclude -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
@@ -33,7 +33,7 @@ $(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 clean:
 	rm -f $(OBJ)

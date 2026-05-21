@@ -43,19 +43,19 @@ typedef enum e_node_type
 	N_SUBSHELL,
 }	t_node_type;
 
-typedef enum e_redir_mode
+typedef enum e_redir_type
 {
 	R_INPUT,
 	R_OUTPUT,
 	R_APPEND,
 	R_HEREDOC
-}	t_redir_mode;
+}	t_redir_type;
 
 typedef struct s_cmd	t_cmd;
 
 typedef struct s_execmd
 {
-	char	**av;
+	char	**argv;
 }	t_execmd;
 
 typedef struct s_binopcmd
@@ -68,7 +68,7 @@ typedef struct s_redircmd
 {
 	t_cmd			*cmd;
 	char			*file;
-	t_redir_mode	mode;
+	t_redir_type	type;
 	//int				fd;
 }	t_redircmd;
 

@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 15:54:57 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 17:19:11 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "lexer.h"
 #include "utils.h"
+#include "executor.h"
 
 int	main(int ac, char **av, char **envp)
 {
@@ -33,12 +34,12 @@ int	main(int ac, char **av, char **envp)
 		if (*line)
 			add_history(line);
 		tokens = lexer_tokenize(line);
-		ast = parse(tokens);
+		ast = parse_expression(tokens);
 		if (ast)
-			ctx.last_status = executor(&ctx, ast);
-		free_cmd(ast);
+			ctx.last_exit_status = executor(&ctx, ast);
+		cmd_clear(&ast);
 		token_clear(&tokens);
 		free(line);
 	}
-	return (ctx.last_status);
+	return (ctx.last_exit_status);
 }

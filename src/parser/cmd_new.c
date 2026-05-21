@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 15:07:24 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 16:28:36 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static t_cmd	*cmd_alloc(t_node_type type)
 	return (cmd);
 }
 
-t_cmd	*new_exec_node(char **av)
+t_cmd	*new_exec_node(char **argv)
 {
 	t_cmd	*cmd;
 
 	cmd = cmd_alloc(N_EXEC);
 	if (!cmd)
 		return (NULL);
-	cmd->u_cmd.exec.av = av;
+	cmd->u_cmd.exec.argv = argv;
 	return (cmd);
 }
 

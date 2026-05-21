@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 09:32:37 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 15:07:07 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 16:29:00 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@
 static t_cmd	*wrap_redir(t_cmd *child, t_token *redir)
 {
 	char	*file;
+	t_cmd	*new_node;
 
 	file = ft_strdup(redir->next->value);
 	if (!file)
 		return (cmd_clear(&child), NULL);
 	new_node = new_redir_node(child, file,
-			token_to_redir_mode(redir->type));
+			token_to_redir_type(redir->type));
 	if (!new_node)
 	{
 		free(file);
@@ -40,22 +41,22 @@ static t_cmd	*wrap_redir(t_cmd *child, t_token *redir)
 /*
 ** build a command subtree from tokens in [start, end).
 **
-** tokens_to_av creates ["echo", "hi", NULL]
-** new_exec_node() wraps said av into an N_EXEC node
+** tokens_to_argv creates ["echo", "hi", NULL]
+** new_exec_node() wraps said argv into an N_EXEC node
 ** scan redirections and wrap
 */
 static t_cmd	*parse_command(t_token *start, t_token *end)
 {
-	char	**av;
+	char	**argv;
 	t_cmd	*cmd;
 	t_token	*cur;
 
-	av = tokens_to_av(start, end);
-	if (!av)
+	argv = tokens_to_argv(start, end);
+	if (!argv)
 		return (NULL);
-	cmd = new_exec_node(av);
+	cmd = new_exec_node(argv);
 	if (!cmd)
-		return (free_split(av), NULL);
+		return (free_split(argv), NULL);
 	cur = start;
 	while (cur && cur != end)
 	{

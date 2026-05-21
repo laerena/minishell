@@ -9,6 +9,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/include/libft.h"
+# include "../libft/include/ft_printf.h"
 
 typedef enum e_token_type
 {

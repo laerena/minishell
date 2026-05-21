@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 12:55:36 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 15:04:25 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 16:29:32 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ static void	print_indent(int depth)
 	}
 }
 
-/* p one av array on one line */
-static void	print_av(char **av)
+/* p one argv array on one line */
+static void	print_argv(char **argv)
 {
 	int	i;
 
 	i = 0;
-	while (av && av[i])
+	while (argv && argv[i])
 	{
-		printf("[%s]", av[i]);
-		if (av[i + 1])
+		printf("[%s]", argv[i]);
+		if (argv[i + 1])
 			printf(" ");
 		i++;
 	}
@@ -66,7 +66,7 @@ static void	print_ast_node(t_cmd *cmd, int depth)
 	if (cmd->type == N_EXEC)
 	{
 		printf("EXEC ");
-		print_av(cmd->u_cmd.exec.av);
+		print_argv(cmd->u_cmd.exec.argv);
 		printf("\n");
 	}
 	else if (cmd->type == N_PIPE)

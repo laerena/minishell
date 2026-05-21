@@ -6,26 +6,26 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 16:59:38 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/30 16:35:21 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/21 16:28:34 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 
-static void	free_av(char **av)
+static void	free_argv(char **argv)
 {
 	int	i;
 
-	if (!av)
+	if (!argv)
 		return ;
 	i = 0;
-	while (av[i])
+	while (argv[i])
 	{
-		free(av[i]);
+		free(argv[i]);
 		i++;
 	}
-	free(av);
+	free(argv);
 }
 
 static void	clear_redir(t_cmd *cmd)
@@ -56,7 +56,7 @@ void	cmd_clear(t_cmd **cmd)
 	if (!cmd || !*cmd)
 		return ;
 	if ((*cmd)->type == N_EXEC)
-		free_av((*cmd)->u_cmd.exec.av);
+		free_argv((*cmd)->u_cmd.exec.argv);
 	else if ((*cmd)->type == N_PIPE || (*cmd)->type == N_AND
 		|| (*cmd)->type == N_OR)
 		clear_binop(*cmd);

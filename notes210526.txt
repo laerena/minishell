@@ -1,0 +1,33 @@
+exit
+execve: No such file or directory
+free(): invalid pointer
+zsh: IOT instruction (core dumped)  ./minishell
+
+pwd 
+works but ends the program -normally
+
+cd 
+execve: Permission denied
+zsh: segmentation fault (core dumped)  ./minishell
+
+echo 
+works but ends the program -normally
+
+export
+execve: Permission denied
+zsh: segmentation fault (core dumped)  ./minishell
+
+env 
+works but ends the program -normally
+
+minishell$ echo hello && echo heelo world
+it should:
+c2r7s9% echo hello && echo heelo
+hello
+heelo
+
+(ls) && echo hello && echo world 
+works
+
+ls | wc timeout
+

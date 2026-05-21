@@ -16,7 +16,7 @@ typedef enum e_token_type
 	T_PIPE,
 	T_REDIR_IN,
 	T_REDIR_OUT,
-	T_APPEND, /* >> */
+	T_APPEND,
 	T_HEREDOC,
 	T_AND,
 	T_OR,
@@ -37,9 +37,9 @@ typedef enum e_node_type
 {
 	N_EXEC,
 	N_PIPE,
+	N_REDIR,
 	N_AND,
 	N_OR,
-	N_REDIR,
 	N_SUBSHELL,
 }	t_node_type;
 
@@ -69,7 +69,6 @@ typedef struct s_redircmd
 	t_cmd			*cmd;
 	char			*file;
 	t_redir_type	type;
-	//int				fd;
 }	t_redircmd;
 
 typedef struct s_subshellcmd

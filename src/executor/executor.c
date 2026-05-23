@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 19:20:04 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 20:37:07 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	run_node(t_ctx *ctx, t_cmd *ast_node)
 	else
 	{
 		ft_eprintf("wrong node->type: %i\n", ast_node->type);
-		//fcleanup(ctx);
+		//fcleanup(ctx), may handle fcleanup in the main;
 		ctx->last_exit_status = 127;
 		return (127);
 	}

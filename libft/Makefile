@@ -76,6 +76,7 @@ FCN = \
 	added/ft_utoa.c \
 	added/ft_utoa_base.c \
 	added/ft_strarr_free.c \
+	added/ft_strcmp.c \
 	gnl/get_next_line.c \
 	ft_printf/ft_printf.c \
 	ft_printf/ft_printf_fd.c \

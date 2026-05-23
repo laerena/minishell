@@ -19,6 +19,18 @@
 # include "../libft/include/libft.h"
 # include "../libft/include/ft_printf.h"
 
+typedef enum e_builtin_type
+{
+	BUILTIN_NONE, // external cmds
+	BUILTIN_ECHO,
+	BUILTIN_CD,
+	BUILTIN_PWD,
+	BUILTIN_EXPORT,
+	BUILTIN_UNSET,
+	BUILTIN_ENV,
+	BUILTIN_EXIT
+}	t_builtin_type;
+
 typedef enum e_token_type
 {
 	T_WORD,
@@ -64,8 +76,8 @@ typedef struct s_cmd	t_cmd;
 
 typedef struct s_execmd
 {
-	char	**argv;
-	int		is_builtin;
+	t_builtin_type	builtin;
+	char			**argv;
 }	t_execmd;
 
 typedef struct s_binopcmd

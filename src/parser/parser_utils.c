@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:55:45 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/23 14:31:36 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 16:02:17 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	is_builtin_cmd(char *cmd_name)
 	{
 		builtin_len = ft_strlen(builtincmds[i]) + 1;
 		if (ft_strncmp(builtincmds[i], cmd_name, builtin_len) == 0)
-			return (TRUE);
+			return (i);
 		i++;
 	}
 	return (FALSE);

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/23 14:37:41 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 15:56:22 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ t_cmd	*new_exec_node(char **argv)
 	if (!cmd)
 		return (NULL);
 	cmd->u_cmd.exec.argv = argv;
-	cmd->u_cmd.exec.is_builtin = is_builtin_cmd(argv[0]);
+	cmd->u_cmd.exec.builtin = is_builtin_cmd(argv[0]);
 	//DEBUG
-	ft_printf("is_builin_cmd=%i\n", cmd->u_cmd.exec.is_builtin);
+	ft_printf("is_builin_cmd=%i\n", cmd->u_cmd.exec.builtin);
 	//
 	return (cmd);
 }

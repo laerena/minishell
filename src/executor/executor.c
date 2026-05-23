@@ -6,14 +6,14 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 14:36:08 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 15:58:11 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 // static int	is_builtin_cmd(t_cmd *cmd);
-static int	run_cmd(t_ctx *ctx, t_cmd *ast_node);
+static int	run_node(t_ctx *ctx, t_cmd *ast_node);
 int	run_in_child(t_ctx *ctx, t_cmd *ast_node);
 
 // check if the next node is a builtin cmd then run it directly
@@ -29,8 +29,8 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 	int	exit_code;
 
 	if (ast_node->type == N_EXEC
-		&& ast_node->u_cmd.exec.is_builtin == 1)
-			exit_code = run_cmd(ctx, ast_node);
+		&& ast_node->u_cmd.exec.builtin == 1)
+			exit_code = run_builtin(ctx, ast_node);
 	else
 		exit_code = run_in_child(ctx, ast_node);
 	return (exit_code);
@@ -68,7 +68,7 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 // 	return (FALSE);
 // }
 
-int	run_cmd(t_ctx *ctx, t_cmd *ast_node)
+static int	run_node(t_ctx *ctx, t_cmd *ast_node)
 {
 	if (ast_node->type == N_EXEC)
 		return (run_exec(ctx, ast_node));
@@ -104,7 +104,7 @@ int	run_in_child(t_ctx *ctx, t_cmd *ast_node)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		exit(run_cmd(ctx, ast_node));
+		exit(run_node(ctx, ast_node));
 	}
 	waitpid(child_pid, &status, 0);
 	exit_code = convert_status_to_exitcode(status);

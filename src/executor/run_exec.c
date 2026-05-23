@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 14:46:32 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 15:28:16 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,8 @@ int	run_exec(t_ctx *ctx, t_cmd *ast_node)
 	args = ast_node->u_cmd.exec.argv;
 	if (!args || !args[0])
 		return (ctx->last_exit_status = 1, 1);
-	//Debug
-	for(size_t i = 0; args[i]; i++)
-		ft_printf("EXE_ARGS[%zu]=%s\n", i, args[i]);
-	//
 	dirs_path = extract_paths_from_envp(ctx->envp);
 	exec_path = exec_path_finder(args[0], dirs_path);
-	//Debug
-	for(size_t i = 0; dirs_path[i]; i++)
-		ft_printf("DIRS_PATH[%zu]=%s\n", i, dirs_path[i]);
-	ft_printf("EXEC_PATH=%s\n", exec_path);
-	//
 	if (!exec_path)
 	{
 		ft_eprintf("%s: command not found\n", args[0]);
@@ -80,9 +71,6 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 	while (*dirs_iter)
 	{
 		ft_asprintf(&exec_path, "%s/%s", *dirs_iter, cmd);
-		//DEBUG
-		ft_printf("EXEC_PATH_FINDER=%s\n", exec_path);
-		//
 		if (access(exec_path, X_OK) == 0)
 			break ;
 		free(exec_path);

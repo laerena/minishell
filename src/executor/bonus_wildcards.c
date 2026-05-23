@@ -3,22 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_wildcards.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 19:52:15 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/21 17:46:49 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/23 15:33:04 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// | Command   | Wildcard expansion? | Notes                                                      |
-// |-----------|---------------------|------------------------------------------------------------|
-// | `echo`    | Yes                 | `echo *.c` → `echo 1.c 2.c`                                |
-// | `cd`      | Yes                 | `cd *` expands, but only the first match is used           |
-// | `export`  | Yes                 | But rarely useful; expands to matching filenames           |
-// | `unset`   | Yes                 | But rarely useful; expands to matching filenames           |
-// | `env`     | Yes                 | If you do `env *.c`, it runs `env` with those filenames as args |
-// | `exit`    | Yes                 | `exit *` expands, but only the first match is used as the exit code (usually not meaningful) |
-// | `pwd`     | No                  | No arguments, so nothing to expand                         |
 
 #include "executor.h"
 

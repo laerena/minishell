@@ -24,6 +24,7 @@ SRC = src/main.c \
 		src/executor/op_control_flow.c\
 		src/executor/helper.c\
 		src/executor/run_exec.c\
+		src/executor/run_builtin.c \
 		src/executor/bonus_wildcards.c
 
 

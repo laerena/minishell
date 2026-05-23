@@ -36,6 +36,8 @@ int	run_pipe(t_ctx *ctx, t_cmd *ast_node);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node);
 //	run_exec.c
 int	run_exec(t_ctx *ctx, t_cmd *ast_node);
+//	run_builtin.c
+int	run_builtin(t_ctx *ctx, t_cmd *ast_node);
 //	bonus_wildcards.c
 int	expand_wildcards(char ***args);
 //	helper.c

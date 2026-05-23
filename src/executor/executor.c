@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/21 17:36:41 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/23 14:36:08 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static int	is_builtin_cmd(t_cmd *cmd);
+// static int	is_builtin_cmd(t_cmd *cmd);
 static int	run_cmd(t_ctx *ctx, t_cmd *ast_node);
 int	run_in_child(t_ctx *ctx, t_cmd *ast_node);
 
@@ -28,8 +28,9 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	exit_code;
 
-	if (is_builtin_cmd(ast_node))
-		exit_code = run_cmd(ctx, ast_node);
+	if (ast_node->type == N_EXEC
+		&& ast_node->u_cmd.exec.is_builtin == 1)
+			exit_code = run_cmd(ctx, ast_node);
 	else
 		exit_code = run_in_child(ctx, ast_node);
 	return (exit_code);
@@ -38,29 +39,34 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 //check if the node is an exec node
 //then check if this exec node contains a builtin cmd
 //return TRUE (int: 1) if it contains a builtincmd otherwise FALSE (int: 0)
-static int	is_builtin_cmd(t_cmd *cmd)
-{
-	char		*cmd_name;
-	size_t		i;
-	size_t		builtin_len;
-	static char	*builtincmds[] = {
-		"cd", "echo", "export", "unset", "env", "exit", "pwd",
-		NULL
-	};
 
-	if (cmd->type != N_EXEC)
-		return (FALSE);
-	cmd_name = cmd->u_cmd.exec.argv[0];
-	i = 0;
-	while (builtincmds[i])
-	{
-		builtin_len = ft_strlen(builtincmds[i]) + 1;
-		if (ft_strncmp(builtincmds[i], cmd_name, builtin_len) == 0)
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
-}
+//moved and simplified to parser_utils.c
+//to be used in cmd_new.c by ft:"(t_cmd	*new_exec_node(char **argv)"
+//now it should update the struct t_execmd->is_builtin when parsing
+
+//static int	is_builtin_cmd(t_cmd *cmd)
+// {
+// 	char		*cmd_name;
+// 	size_t		i;
+// 	size_t		builtin_len;
+// 	static char	*builtincmds[] = {
+// 		"cd", "echo", "export", "unset", "env", "exit", "pwd",
+// 		NULL
+// 	};
+
+// 	if (cmd->type != N_EXEC)
+// 		return (FALSE);
+// 	cmd_name = cmd->u_cmd.exec.argv[0];
+// 	i = 0;
+// 	while (builtincmds[i])
+// 	{
+// 		builtin_len = ft_strlen(builtincmds[i]) + 1;
+// 		if (ft_strncmp(builtincmds[i], cmd_name, builtin_len) == 0)
+// 			return (TRUE);
+// 		i++;
+// 	}
+// 	return (FALSE);
+// }
 
 int	run_cmd(t_ctx *ctx, t_cmd *ast_node)
 {

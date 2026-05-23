@@ -2,6 +2,14 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# ifndef FALSE
+#  define FALSE 0
+# endif
+
+# ifndef TRUE
+#  define TRUE 1
+# endif
+
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -57,6 +65,7 @@ typedef struct s_cmd	t_cmd;
 typedef struct s_execmd
 {
 	char	**argv;
+	int		is_builtin;
 }	t_execmd;
 
 typedef struct s_binopcmd

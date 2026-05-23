@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:55:45 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 16:29:22 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/23 14:31:36 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,3 +92,22 @@ char	**tokens_to_argv(t_token *start, t_token *end)
 	return (argv);
 }
 
+int	is_builtin_cmd(char *cmd_name)
+{
+	size_t		i;
+	size_t		builtin_len;
+	static char	*builtincmds[] = {
+		"cd", "echo", "export", "unset", "env", "exit", "pwd",
+		NULL
+	};
+
+	i = 0;
+	while (builtincmds[i])
+	{
+		builtin_len = ft_strlen(builtincmds[i]) + 1;
+		if (ft_strncmp(builtincmds[i], cmd_name, builtin_len) == 0)
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}

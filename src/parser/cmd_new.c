@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_new.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 16:28:36 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/23 14:37:41 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ t_cmd	*new_exec_node(char **argv)
 	if (!cmd)
 		return (NULL);
 	cmd->u_cmd.exec.argv = argv;
+	cmd->u_cmd.exec.is_builtin = is_builtin_cmd(argv[0]);
+	//DEBUG
+	ft_printf("is_builin_cmd=%i\n", cmd->u_cmd.exec.is_builtin);
+	//
 	return (cmd);
 }
 

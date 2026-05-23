@@ -10,10 +10,6 @@
 # include <signal.h>
 # include <dirent.h>
 
-//define
-# define TRUE 1
-# define FALSE 0
-
 //struct
 typedef struct s_redir_info
 {

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 15:28:16 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 19:20:31 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	run_exec(t_ctx *ctx, t_cmd *ast_node)
 	char	**args;
 	char	*exec_path;
 	char	**dirs_path;
-
+	
 	args = ast_node->u_cmd.exec.argv;
 	if (!args || !args[0])
 		return (ctx->last_exit_status = 1, 1);

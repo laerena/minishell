@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:55:45 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/23 16:02:17 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/23 19:05:36 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,13 @@ int	is_builtin_cmd(char *cmd_name)
 	size_t		i;
 	size_t		builtin_len;
 	static char	*builtincmds[] = {
-		"cd", "echo", "export", "unset", "env", "exit", "pwd",
+		"echo", //1
+		"cd", //2
+		"pwd", //3
+		"export", //4
+		"unset", //5
+		"env", //6
+		"exit", //7
 		NULL
 	};
 
@@ -106,8 +112,8 @@ int	is_builtin_cmd(char *cmd_name)
 	{
 		builtin_len = ft_strlen(builtincmds[i]) + 1;
 		if (ft_strncmp(builtincmds[i], cmd_name, builtin_len) == 0)
-			return (i);
+			return (i + 1);
 		i++;
 	}
-	return (FALSE);
+	return (BUILTIN_NONE);
 }

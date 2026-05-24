@@ -6,13 +6,13 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 19:20:31 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/24 12:01:30 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static char	**extract_paths_from_envp(char **envp);
+static char	**extract_path_from_envp(char **envp);
 static char	*exec_path_finder(char *cmd, char **dirs_path);
 
 int	run_exec(t_ctx *ctx, t_cmd *ast_node)
@@ -24,7 +24,7 @@ int	run_exec(t_ctx *ctx, t_cmd *ast_node)
 	args = ast_node->u_cmd.exec.argv;
 	if (!args || !args[0])
 		return (ctx->last_exit_status = 1, 1);
-	dirs_path = extract_paths_from_envp(ctx->envp);
+	dirs_path = extract_path_from_envp(ctx->envp);
 	exec_path = exec_path_finder(args[0], dirs_path);
 	if (!exec_path)
 	{
@@ -43,7 +43,7 @@ int	run_exec(t_ctx *ctx, t_cmd *ast_node)
 	return (ctx->last_exit_status = 0, 0);
 }
 
-static char	**extract_paths_from_envp(char **envp)
+static char	**extract_path_from_envp(char **envp)
 {
 	char	*path;
 

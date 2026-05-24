@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 19:52:15 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 15:33:04 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/24 14:50:15 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	expand_single_wildcard(t_dynstrarr *w_args, const char *arg);
 static int	ft_fnmatch_minishell(const char *pattern, const char *arg);
 static int	ft_strarr_apnd(t_dynstrarr *w_args, const char *arg);
-//static void	ft_strarr_sort(char **args);
+static void	ft_strarr_sort(char **args);
 
 int	expand_wildcards(char ***args)
 {
@@ -36,7 +36,7 @@ int	expand_wildcards(char ***args)
 		return (1);
 	ft_strarr_free(*args);
 	(*args) = w_args.strarr;
-
+	ft_strarr_sort(*args);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_io.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 15:08:50 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/21 17:35:12 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/24 11:25:52 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ int	run_pipe(t_ctx *ctx, t_cmd *ast_node)
 		close(pipefd[0]);
 		exit(executor(ctx, ast_node->u_cmd.binop.right));
 	}
+	close(pipefd[0]);
+	close(pipefd[1]);
 	waitpid(left_pid, NULL, 0);
 	waitpid(right_pid, &status, 0);
 	exit_code = convert_status_to_exitcode(status);
 	ctx->last_exit_status = exit_code;
-	close(pipefd[0]);
-	close(pipefd[1]);
 	return (exit_code);
 }
 

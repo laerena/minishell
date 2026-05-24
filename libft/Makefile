@@ -15,93 +15,93 @@ HEADERS_DIR = include
 
 # Functions
 FCN = \
-	char/ft_isalnum.c \
-	char/ft_isalpha.c \
-	char/ft_isascii.c \
-	char/ft_isdigit.c \
-	char/ft_isprint.c \
-	char/ft_tolower.c \
-	char/ft_toupper.c \
-	conv/ft_atoi.c \
-	conv/ft_itoa.c \
-	lst/ft_lstadd_back.c \
-	lst/ft_lstadd_front.c \
-	lst/ft_lstclear.c \
-	lst/ft_lstdelone.c \
-	lst/ft_lstiter.c \
-	lst/ft_lstlast.c \
-	lst/ft_lstmap.c \
-	lst/ft_lstnew.c \
-	lst/ft_lstsize.c \
-	mem/ft_bzero.c \
-	mem/ft_calloc.c \
-	mem/ft_memchr.c \
-	mem/ft_memcmp.c \
-	mem/ft_memcpy.c \
-	mem/ft_memmove.c \
-	mem/ft_memset.c \
-	put/ft_putchar_fd.c \
-	put/ft_putendl_fd.c \
-	put/ft_putnbr_fd.c \
-	put/ft_putstr_fd.c \
-	str/ft_split.c \
-	str/ft_strchr.c \
-	str/ft_strdup.c \
-	str/ft_striteri.c \
-	str/ft_strjoin.c \
-	str/ft_strlcat.c \
-	str/ft_strlcpy.c \
-	str/ft_strlen.c \
-	str/ft_strmapi.c \
-	str/ft_strncmp.c \
-	str/ft_strnstr.c \
-	str/ft_strrchr.c \
-	str/ft_strtrim.c \
-	str/ft_substr.c \
-	added/ft_atoll.c \
-	added/ft_isspace.c \
-	added/ft_isvalid_base.c \
-	added/ft_itoa_base.c \
-	added/ft_llitoa.c \
-	added/ft_llitoa_base.c \
-	added/ft_llutoa.c \
-	added/ft_llutoa_base.c \
-	added/ft_realloc.c \
-	added/ft_split2.c \
-	added/ft_strclen.c \
-	added/ft_strjoin2.c \
-	added/ft_strnjoin.c \
-	added/ft_strset.c \
-	added/ft_strswapchar.c \
-	added/ft_utoa.c \
-	added/ft_utoa_base.c \
-	added/ft_strarr_free.c \
-	added/ft_strcmp.c \
-	gnl/get_next_line.c \
-	ft_printf/ft_printf.c \
-	ft_printf/ft_printf_fd.c \
-	ft_printf/ft_printf_buf_static.c \
-	ft_printf/ft_printf_buf_dyn.c \
-	ft_printf/ft_printf_core.c \
-	ft_printf/ft_printf_parse_format.c \
-	ft_printf/ft_printf_convert.c \
-	ft_printf/ft_printf_output.c \
-	ft_printf/ft_printf_utils.c \
-	ft_printf/specifier/specifier_str.c \
-	ft_printf/specifier/specifier_char.c \
-	ft_printf/specifier/specifier_int.c \
-	ft_printf/specifier/specifier_hex.c \
-	ft_printf/specifier/specifier_ptr.c \
-	ft_printf/specifier/specifier_uint.c \
-	ft_printf/specifier/specifier_perc.c \
-	ft_printf/format/format_precision.c \
-	ft_printf/format/format_prefix.c \
-	ft_printf/format/format_pads.c \
-	ft_printf/format/format_assembler.c
+	src/char/ft_isalnum.c \
+	src/char/ft_isalpha.c \
+	src/char/ft_isascii.c \
+	src/char/ft_isdigit.c \
+	src/char/ft_isprint.c \
+	src/char/ft_isspace.c \
+	src/char/ft_tolower.c \
+	src/char/ft_toupper.c \
+	src/conv/ft_atoi.c \
+	src/conv/ft_itoa.c \
+	src/conv/ft_atoll.c \
+	src/conv/ft_itoa_base.c \
+	src/conv/ft_llitoa.c \
+	src/conv/ft_llitoa_base.c \
+	src/conv/ft_llutoa.c \
+	src/conv/ft_llutoa_base.c \
+	src/conv/ft_utoa.c \
+	src/conv/ft_utoa_base.c \
+	src/conv/ft_isvalid_base.c \
+	src/lst/ft_lstadd_back.c \
+	src/lst/ft_lstadd_front.c \
+	src/lst/ft_lstclear.c \
+	src/lst/ft_lstdelone.c \
+	src/lst/ft_lstiter.c \
+	src/lst/ft_lstlast.c \
+	src/lst/ft_lstmap.c \
+	src/lst/ft_lstnew.c \
+	src/lst/ft_lstsize.c \
+	src/mem/ft_bzero.c \
+	src/mem/ft_calloc.c \
+	src/mem/ft_memchr.c \
+	src/mem/ft_memcmp.c \
+	src/mem/ft_memcpy.c \
+	src/mem/ft_memmove.c \
+	src/mem/ft_memset.c \
+	src/mem/ft_realloc.c \
+	src/put/ft_putchar_fd.c \
+	src/put/ft_putendl_fd.c \
+	src/put/ft_putnbr_fd.c \
+	src/put/ft_putstr_fd.c \
+	src/str/ft_split.c \
+	src/str/ft_split2.c \
+	src/str/ft_strchr.c \
+	src/str/ft_strdup.c \
+	src/str/ft_striteri.c \
+	src/str/ft_strjoin.c \
+	src/str/ft_strjoin2.c \
+	src/str/ft_strlcat.c \
+	src/str/ft_strlcpy.c \
+	src/str/ft_strlen.c \
+	src/str/ft_strmapi.c \
+	src/str/ft_strncmp.c \
+	src/str/ft_strnstr.c \
+	src/str/ft_strrchr.c \
+	src/str/ft_strtrim.c \
+	src/str/ft_substr.c \
+	src/str/ft_strclen.c \
+	src/str/ft_strnjoin.c \
+	src/str/ft_strset.c \
+	src/str/ft_strswapchar.c \
+	src/str/ft_strcmp.c \
+	src/arr/ft_arrlen.c \
+	src/arr/ft_strarr_free.c \
+	src/gnl/get_next_line.c \
+	src/ft_printf/ft_printf.c \
+	src/ft_printf/ft_printf_fd.c \
+	src/ft_printf/ft_printf_buf_static.c \
+	src/ft_printf/ft_printf_buf_dyn.c \
+	src/ft_printf/ft_printf_core.c \
+	src/ft_printf/ft_printf_parse_format.c \
+	src/ft_printf/ft_printf_convert.c \
+	src/ft_printf/ft_printf_output.c \
+	src/ft_printf/ft_printf_utils.c \
+	src/ft_printf/specifier/specifier_str.c \
+	src/ft_printf/specifier/specifier_char.c \
+	src/ft_printf/specifier/specifier_int.c \
+	src/ft_printf/specifier/specifier_hex.c \
+	src/ft_printf/specifier/specifier_ptr.c \
+	src/ft_printf/specifier/specifier_uint.c \
+	src/ft_printf/specifier/specifier_perc.c \
+	src/ft_printf/format/format_precision.c \
+	src/ft_printf/format/format_prefix.c \
+	src/ft_printf/format/format_pads.c \
+	src/ft_printf/format/format_assembler.c
 
 # Object files
 OBJS = $(FCN:.c=.o)
-OBJS_BONUS = $(FCN_BONUS:.c=.o)
 
 # --- Default Rule ---
 # Builds library (main)
@@ -111,11 +111,6 @@ all: $(NAME)
 # Build static library from object files
 $(NAME): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
-
-# --- Bonus Rule ---
-# Build static library from object files(main + bonus)
-bonus: $(NAME) $(OBJS_BONUS)
-	$(AR) $(ARFLAGS) $^
 
 # --- Pattern Rule ---
 # Compile function files into object files

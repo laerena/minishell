@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 23:15:14 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/24 14:13:22 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 // | `echo`    | Yes                 | `echo *.c` → `echo 1.c 2.c`                                |
 // | `cd`      | Yes                 | `cd *` expands, but only the first match is used           |
 // | `pwd`     | No                  | No arguments, so nothing to expand                         |
+// | `env`     | Yes                 | If you do `env *.c`, it runs `env` with those filenames as args |
 // | `export`  | Yes                 | But rarely useful; expands to matching filenames           |
 // | `unset`   | Yes                 | But rarely useful; expands to matching filenames           |
-// | `env`     | Yes                 | If you do `env *.c`, it runs `env` with those filenames as args |
 // | `exit`    | Yes                 | `exit *` expands, but only the first match is used as the exit code (usually not meaningful) |
 
 // ◦ echo with option -n
@@ -29,6 +29,44 @@
 // ◦ exit with no options
 
 #include "executor.h"
+
+static int	builtin_export(t_ctx *ctx, char **args)
+{
+	char	**envp_vars;
+	char	**tmp;
+
+	while (*args)
+	{
+		envp_vars = ctx->envp;
+		while (*envp_vars)
+		{
+			if (ft_strcmp(*args, *envp_vars) == 0)
+				break ;
+			else if (ft_strncmp(*args, *envp_vars, ft_strclen(*args, '=')) == 0)
+			{
+				*tmp = *envp_vars;
+				*envp_vars = ft_strdup(*args);
+				free(*tmp);
+			}
+			envp_vars++;
+		}
+		if (*envp_vars == NULL)
+		{
+			tmp = ft_realloc(envp, ft_strlen(envp), ft_strlen(envp) + 1);
+		}
+	}
+}
+
+static int	builtin_env(char **envp)
+{
+	while (*envp)
+	{
+		if (ft_printf("%s\n", *envp) == -1)
+			return (1);
+		envp++;
+	}
+	return (0);
+}
 
 static int	builtin_pwd(t_ctx *ctx)
 {
@@ -87,8 +125,7 @@ static int	builtin_echo(t_ctx *ctx, char **args)
 	if (has_newline == 1)
 			if (write (1, "\n", 1) == -1)
 				return (ctx->last_exit_status = 1, 1);
-	ctx->last_exit_status = 0;
-	return (0);
+	return (ctx->last_exit_status = 0, 0);
 }
 
 //main ft to handle builtin cmds
@@ -107,12 +144,12 @@ int	run_builtin(t_ctx *ctx, t_cmd *ast_node)
 		return (builtin_cd(ctx, exec->argv[1]));
 	else if (exec->builtin == BUILTIN_PWD)
 		return (builtin_pwd(ctx));
-	// else if (exec->builtin == BUILTIN_EXPORT)
-
+	else if (exec->builtin == BUILTIN_EXPORT)
+		return (builtin_export(ctx, exec->argv + 1))
 	// else if (exec->builtin == BUILTIN_UNSET)
 
-	// else if (exec->builtin == BUILTIN_ENV)
-
+	else if (exec->builtin == BUILTIN_ENV)
+		return (builtin_env(ctx->envp));
 	// else if (exec->builtin == BUILTIN_EXIT)
 	else
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 14:13:22 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/24 15:07:53 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,32 @@
 
 #include "executor.h"
 
-static int	builtin_export(t_ctx *ctx, char **args)
-{
-	char	**envp_vars;
-	char	**tmp;
+// static int	builtin_export(t_ctx *ctx, char **args)
+// {
+// 	char	**envp_vars;
+// 	char	**tmp;
 
-	while (*args)
-	{
-		envp_vars = ctx->envp;
-		while (*envp_vars)
-		{
-			if (ft_strcmp(*args, *envp_vars) == 0)
-				break ;
-			else if (ft_strncmp(*args, *envp_vars, ft_strclen(*args, '=')) == 0)
-			{
-				*tmp = *envp_vars;
-				*envp_vars = ft_strdup(*args);
-				free(*tmp);
-			}
-			envp_vars++;
-		}
-		if (*envp_vars == NULL)
-		{
-			tmp = ft_realloc(envp, ft_strlen(envp), ft_strlen(envp) + 1);
-		}
-	}
-}
+// 	while (*args)
+// 	{
+// 		envp_vars = ctx->envp;
+// 		while (*envp_vars)
+// 		{
+// 			if (ft_strcmp(*args, *envp_vars) == 0)
+// 				break ;
+// 			else if (ft_strncmp(*args, *envp_vars, ft_strclen(*args, '=')) == 0)
+// 			{
+// 				*tmp = *envp_vars;
+// 				*envp_vars = ft_strdup(*args);
+// 				free(*tmp);
+// 			}
+// 			envp_vars++;
+// 		}
+// 		if (*envp_vars == NULL)
+// 		{
+// 			tmp = ft_strarr_apnd;
+// 		}
+// 	}
+// }
 
 static int	builtin_env(char **envp)
 {
@@ -144,8 +144,8 @@ int	run_builtin(t_ctx *ctx, t_cmd *ast_node)
 		return (builtin_cd(ctx, exec->argv[1]));
 	else if (exec->builtin == BUILTIN_PWD)
 		return (builtin_pwd(ctx));
-	else if (exec->builtin == BUILTIN_EXPORT)
-		return (builtin_export(ctx, exec->argv + 1))
+	// else if (exec->builtin == BUILTIN_EXPORT)
+	// 	return (builtin_export(ctx, exec->argv + 1))
 	// else if (exec->builtin == BUILTIN_UNSET)
 
 	else if (exec->builtin == BUILTIN_ENV)

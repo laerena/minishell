@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 19:52:15 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 14:50:15 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/24 15:03:35 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	expand_wildcards(char ***args)
 		return (1);
 	ft_strarr_free(*args);
 	(*args) = w_args.strarr;
-	ft_strarr_sort(*args);
+	ft_strarr_sort(*args + 1);
 	return (0);
 }
 
@@ -121,7 +121,6 @@ static int	ft_strarr_apnd(t_dynstrarr *w_args, const char *arg)
 	return (0);
 }
 
-/*
 //tested 50%
 static void	ft_strarr_sort(char **args)
 {
@@ -147,4 +146,3 @@ static void	ft_strarr_sort(char **args)
 		}
 	}
 }
-*/

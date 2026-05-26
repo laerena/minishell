@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 14:08:19 by leilai            #+#    #+#             */
-/*   Updated: 2026/04/16 15:56:31 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 12:13:46 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ static int	add_next_token(t_token **tokens, const char *input, int *i)
 		value = read_word(input, i);
 	}
 	if (!value)
+	{
 		return (1);
+	}
 	new_node = token_new(value, type);
 	if (!new_node)
 		return (free(value), 1);

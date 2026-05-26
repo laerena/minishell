@@ -14,3 +14,5 @@ hello
 ** for this added conditional 0644 to open in op_io.c otherwise untouched
 
 quotes handled
+single quote expands double quote don't expand
+instead of 

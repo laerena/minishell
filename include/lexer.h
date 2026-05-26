@@ -1,6 +1,10 @@
 #ifndef LEXER_H
 # define LEXER_H
 
+# define LEX_OK 0
+# define LEX_MALLOC 1
+# define LEX_UNCLOSED_QUOTE 2
+
 # include "minishell.h"
 
 t_token	*lexer_tokenize(const char *input);

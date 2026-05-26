@@ -12,6 +12,8 @@
 
 #include "libft.h"
 
+// return the size of the str until first c char
+// if no c char is found, return the size of the str
 size_t	ft_strclen(char const *s, char c)
 {
 	size_t	len;

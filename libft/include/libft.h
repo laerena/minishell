@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 13:20:17 by vbisco            #+#    #+#             */
-/*   Updated: 2026/05/24 14:27:57 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/25 17:25:11 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void			ft_strarr_free(char **arr);
 int				ft_strcmp(char const *s1, char const *s2);
 size_t			ft_arrlen(void **arr);
+size_t			ft_ptr_index(const void *base, const void *ptr);
 /* ******************** */
 
 #endif

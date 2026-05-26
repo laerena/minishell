@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/25 16:34:20 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 14:33:00 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,19 @@
 #include "expander.h"
 #include "executor.h"
 
-int	main(int ac, char **av, char **envp)
+static int	init_envp(t_ctx *ctx, char **envp);
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_ctx	ctx;
 	char	*line;
 	t_token	*tokens;
 	t_cmd	*ast;
 
-	(void)ac;
-	(void)av;
-	ctx.envp = envp;
+	(void)argc;
+	(void)argv;
+	if (init_envp(&ctx, envp) == 1)
+		return (ft_strarr_free(ctx.envp), 1); // may replace ft_strarr_free by general fclean
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -48,4 +51,26 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 	}
 	return (ctx.last_exit_status);
+}
+
+static int	init_envp(t_ctx *ctx, char **envp)
+{
+	size_t	i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	ctx->envp = ft_calloc((i + 1), sizeof(char *));
+	if (!ctx->envp)
+		return (1);
+	i = 0;
+	while (envp[i])
+	{
+		ctx->envp[i] = ft_strdup(envp[i]);
+		if (!ctx->envp[i])
+			return (1);
+		i++;
+	}
+	ctx->envp[i] = '\0';
+	return (0);
 }

@@ -34,6 +34,7 @@ FCN = \
 	src/conv/ft_utoa.c \
 	src/conv/ft_utoa_base.c \
 	src/conv/ft_isvalid_base.c \
+	src/conv/ft_ptr_index.c \
 	src/lst/ft_lstadd_back.c \
 	src/lst/ft_lstadd_front.c \
 	src/lst/ft_lstclear.c \

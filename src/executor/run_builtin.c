@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/26 14:19:34 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:52:07 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	builtin_unset(t_ctx *ctx, char **args)
 		{
 			envp_size = ft_arrlen((void **)ctx->envp);
 			free(ctx->envp[i]);
-			memmove(ctx->envp + i, ctx->envp + i + 1, (envp_size - i) * sizeof(char *));
+			ft_memmove(ctx->envp + i, ctx->envp + i + 1, (envp_size - i) * sizeof(char *));
 			ctx->envp[envp_size - 1] = NULL;
 			ctx->envp = realloc(ctx->envp, (envp_size - 1) * sizeof(char *));
 			if (!ctx->envp)

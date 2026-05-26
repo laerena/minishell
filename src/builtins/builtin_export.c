@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:56:43 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/26 17:10:43 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 17:26:40 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	builtin_export(t_ctx *ctx, char **args)
 		else //if var not found
 		{
 			envp_size = ft_arrlen((void **)ctx->envp);
-			/*debug*/ ft_printf("envp+size=%zu\n", envp_size);
 			ctx->envp = ft_realloc(ctx->envp, envp_size * sizeof(char *), (envp_size + 2) * sizeof(char *));
 			if (!ctx->envp)
 				return (ctx->last_exit_status = 1, 1);

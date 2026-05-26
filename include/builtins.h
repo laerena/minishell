@@ -3,6 +3,7 @@
 
 //include
 # include "minishell.h"
+# include "executor.h"
 
 //fts
 int		builtin_echo(t_ctx *ctx, char **args);

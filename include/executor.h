@@ -1,5 +1,5 @@
-#ifndef _EXECUTOR_H_
-# define _EXECUTOR_H_
+#ifndef EXECUTOR_H
+# define EXECUTOR_H
 
 //include
 # include "minishell.h"

@@ -27,9 +27,15 @@ SRC = src/main.c \
 		src/executor/op_control_flow.c\
 		src/executor/helper.c\
 		src/executor/run_exec.c\
-		src/executor/run_builtin.c \
-		src/executor/bonus_wildcards.c
-
+		src/executor/run_builtins.c \
+		src/wildcards/wildcards.c \
+		src/builtins/builtin_cd.c \
+		src/builtins/builtin_echo.c \
+		src/builtins/builtin_env.c \
+		src/builtins/builtin_exit.c \
+		src/builtins/builtin_export.c \
+		src/builtins/builtin_pwd.c \
+		src/builtins/builtin_unset.c
 
 OBJ = $(SRC:.c=.o)
 

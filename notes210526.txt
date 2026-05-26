@@ -3,8 +3,6 @@ wait, should lei do this? lmk
 parser should keep multiple args 
 then buildin_cd could do like error_too_many args?
 
-new:
-** added env variable expansion stage before executor
 
 minishell$ laerena@Leias-MacBook-Air
 minishell % /bin/cat $HOME/tes_minishell_expander 

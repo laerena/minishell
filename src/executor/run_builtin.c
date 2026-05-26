@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 15:07:53 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 14:19:34 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,81 @@
 
 #include "executor.h"
 
-// static int	builtin_export(t_ctx *ctx, char **args)
-// {
-// 	char	**envp_vars;
-// 	char	**tmp;
+static int	builtin_unset(t_ctx *ctx, char **args)
+{
+	size_t	envp_size;
+	size_t	name_len;
+	size_t	i;
+	
+	while (*args)
+	{
+		i = 0;
+		while (ctx->envp[i])
+		{
+			name_len = ft_strlen(*args);
+			/*debug*/ ft_printf("arg=%s\nenv=%s\n", *args, ctx->envp[i]);
+			// /*debug*/ ft_printf("DEBUG: args=%p, envp=%p\n", *args, ctx->envp[i]);
+			if (ft_strncmp(ctx->envp[i], *args, name_len) == 0
+				&& (ctx->envp[i])[name_len] == '=' && (*args)[name_len] == '\0')
+				break;
+			i++;
+		}
+		if (ctx->envp[i])
+		{
+			envp_size = ft_arrlen((void **)ctx->envp);
+			free(ctx->envp[i]);
+			memmove(ctx->envp + i, ctx->envp + i + 1, (envp_size - i) * sizeof(char *));
+			ctx->envp[envp_size - 1] = NULL;
+			ctx->envp = realloc(ctx->envp, (envp_size - 1) * sizeof(char *));
+			if (!ctx->envp)
+				return (ctx->last_exit_status = 1, 1);
+		}
+		args++;
+	}
+	return (ctx->last_exit_status = 0, 0);
+}
 
-// 	while (*args)
-// 	{
-// 		envp_vars = ctx->envp;
-// 		while (*envp_vars)
-// 		{
-// 			if (ft_strcmp(*args, *envp_vars) == 0)
-// 				break ;
-// 			else if (ft_strncmp(*args, *envp_vars, ft_strclen(*args, '=')) == 0)
-// 			{
-// 				*tmp = *envp_vars;
-// 				*envp_vars = ft_strdup(*args);
-// 				free(*tmp);
-// 			}
-// 			envp_vars++;
-// 		}
-// 		if (*envp_vars == NULL)
-// 		{
-// 			tmp = ft_strarr_apnd;
-// 		}
-// 	}
-// }
+static int	builtin_export(t_ctx *ctx, char **args)
+{
+	char	**envp;
+	char	*tmp;
+	size_t	envp_size;
+
+	while (*args)
+	{
+		if (!ft_strchr(*args, '=')) // if var has no value (=), I do not export shell var
+		{
+			args++;
+			continue ;
+		}
+		envp = ctx->envp;
+		while (*envp)
+		{
+			if (ft_strncmp(*args, *envp, ft_strclen(*args, '=')) == 0)
+				break;
+			envp++;
+		}
+		if (*args && *envp && ft_strcmp(*args, *envp) == 0) //if var found and value equal
+			return (ctx->last_exit_status = 0, 0);
+		if (*envp != NULL)	//if var found but value not equal
+		{
+			tmp = *envp;
+			*envp = ft_strdup(*args);
+			free(tmp);
+		}
+		else //if var not found
+		{
+			envp_size = ft_arrlen((void **)ctx->envp);
+			ctx->envp = ft_realloc(ctx->envp, envp_size * sizeof(char *), (envp_size + 2) * sizeof(char *));
+			if (!ctx->envp)
+				return (ctx->last_exit_status = 1, 1);
+			ctx->envp[envp_size] = ft_strdup(*args);
+			ctx->envp[envp_size + 1] = NULL;
+		}
+		args++;
+	}
+	return (ctx->last_exit_status = 0, 0);
+}
 
 static int	builtin_env(char **envp)
 {
@@ -144,10 +193,10 @@ int	run_builtin(t_ctx *ctx, t_cmd *ast_node)
 		return (builtin_cd(ctx, exec->argv[1]));
 	else if (exec->builtin == BUILTIN_PWD)
 		return (builtin_pwd(ctx));
-	// else if (exec->builtin == BUILTIN_EXPORT)
-	// 	return (builtin_export(ctx, exec->argv + 1))
-	// else if (exec->builtin == BUILTIN_UNSET)
-
+	else if (exec->builtin == BUILTIN_EXPORT)
+		return (builtin_export(ctx, exec->argv + 1));
+	else if (exec->builtin == BUILTIN_UNSET)
+		return (builtin_unset(ctx, exec->argv + 1));
 	else if (exec->builtin == BUILTIN_ENV)
 		return (builtin_env(ctx->envp));
 	// else if (exec->builtin == BUILTIN_EXIT)

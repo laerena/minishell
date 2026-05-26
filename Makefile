@@ -19,9 +19,11 @@ SRC = src/main.c \
 		src/parser/cmd_new.c \
 		src/parser/cmd_free.c \
 		src/utils/free_split.c\
+		src/utils/error.c \
 		src/expander/expand_ast.c \
 		src/expander/expand_str.c \
 		src/expander/expand_env.c \
+		src/expander/expand_append.c \
 		src/executor/executor.c\
 		src/executor/op_io.c\
 		src/executor/op_control_flow.c\

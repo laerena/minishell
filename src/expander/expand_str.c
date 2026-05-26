@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:31:49 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 08:45:14 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 15:34:04 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,46 +17,19 @@ static int	is_var_char(char c)
 	return (ft_isalnum(c) || c == '_');
 }
 
-static char	*append_char(char *res, char c)
+static int	handle_quote(char c, char *quote)
 {
-	char	*new;
-	int		len;
-
-	len = ft_strlen(res);
-	new = malloc(len + 2);
-	if (!new)
+	if ((c == '\'' || c == '"') && *quote == 0)
 	{
-		free(res);
-		return (NULL);
+		*quote = c;
+		return (1);
 	}
-	ft_memcpy(new, res, len);
-	new[len] = c;
-	new[len + 1] = '\0';
-	free(res);
-	return (new);
-}
-
-static char	*append_str(char *res, char *add)
-{
-	char	*new;
-	int		len1;
-	int		len2;
-
-	if (!add)
-		add = "";
-	len1 = ft_strlen(res);
-	len2 = ft_strlen(add);
-	new = malloc(len1 + len2 + 1);
-	if (!new)
+	if (c == *quote)
 	{
-		free(res);
-		return (NULL);
+		*quote = 0;
+		return (1);
 	}
-	ft_memcpy(new, res, len1);
-	ft_memcpy(new + len1, add, len2);
-	new[len1 + len2] = '\0';
-	free(res);
-	return (new);
+	return (0);
 }
 
 static char	*append_status(t_ctx *ctx, int *i, char *res)
@@ -91,10 +64,7 @@ static char	*expand_var(t_ctx *ctx, char *s, int *i, char *res)
 		return (append_char(res, '$'));
 	key = ft_substr(s, start, *i - start);
 	if (!key)
-	{
-		free(res);
-		return (NULL);
-	}
+		return (free(res), NULL);
 	value = expand_getenv(ctx->envp, key);
 	res = append_str(res, value);
 	free(key);
@@ -116,20 +86,12 @@ char	*expand_str(t_ctx *ctx, char *s)
 	quote = 0;
 	while (s[i])
 	{
-		if ((s[i] == '\'' || s[i] == '"') && quote == 0)
-			quote = s[i++];
-		else if (s[i] == quote)
-		{
-			quote = 0;
+		if (handle_quote(s[i], &quote))
 			i++;
-		}
-		if (s[i] == '$' && quote != '\'')
+		else if (s[i] == '$' && quote != '\'')
 			res = expand_var(ctx, s, &i, res);
 		else
-		{
-			res = append_char(res, s[i]);
-			i++;
-		}
+			res = append_char(res, s[i++]);
 		if (!res)
 			return (NULL);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 14:55:10 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:54:36 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	if (init_envp(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
-		return (ft_strarr_free(ctx.envp), 1); // may replace ft_strarr_free by general fclean
+		return (1);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -38,7 +38,9 @@ int	main(int argc, char **argv, char **envp)
 		if (*line)
 			add_history(line);
 		tokens = lexer_tokenize(line);
-		ast = parse_expression(tokens);
+		ast = NULL;
+		if (tokens)
+			ast = parse_expression(tokens);
 		// I think we should not catch the exit code as a LES (last exit status)
 		// LES should be setup when a cmd is exec to catch its returns
 		// and exit_code should be used to propagate error through nodes
@@ -57,12 +59,11 @@ int	main(int argc, char **argv, char **envp)
 			else
 				ctx.last_exit_status = 1;
 		}
-		//
 		cmd_clear(&ast);
 		token_clear(&tokens);
 		free(line);
 	}
-	//return (0);
+	ft_strarr_free(ctx.envp);
 	return (ctx.last_exit_status);
 	//
 }
@@ -84,9 +85,10 @@ static int	init_envp(t_ctx *ctx, char **envp)
 	{
 		ctx->envp[i] = ft_strdup(envp[i]);
 		if (!ctx->envp[i])
-			return (1);
+			return (ft_strarr_free(ctx->envp), 1);
 		i++;
 	}
-	ctx->envp[i] = '\0';
+	ctx->envp[i] = NULL;
+	ctx->last_exit_status = 0;
 	return (0);
 }

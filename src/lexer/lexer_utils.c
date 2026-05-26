@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 16:03:33 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 12:09:46 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 14:51:39 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,21 @@ static int	skip_quote(const char *input, int *i, char quote)
 }
 
 /* allocate and return extracted WORD token string from input */
-char	*read_word(const char *input, int *i)
+char	*read_word(const char *input, int *i, int *error)
 {
 	int	start;
 
+	*error = LEX_OK;
 	start = *i;
 	while (input[*i] && !is_space(input[*i]) && !is_operator(input[*i]))
 	{
 		if (input[*i] == '\'' || input[*i] == '"')
 		{
 			if (skip_quote(input, i, input[*i]))
+			{
+				*error = LEX_UNCLOSED_QUOTE;
 				return (NULL);
+			}
 		}
 		else
 			(*i)++;

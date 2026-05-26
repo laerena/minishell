@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:56:07 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/23 14:35:49 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 14:58:34 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minishell.h"
 # include "utils.h"
+# include "error.h"
 
 int				check_syntax(t_token *tokens);
 t_cmd			*parse_or(t_token *start, t_token *end);

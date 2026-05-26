@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 14:33:00 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 14:55:10 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	if (init_envp(&ctx, envp) == 1)
+	if (init_envp(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
 		return (ft_strarr_free(ctx.envp), 1); // may replace ft_strarr_free by general fclean
 	while (1)
 	{
@@ -39,6 +39,17 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 		tokens = lexer_tokenize(line);
 		ast = parse_expression(tokens);
+		// I think we should not catch the exit code as a LES (last exit status)
+		// LES should be setup when a cmd is exec to catch its returns
+		// and exit_code should be used to propagate error through nodes
+		// I don t need we care about the returns here
+		// We should only care about fatal errors returns and then free, exit program otherwise continue
+		// proposition:
+		// if (ast)
+		// {
+		// 	expand_ast(&ctx, ast)
+		//	executor(&ctx, ast) != 0)
+		// }
 		if (ast)
 		{
 			if (expand_ast(&ctx, ast) == 0)
@@ -46,13 +57,18 @@ int	main(int argc, char **argv, char **envp)
 			else
 				ctx.last_exit_status = 1;
 		}
+		//
 		cmd_clear(&ast);
 		token_clear(&tokens);
 		free(line);
 	}
+	//return (0);
 	return (ctx.last_exit_status);
+	//
 }
 
+//dup **envp locally to allow modifications on it
+//we need a local cpy of **envp in our program not the original one
 static int	init_envp(t_ctx *ctx, char **envp)
 {
 	size_t	i;

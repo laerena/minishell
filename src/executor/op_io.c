@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   op_io.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 15:08:50 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 11:25:52 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/26 08:47:44 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static		t_redir_info	get_redir_info(t_redir_type type);
-static int	my_dup2(int oldfd, int newfd);
+static t_redir_info	get_redir_info(t_redir_type type);
+static int			my_dup2(int oldfd, int newfd);
 
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node)
 {
@@ -56,7 +56,10 @@ int	run_redir(t_ctx *ctx, t_cmd *ast_node)
 	int				exit_code;
 
 	r_info = get_redir_info(ast_node->u_cmd.redir.type);
-	fd = open(ast_node->u_cmd.redir.file, r_info.flags);
+	if (r_info.flags & O_CREAT)
+		fd = open(ast_node->u_cmd.redir.file, r_info.flags, 0644);
+	else
+		fd = open(ast_node->u_cmd.redir.file, r_info.flags);
 	if (fd < 0)
 	{
 		perror("open");
@@ -83,8 +86,8 @@ static t_redir_info	get_redir_info(t_redir_type type)
 {
 	t_redir_info	info;
 
-	info.flags = '\0';
-	info.fd = '\0';
+	info.flags = 0;
+	info.fd = 0;
 	if (type == R_INPUT || type == R_HEREDOC)
 	{
 		info.flags = O_RDONLY;

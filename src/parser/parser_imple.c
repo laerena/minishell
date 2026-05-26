@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:58:35 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/12 14:38:16 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 15:02:38 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ t_cmd	*parse_or(t_token *start, t_token *end)
 /* public parser entry point */
 t_cmd	*parse_expression(t_token *tokens)
 {
+	if (check_syntax(tokens))
+		return (NULL);
 	if (!tokens)
 		return (NULL);
 	return (parse_or(tokens, NULL));

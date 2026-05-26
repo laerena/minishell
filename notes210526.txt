@@ -3,6 +3,8 @@ wait, should lei do this? lmk
 parser should keep multiple args 
 then buildin_cd could do like error_too_many args?
 
+new:
+** added env variable expansion stage before executor
 
 minishell$ laerena@Leias-MacBook-Air
 minishell % /bin/cat $HOME/tes_minishell_expander 
@@ -10,9 +12,9 @@ cat: /Users/laerena/tes_minishell_expander: Permission denied
 laerena@Leias-MacBook-Air minishell % chmod 777 /Users/laerena/tes_minishell_expander 
 laerena@Leias-MacBook-Air minishell % /bin/cat $HOME/tes_minishell_expander 
 hello
-
 ** for this added conditional 0644 to open in op_io.c otherwise untouched
 
-quotes handled
+** quotes handled
 single quote expands double quote don't expand
-instead of 
+
+** added error handling module for lexer parser

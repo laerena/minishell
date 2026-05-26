@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 14:08:19 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 12:13:46 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 14:48:54 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,31 @@
 ** - repeat
 */
 
+static int	handle_token_error(int error)
+{
+	if (error == LEX_UNCLOSED_QUOTE)
+		return (syntax_error("unclosed quote"));
+	return (malloc_error());
+}
+
 /* create one token from input, append or clean all on fail */
 static int	add_next_token(t_token **tokens, const char *input, int *i)
 {
 	t_token_type	type;
 	t_token			*new_node;
 	char			*value;
+	int				error;
 
+	error = LEX_OK;
 	if (is_operator(input[*i]))
 		value = read_operator(input, i, &type);
 	else
 	{
 		type = T_WORD;
-		value = read_word(input, i);
+		value = read_word(input, i, &error);
 	}
 	if (!value)
-	{
-		return (1);
-	}
+		return (handle_token_error(error));
 	new_node = token_new(value, type);
 	if (!new_node)
 		return (free(value), 1);
@@ -67,5 +74,3 @@ t_token	*lexer_tokenize(const char *input)
 	}
 	return (tokens);
 }
-
-

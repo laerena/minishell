@@ -1,8 +1,7 @@
 check builtin cd with multiple args behavior
-wait, should lei do this? lmk
-parser should keep multiple args 
-then buildin_cd could do like error_too_many args?
-
+wait, should lei do this? lmk => not it s ok I handle builtin fix, it was for me xD
+parser should keep multiple args => agree
+then buildin_cd could do like error_too_many args? => Not sure what is the normal behavior, but seems like it should not accept more than 1 and display an error
 
 minishell$ laerena@Leias-MacBook-Air
 minishell % /bin/cat $HOME/tes_minishell_expander 

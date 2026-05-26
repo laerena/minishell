@@ -1,6 +1,3 @@
-check builtin cd with multiple args behavior
-
-
 minishell$ laerena@Leias-MacBook-Air
 minishell % /bin/cat $HOME/tes_minishell_expander 
 cat: /Users/laerena/tes_minishell_expander: Permission denied 
@@ -8,6 +5,7 @@ laerena@Leias-MacBook-Air minishell % chmod 777 /Users/laerena/tes_minishell_exp
 laerena@Leias-MacBook-Air minishell % /bin/cat $HOME/tes_minishell_expander 
 hello
 ** for this added conditional 0644 to open in op_io.c otherwise untouched
+*** edited get_redir_info and related struct to handle this
 
 ** quotes handled
 single quote expands double quote don't expand

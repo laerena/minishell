@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_io.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 15:08:50 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/26 08:47:44 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/26 17:52:12 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ int	run_redir(t_ctx *ctx, t_cmd *ast_node)
 	int				exit_code;
 
 	r_info = get_redir_info(ast_node->u_cmd.redir.type);
-	if (r_info.flags & O_CREAT)
-		fd = open(ast_node->u_cmd.redir.file, r_info.flags, 0644);
-	else
-		fd = open(ast_node->u_cmd.redir.file, r_info.flags);
+	fd = open(ast_node->u_cmd.redir.file, r_info.flags, r_info.mode);
 	if (fd < 0)
 	{
 		perror("open");
@@ -86,23 +83,24 @@ static t_redir_info	get_redir_info(t_redir_type type)
 {
 	t_redir_info	info;
 
-	info.flags = 0;
-	info.fd = 0;
+	ft_memset(&info, 0, sizeof(t_redir_info));
 	if (type == R_INPUT || type == R_HEREDOC)
 	{
-		info.flags = O_RDONLY;
 		info.fd = STDIN_FILENO;
+		info.flags = O_RDONLY;
 	}
 	else if (type == R_OUTPUT)
 	{
-		info.flags = O_WRONLY | O_CREAT | O_TRUNC;
 		info.fd = STDOUT_FILENO;
+		info.flags = O_WRONLY | O_CREAT | O_TRUNC;
 	}
 	else if (type == R_APPEND)
 	{
-		info.flags = O_WRONLY | O_CREAT | O_APPEND;
 		info.fd = STDOUT_FILENO;
+		info.flags = O_WRONLY | O_CREAT | O_APPEND;
 	}
+	if (info.flags & O_CREAT)
+		info.mode = 0644;
 	return (info);
 }
 

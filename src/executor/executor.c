@@ -6,11 +6,12 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/23 20:37:07 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/27 16:17:15 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "minishell.h"
 
 // static int	is_builtin_cmd(t_cmd *cmd);
 static int	run_node(t_ctx *ctx, t_cmd *ast_node);
@@ -102,8 +103,7 @@ int	run_in_child(t_ctx *ctx, t_cmd *ast_node)
 	child_pid = fork();
 	if (child_pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signals_reset();
 		exit(run_node(ctx, ast_node));
 	}
 	waitpid(child_pid, &status, 0);

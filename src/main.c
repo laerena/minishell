@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 15:54:36 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/27 16:15:23 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,53 @@
 #include "executor.h"
 
 static int	init_envp(t_ctx *ctx, char **envp);
+static void	shell_loop(t_ctx *ctx);
+static void	cleanup_env(char **envp);
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_ctx	ctx;
+
+	(void)argc;
+	(void)argv;
+	ctx.last_exit_status = 0;
+	if (init_envp(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
+		return (1);
+	shell_loop(&ctx);
+	cleanup_env(ctx.envp);
+	return (0);
+}
+
+//dup **envp locally to allow modifications on it
+//we need a local cpy of **envp, can t modify the original
+static int	init_envp(t_ctx *ctx, char **envp)
+{
+	size_t	i;
+
+	i = 0;
+	while (envp && envp[i])
+		i++;
+	ctx->envp = ft_calloc((i + 1), sizeof(char *));
+	if (!ctx->envp)
+		return (1);
+	i = 0;
+	while (envp && envp[i])
+	{
+		ctx->envp[i] = ft_strdup(envp[i]);
+		if (!ctx->envp[i])
+			return (ft_strarr_free(ctx->envp), 1);
+		i++;
+	}
+	return (0);
+}
+
+static void	shell_loop(t_ctx *ctx)
+{
 	char	*line;
 	t_token	*tokens;
 	t_cmd	*ast;
 
-	(void)argc;
-	(void)argv;
-	if (init_envp(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
-		return (1);
+	handle_signals();
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -41,54 +76,16 @@ int	main(int argc, char **argv, char **envp)
 		ast = NULL;
 		if (tokens)
 			ast = parse_expression(tokens);
-		// I think we should not catch the exit code as a LES (last exit status)
-		// LES should be setup when a cmd is exec to catch its returns
-		// and exit_code should be used to propagate error through nodes
-		// I don t need we care about the returns here
-		// We should only care about fatal errors returns and then free, exit program otherwise continue
-		// proposition:
-		// if (ast)
-		// {
-		// 	expand_ast(&ctx, ast)
-		//	executor(&ctx, ast) != 0)
-		// }
 		if (ast)
-		{
-			if (expand_ast(&ctx, ast) == 0)
-				ctx.last_exit_status = executor(&ctx, ast);
-			else
-				ctx.last_exit_status = 1;
-		}
+			if (expand_ast(ctx, ast) == 0)
+				executor(ctx, ast);
 		cmd_clear(&ast);
 		token_clear(&tokens);
 		free(line);
 	}
-	ft_strarr_free(ctx.envp);
-	return (ctx.last_exit_status);
-	//
 }
 
-//dup **envp locally to allow modifications on it
-//we need a local cpy of **envp in our program not the original one
-static int	init_envp(t_ctx *ctx, char **envp)
+static void	cleanup_env(char **envp)
 {
-	size_t	i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	ctx->envp = ft_calloc((i + 1), sizeof(char *));
-	if (!ctx->envp)
-		return (1);
-	i = 0;
-	while (envp[i])
-	{
-		ctx->envp[i] = ft_strdup(envp[i]);
-		if (!ctx->envp[i])
-			return (ft_strarr_free(ctx->envp), 1);
-		i++;
-	}
-	ctx->envp[i] = NULL;
-	ctx->last_exit_status = 0;
-	return (0);
+	ft_strarr_free(envp);
 }

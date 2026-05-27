@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/23 19:20:46 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/27 18:23:22 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,11 @@ static t_cmd	*cmd_alloc(t_node_type type)
 t_cmd	*new_exec_node(char **argv)
 {
 	t_cmd	*cmd;
-
+	if (!argv || !argv[0])
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
+		return NULL;
+	}
 	cmd = cmd_alloc(N_EXEC);
 	if (!cmd)
 		return (NULL);

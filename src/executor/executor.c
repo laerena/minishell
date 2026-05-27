@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/27 16:17:15 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/27 18:17:47 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	exit_code;
 
+	if (!ast_node)
+		return (1);
 	if (ast_node->type == N_EXEC
 		&& ast_node->u_cmd.exec.builtin)
 			exit_code = run_builtin(ctx, ast_node);

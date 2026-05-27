@@ -1,2 +1,12 @@
 external command PATH lookup
 	execve path resolution
+
+minishell: syntax error near unexpected token `newline'
+minishell$ >>d
+minishell: syntax error near unexpected token `newline'
+minishell$ $?
+0: command not found
+* added a check for null argv[0] in t_cmd	*new_exec_node(char **argv)
+* but we need to set up last exit status to 1 after this error
+
+heredoc not working...

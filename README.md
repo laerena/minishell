@@ -8,4 +8,4 @@ git submodule update --init --recursive
 # uses when libft get new commits to update the -v we dl here
 git submodule update --remote
 
-SO COOL
+# SO COOL

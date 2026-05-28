@@ -35,6 +35,7 @@ int	run_subshell(t_ctx *ctx, t_cmd *ast_node);
 //	op_io.c
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node);
+int	run_heredoc(t_ctx *ctx, t_cmd *ast_node);
 //	run_exec.c
 int	run_exec(t_ctx *ctx, t_cmd *ast_node);
 //	run_builtin.c

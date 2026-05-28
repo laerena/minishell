@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_new.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/27 18:23:22 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/28 13:17:45 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ static t_cmd	*cmd_alloc(t_node_type type)
 t_cmd	*new_exec_node(char **argv)
 {
 	t_cmd	*cmd;
-	if (!argv || !argv[0])
-	{
-		ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
-		return NULL;
-	}
+
+	if (!argv)
+		return (NULL);
 	cmd = cmd_alloc(N_EXEC);
 	if (!cmd)
 		return (NULL);
 	cmd->u_cmd.exec.argv = argv;
-	cmd->u_cmd.exec.builtin = is_builtin_cmd(argv[0]);
+	cmd->u_cmd.exec.builtin = BUILTIN_NONE;
+	if (argv[0])
+		cmd->u_cmd.exec.builtin = is_builtin_cmd(argv[0]);
 	return (cmd);
 }
 
@@ -69,6 +69,7 @@ t_cmd	*new_redir_node(t_cmd *child, char *file, t_redir_type type)
 	cmd->u_cmd.redir.cmd = child;
 	cmd->u_cmd.redir.file = file;
 	cmd->u_cmd.redir.type = type;
+	cmd->u_cmd.redir.heredoc_expand = 1;
 	return (cmd);
 }
 

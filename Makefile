@@ -24,8 +24,10 @@ SRC = src/main.c \
 		src/expander/expand_str.c \
 		src/expander/expand_env.c \
 		src/expander/expand_append.c \
+		src/expander/expand_heredoc.c \
 		src/executor/executor.c\
 		src/executor/op_io.c\
+		src/executor/heredoc.c\
 		src/executor/op_control_flow.c\
 		src/executor/helper.c\
 		src/executor/run_exec.c\

@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 13:09:26 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 08:21:38 by leilai           ###   ########.fr       */
+/*   Updated: 2026/05/28 13:21:39 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,16 @@ static int	expand_redir(t_ctx *ctx, t_cmd *cmd)
 
 	if (expand_ast(ctx, cmd->u_cmd.redir.cmd))
 		return (1);
+	if (cmd->u_cmd.redir.type == R_HEREDOC)
+	{
+		new = strip_heredoc_quotes(cmd->u_cmd.redir.file,
+				&cmd->u_cmd.redir.heredoc_expand);
+		if (!new)
+			return (1);
+		free(cmd->u_cmd.redir.file);
+		cmd->u_cmd.redir.file = new;
+		return (0);
+	}
 	new = expand_str(ctx, cmd->u_cmd.redir.file);
 	if (!new)
 		return (1);

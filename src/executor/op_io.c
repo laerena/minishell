@@ -55,6 +55,8 @@ int	run_redir(t_ctx *ctx, t_cmd *ast_node)
 	int				fd;
 	int				exit_code;
 
+	if (ast_node->u_cmd.redir.type == R_HEREDOC)
+		return (run_heredoc(ctx, ast_node));
 	r_info = get_redir_info(ast_node->u_cmd.redir.type);
 	fd = open(ast_node->u_cmd.redir.file, r_info.flags, r_info.mode);
 	if (fd < 0)
@@ -84,7 +86,7 @@ static t_redir_info	get_redir_info(t_redir_type type)
 	t_redir_info	info;
 
 	ft_memset(&info, 0, sizeof(t_redir_info));
-	if (type == R_INPUT || type == R_HEREDOC)
+	if (type == R_INPUT)
 	{
 		info.fd = STDIN_FILENO;
 		info.flags = O_RDONLY;

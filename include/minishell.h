@@ -91,6 +91,7 @@ typedef struct s_redircmd
 	t_cmd			*cmd;
 	char			*file;
 	t_redir_type	type;
+	int				heredoc_expand;
 }	t_redircmd;
 
 typedef struct s_subshellcmd

@@ -14,33 +14,48 @@
 
 static char	**extract_path_from_envp(char **envp);
 static char	*exec_path_finder(char *cmd, char **dirs_path);
+static int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path);
+static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path);
 
 int	run_exec(t_ctx *ctx, t_cmd *ast_node)
 {
 	char	**args;
 	char	*exec_path;
 	char	**dirs_path;
-	
+
 	args = ast_node->u_cmd.exec.argv;
 	if (!args || !args[0])
-		return (ctx->last_exit_status = 1, 1);
+		return (ctx->last_exit_status = 0, 0);
 	dirs_path = extract_path_from_envp(ctx->envp);
 	exec_path = exec_path_finder(args[0], dirs_path);
 	if (!exec_path)
-	{
-		ft_eprintf("%s: command not found\n", args[0]);
-		return (ctx->last_exit_status = 1, 1);
-	}
+		return (exec_not_found(ctx, args[0], dirs_path));
 	if (expand_wildcards(&args) == 1)
-		return (ctx->last_exit_status = 1, 1);
+		return (exec_error(ctx, exec_path, dirs_path));
 	if (execve(exec_path, args, ctx->envp) == -1)
 	{
 		perror("execve");
-		return (ctx->last_exit_status = 1, 1);
+		return (exec_error(ctx, exec_path, dirs_path));
 	}
 	free(exec_path);
 	ft_strarr_free(dirs_path);
 	return (ctx->last_exit_status = 0, 0);
+}
+
+static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path)
+{
+	ft_eprintf("%s: command not found\n", cmd);
+	ft_strarr_free(dirs_path);
+	ctx->last_exit_status = 1;
+	return (1);
+}
+
+static int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path)
+{
+	free(exec_path);
+	ft_strarr_free(dirs_path);
+	ctx->last_exit_status = 1;
+	return (1);
 }
 
 static char	**extract_path_from_envp(char **envp)
@@ -48,7 +63,7 @@ static char	**extract_path_from_envp(char **envp)
 	char	*path;
 
 	path = NULL;
-	while(*envp)
+	while (*envp)
 	{
 		if (ft_strncmp(*envp, "PATH=", 5) == 0)
 			path = *envp;
@@ -56,7 +71,7 @@ static char	**extract_path_from_envp(char **envp)
 	}
 	if (!path)
 		return (NULL);
-	return(ft_split((path + 5), ':'));
+	return (ft_split((path + 5), ':'));
 }
 
 static char	*exec_path_finder(char *cmd, char **dirs_path)
@@ -65,6 +80,12 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 	char	**dirs_iter;
 
 	exec_path = NULL;
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	if (!dirs_path)
 		return (NULL);
 	dirs_iter = dirs_path;

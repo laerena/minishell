@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/27 16:15:23 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/28 12:57:16 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "executor.h"
 
 static int	init_envp(t_ctx *ctx, char **envp);
+static void	handle_line(t_ctx *ctx, char *line);
 static void	shell_loop(t_ctx *ctx);
 static void	cleanup_env(char **envp);
 
@@ -58,11 +59,28 @@ static int	init_envp(t_ctx *ctx, char **envp)
 	return (0);
 }
 
+static void	handle_line(t_ctx *ctx, char *line)
+{
+	t_token	*tokens;
+	t_cmd	*ast;
+
+	tokens = lexer_tokenize(line);
+	ast = NULL;
+	if (tokens)
+		ast = parse_expression(tokens);
+	if (tokens && !ast)
+		ctx->last_exit_status = 1;
+	if (ast && expand_ast(ctx, ast) == 0)
+		executor(ctx, ast);
+	else if (ast)
+		ctx->last_exit_status = 1;
+	cmd_clear(&ast);
+	token_clear(&tokens);
+}
+
 static void	shell_loop(t_ctx *ctx)
 {
 	char	*line;
-	t_token	*tokens;
-	t_cmd	*ast;
 
 	handle_signals();
 	while (1)
@@ -72,15 +90,7 @@ static void	shell_loop(t_ctx *ctx)
 			break ;
 		if (*line)
 			add_history(line);
-		tokens = lexer_tokenize(line);
-		ast = NULL;
-		if (tokens)
-			ast = parse_expression(tokens);
-		if (ast)
-			if (expand_ast(ctx, ast) == 0)
-				executor(ctx, ast);
-		cmd_clear(&ast);
-		token_clear(&tokens);
+		handle_line(ctx, line);
 		free(line);
 	}
 }

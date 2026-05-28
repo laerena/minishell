@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:59:01 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/26 17:10:25 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/05/28 16:20:58 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	builtin_echo(t_ctx *ctx, char **args)
 	{
 		if (write(1, *args, ft_strlen(*args)) == -1)
 			return (ctx->last_exit_status = 1, 1);
-		if (write(1, " ", 1) == -1)
-			return (ctx->last_exit_status = 1, 1);
+		// if (write(1, "", 1) == -1)
+		// 	return (ctx->last_exit_status = 1, 1);
 		args++;
 	}
 	if (has_newline == 1)

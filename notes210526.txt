@@ -1,42 +1,14 @@
-external command PATH lookup
-	execve path resolution
+SHELL_LV to hqndle/update
 
-minishell: syntax error near unexpected token `newline'
-minishell$ >>d
-minishell: syntax error near unexpected token `newline'
-minishell$ $?
-0: command not found -> **not error, usage echo $?
-* added a check for null argv[0] in t_cmd	*new_exec_node(char **argv)
-* but we need to set up last exit status to 1 after this error
+multiples heredoc (<< t << t << t) took only the last eof to terminate ignroe the others
 
-heredoc not working...
-*** heredoc is currently a regular input redir
+check multie heredoc into a file output
 
-*** now: 
+export
 
-added heredoc.c
-struct redircmd - heredoc_expand
-modified op_io.c run_exec.c signal.c
+child leaks
 
-laerena@Mac minishell % ./minishell 
-minishell$ /bin/cat << EOF | /bin/cat
-> hello
-> EOF
-hello
-minishell$ /bin/cat << EOF
-> hello
-> EOF
-hello
-minishell$ /bin/cat << EOF
-> $HOME
-> EOF
-/Users/laerena
-minishell$ /bin/cat << 'EOF'
-> $HOME
-> EOF
-$HOME
-minishell$ /bin/cat << EOF | /bin/cat
-> hello
-> EOF
-hello
-minishell$
+echo test test = testtest (suite a la suppression de l'espace en trop dans le builtin d'eco)
+
+
+valgrind --suppressions=a.supp --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --track-origins=yes ./minishell

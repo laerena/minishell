@@ -1,6 +1,7 @@
 SHELL_LV to hqndle/update
 
 multiples heredoc (<< t << t << t) took only the last eof to terminate ignroe the others
+??heredoc signals sigint handle ??
 
 check multie heredoc into a file output
 

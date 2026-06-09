@@ -6,14 +6,14 @@
 /*   By: vabisco <vabisco@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:56:43 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/09 14:40:04 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/09 16:07:24 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
 static void	ft_strarr_sort(char **args);
-static int export_noarg(char **envp);
+static int export_p(char **envp);
 
 int	builtin_export(t_ctx *ctx, char **args)
 {
@@ -22,7 +22,7 @@ int	builtin_export(t_ctx *ctx, char **args)
 	size_t	envp_size;
 
 	if (!*args)
-		export_noarg(ctx->envp);
+		export_p(ctx->envp);
 	while (*args)
 	{
 		// if (!ft_strchr(*args, '=')) // if var has no value (=), I do not export shell var
@@ -86,7 +86,7 @@ static void	ft_strarr_sort(char **args)
 	}
 }
 
-static int export_noarg(char **envp)
+static int	export_p(char **envp)
 {
 	size_t	n;
 	char	**cpy;
@@ -101,12 +101,31 @@ static int export_noarg(char **envp)
 	{
 		cpy[i] = envp[i];
 		i++;
-
 	}
 	cpy[i] = NULL;
-	ft_strarr_sort(envp);
-	if (builtin_env(envp) == 1)
-		return (1);
+	ft_strarr_sort(cpy);
+	// export_p_print(cpy, n);
 	free(cpy);
 	return (0);
 }
+
+// static int	export_p_print(char **cpy, int n)
+// {
+// 	size_t	i;
+// 	char	*sep;
+// 	char	*name;
+// 	char	*value;
+	
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		sep = ft_strchr(cpy[i], '=');
+// 		if (sep == NULL)
+// 			return (ft_printf("declare -x %s", cpy[i]));
+// 		name = ft_substr(cpy[i], 0, sep);
+// 		ft_printf("declare -x %s", name);
+// 		if (value)
+// 			ft_printf("=\"%s\"", cpy[i] + name);
+// 		write(1, "\n", 1);
+// 	}
+// }

@@ -6,10 +6,11 @@ multiples heredoc (<< t << t << t) took only the last eof to terminate ignroe th
 check multie heredoc into a file output
 
 export
+>>working
 
 child leaks
 
 echo test test = testtest (suite a la suppression de l'espace en trop dans le builtin d'eco)
-
+>> fixed
 
 valgrind --suppressions=a.supp --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --track-origins=yes ./minishell

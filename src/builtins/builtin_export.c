@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:56:43 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/09 16:07:24 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/09 19:04:52 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	ft_strarr_sort(char **args);
 static int export_p(char **envp);
+static int	export_p_print(char **cpy, size_t n);
 
 int	builtin_export(t_ctx *ctx, char **args)
 {
@@ -104,28 +105,28 @@ static int	export_p(char **envp)
 	}
 	cpy[i] = NULL;
 	ft_strarr_sort(cpy);
-	// export_p_print(cpy, n);
+	export_p_print(cpy, n);
 	free(cpy);
 	return (0);
 }
 
-// static int	export_p_print(char **cpy, int n)
-// {
-// 	size_t	i;
-// 	char	*sep;
-// 	char	*name;
-// 	char	*value;
+static int	export_p_print(char **cpy, size_t n)
+{
+	size_t	i;
+	char	*sep;
+	char	*name;
+	char	*value;
 	
-// 	i = 0;
-// 	while (i < n)
-// 	{
-// 		sep = ft_strchr(cpy[i], '=');
-// 		if (sep == NULL)
-// 			return (ft_printf("declare -x %s", cpy[i]));
-// 		name = ft_substr(cpy[i], 0, sep);
-// 		ft_printf("declare -x %s", name);
-// 		if (value)
-// 			ft_printf("=\"%s\"", cpy[i] + name);
-// 		write(1, "\n", 1);
-// 	}
-// }
+	i = 0;
+	while (i < n)
+	{
+		sep = ft_strchr(cpy[i], '=');
+		if (sep == NULL)
+			return (ft_printf("declare -x %s\n", cpy[i]), 0);
+		name = ft_substr(cpy[i], 0, (size_t)(sep - 0));
+		value = sep + 1;
+		ft_printf("declare -x %s=\"%s\"\n", name, value);
+		i++;
+	}
+	return (0);
+}

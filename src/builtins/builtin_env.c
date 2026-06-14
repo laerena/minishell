@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:57:05 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/09 15:23:45 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/14 14:07:10 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ static int	ft_strarr_putendl_fd(char **strarr, int fd)
 {
 	while (*strarr)
 	{
-		if (ft_putendl_fd(*strarr, fd) == -1)
-			return (-1);
+		if (ft_strchr(*strarr, '='))
+			if (ft_putendl_fd(*strarr, fd) == -1)
+				return (-1);
 		strarr++;
 	}
 	return (0);

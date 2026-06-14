@@ -38,6 +38,7 @@ SRC = src/main.c \
 		src/builtins/builtin_env.c \
 		src/builtins/builtin_exit.c \
 		src/builtins/builtin_export.c \
+		src/builtins/builtin_export_p.c \
 		src/builtins/builtin_pwd.c \
 		src/builtins/builtin_unset.c \
 		src/signals.c

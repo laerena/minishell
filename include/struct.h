@@ -62,6 +62,8 @@ typedef struct s_execmd
 	char			**argv;
 }	t_execmd;
 
+typedef struct s_cmd	t_cmd;
+
 typedef struct s_binopcmd
 {
 	t_cmd	*left;
@@ -72,8 +74,6 @@ typedef struct s_subshellcmd
 {
 	t_cmd		*child;
 }	t_subshellcmd;
-
-typedef struct s_cmd	t_cmd;
 
 typedef struct s_redircmd
 {

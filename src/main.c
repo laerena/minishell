@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/14 13:52:28 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/14 14:03:25 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ctx.last_exit_status = 0;
+	ft_bzero(&ctx, sizeof(t_ctx));
 	if (init_envp(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
 		return (1);
 	shell_loop(&ctx);
@@ -43,13 +44,20 @@ static int	init_envp(t_ctx *ctx, char **envp)
 	size_t	i;
 
 	i = 0;
-	while (envp && envp[i])
+	if (!envp || !envp[0])
+	{
+		ctx->envp = ft_calloc(1, sizeof(char *));
+		if (!ctx->envp)
+			return (1);
+		return (0);
+	}
+	while (envp[i])
 		i++;
 	ctx->envp = ft_calloc((i + 1), sizeof(char *));
 	if (!ctx->envp)
 		return (1);
 	i = 0;
-	while (envp && envp[i])
+	while (envp[i])
 	{
 		ctx->envp[i] = ft_strdup(envp[i]);
 		if (!ctx->envp[i])

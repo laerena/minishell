@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/28 12:57:16 by leilai           ###   ########.fr       */
+/*   Updated: 2026/06/14 13:52:28 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int argc, char **argv, char **envp)
 }
 
 //dup **envp locally to allow modifications on it
-//we need a local cpy of **envp, can t modify the original
+//(need a local cpy of **envp, can t modify the original)
 static int	init_envp(t_ctx *ctx, char **envp)
 {
 	size_t	i;

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/14 14:03:25 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/15 14:06:55 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	init_envp(t_ctx *ctx, char **envp)
 	{
 		ctx->envp[i] = ft_strdup(envp[i]);
 		if (!ctx->envp[i])
-			return (ft_strarr_free(ctx->envp), 1);
+			return (cleanup_env(ctx->envp), 1);
 		i++;
 	}
 	return (0);
@@ -95,7 +95,10 @@ static void	shell_loop(t_ctx *ctx)
 	{
 		line = readline("minishell$ ");
 		if (!line)
+		{
+			write(2, "exit\n", 5);
 			break ;
+		}
 		if (*line)
 			add_history(line);
 		handle_line(ctx, line);

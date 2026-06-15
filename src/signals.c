@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:40:22 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/28 13:47:43 by leilai           ###   ########.fr       */
+/*   Updated: 2026/06/15 14:04:46 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	handle_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+// handles SIGINT ctrl+C signal via act struct, no previous handler
+// handles SIGQUIT ctrl+\ signal via act struct, no previous handler
 static void	sigs_main(int signum)
 {
 	if (signum == SIGINT)

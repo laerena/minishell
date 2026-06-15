@@ -1,19 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*   find_var_in_envp.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/26 16:50:52 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/15 15:45:43 by vabisco          ###   ########.fr       */
+/*   Created: 2026/06/15 15:23:37 by vabisco           #+#    #+#             */
+/*   Updated: 2026/06/15 15:23:48 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "utils.h"
 
-void	builtin_exit(t_ctx *ctx)
+char	**find_var_in_envp(char **envp, char *args)
 {
-	write(2, "exit\n", 5);
-	exit(ctx->last_exit_status);
+	size_t	name_len;
+
+	if (!envp || !args)
+		return (NULL);
+	name_len = ft_strclen(args, '=');
+	while (*envp)
+	{
+		if (ft_strncmp(*envp, args, name_len) == 0 && (name_len - ft_strclen(*envp, '=') == 0))
+			return (envp);
+		envp++;
+	}
+	return (envp);
 }

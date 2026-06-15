@@ -20,6 +20,7 @@ SRC = src/main.c \
 		src/parser/cmd_free.c \
 		src/utils/free_split.c\
 		src/utils/error.c \
+		src/utils/find_var_in_envp.c \
 		src/expander/expand_ast.c \
 		src/expander/expand_str.c \
 		src/expander/expand_env.c \
@@ -41,6 +42,8 @@ SRC = src/main.c \
 		src/builtins/builtin_export_p.c \
 		src/builtins/builtin_pwd.c \
 		src/builtins/builtin_unset.c \
+		src/init/init_envp.c \
+		src/init/update_SHLVL.c \
 		src/signals.c
 
 OBJ = $(SRC:.c=.o)

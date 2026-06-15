@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/28 13:38:30 by leilai           ###   ########.fr       */
+/*   Updated: 2026/06/15 15:58:35 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,9 @@ int	run_in_child(t_ctx *ctx, t_cmd *ast_node)
 	child_pid = fork();
 	if (child_pid == 0)
 	{
+		/* DEBUG: show child pid and whether stdout is a tty */
+        fprintf(stderr, "DEBUG: child pid=%d, isatty(1)=%d\n",
+                (int)getpid(), (int)isatty(STDOUT_FILENO));
 		signals_reset();
 		exit(run_node(ctx, ast_node));
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 12:01:30 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/18 17:47:30 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,23 @@ int	run_exec(t_ctx *ctx, t_cmd *ast_node)
 	char	**dirs_path;
 
 	args = ast_node->u_cmd.exec.argv;
+	fprintf(stderr, "DEBUG run_exec argv[0]=[%s]\n", args && args[0] ? args[0] : "(null)");
 	if (!args || !args[0])
 		return (ctx->last_exit_status = 0, 0);
 	dirs_path = extract_path_from_envp(ctx->envp);
+	if (!dirs_path)
+	fprintf(stderr, "DEBUG dirs_path=(null)\n");
+	else
+	{
+		int i = 0;
+		while (dirs_path[i])
+		{
+			fprintf(stderr, "DEBUG dirs_path[%d]=[%s]\n", i, dirs_path[i]);
+			i++;
+		}
+	}
 	exec_path = exec_path_finder(args[0], dirs_path);
+	fprintf(stderr, "DEBUG run_exec exec_path=[%s]\n", exec_path ? exec_path : "(null)");
 	if (!exec_path)
 		return (exec_not_found(ctx, args[0], dirs_path));
 	if (expand_wildcards(&args) == 1)
@@ -78,6 +91,7 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 {
 	char	*exec_path;
 	char	**dirs_iter;
+	char	*tmp;
 
 	exec_path = NULL;
 	if (ft_strchr(cmd, '/'))
@@ -91,7 +105,16 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 	dirs_iter = dirs_path;
 	while (*dirs_iter)
 	{
-		ft_asprintf(&exec_path, "%s/%s", *dirs_iter, cmd);
+		//ft_asprintf(&exec_path, "%s/%s", *dirs_iter, cmc);
+		tmp = ft_strjoin(*dirs_iter, "/");
+		if (!tmp)
+			return (NULL);
+		exec_path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!exec_path)
+			return (NULL);
+		fprintf(stderr, "DEBUG try exec_path=[%s]\n", exec_path);
+		fprintf(stderr, "DEBUG access=%d\n", access(exec_path, X_OK));
 		if (access(exec_path, X_OK) == 0)
 			break ;
 		free(exec_path);

@@ -95,11 +95,19 @@ typedef struct s_cmd
 	}	u_cmd;
 }	t_cmd;
 
+typedef struct s_save_fds
+{
+	int	save_stdin;
+	int	save_stdout;
+	int	save_stderr;
+}	t_save_fds;
+
 typedef struct s_ctx
 {
-	char	**envp;
-	t_cmd	*ast_head;
-	int		last_exit_status;
+	char		**envp;
+	t_cmd		*ast_head;
+	int			last_exit_status;
+	t_save_fds	saved_fds;
 }	t_ctx;
 
 #endif

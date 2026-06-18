@@ -4,6 +4,7 @@ static t_redir_info	get_redir_info(t_redir_type type);
 static int			my_dup2(int oldfd, int newfd);
 static void	handle_left_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node);
 static void	handle_right_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node);
+static int	restore_fds(t_ctx *ctx);
 
 
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node)
@@ -96,7 +97,7 @@ int	run_redir(t_ctx *ctx, t_cmd *ast_node)
 		ctx->last_exit_status = 1;
 		return (1);
 	}
-	if (my_dup2(fd, r_info.fd) < 0)
+	if (my_dup2(fd, r_info.fd) == -1)
 	{
 		perror("dup2");
 		close(fd);
@@ -105,6 +106,8 @@ int	run_redir(t_ctx *ctx, t_cmd *ast_node)
 	}
 	close(fd);
 	exit_code = executor(ctx, ast_node->u_cmd.redir.cmd);
+	if (restore_fds(ctx) == 1)
+			return (perror("restore_fds"), 1);
 	return (exit_code);
 }
 
@@ -120,5 +123,17 @@ static int my_dup2(int oldfd, int newfd)
 		return (1);
 	}
 	close(oldfd);
+	return (0);
+}
+
+// restore fds to their original state
+static int	restore_fds(t_ctx *ctx)
+{
+	if (dup2(ctx->saved_fds.save_stdin, STDIN_FILENO) == -1)
+		return (1);
+	if (dup2(ctx->saved_fds.save_stdout, STDOUT_FILENO) == -1)
+		return (1);
+	if (dup2(ctx->saved_fds.save_stderr, STDERR_FILENO) == -1)
+		return (1);
 	return (0);
 }

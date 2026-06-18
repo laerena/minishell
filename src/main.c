@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/16 13:30:05 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/18 13:20:46 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	ctx.last_exit_status = 0;
 	ft_bzero(&ctx, sizeof(t_ctx));
-	if (init_envp(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
+	if (init(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
 		return (1);
-	update_shlvl(&ctx);
 	shell_loop(&ctx);
 	ft_strarr_free(ctx.envp);
 	return (0);
@@ -48,10 +47,7 @@ static void	handle_line(t_ctx *ctx, char *line)
 		ast = parse_expression(tokens);
 	if (tokens && !ast)
 		ctx->last_exit_status = 1;
-	// if (ast && expand_ast(ctx, ast) == 0)
 	executor(ctx, ast);
-	// else if (ast)
-	// 	ctx->last_exit_status = 1;
 	cmd_clear(&ast);
 	token_clear(&tokens);
 }

@@ -42,7 +42,7 @@ SRC = src/main.c \
 		src/builtins/builtin_export_p.c \
 		src/builtins/builtin_pwd.c \
 		src/builtins/builtin_unset.c \
-		src/init/init_envp.c \
+		src/init/init.c \
 		src/init/update_SHLVL.c \
 		src/signals.c
 

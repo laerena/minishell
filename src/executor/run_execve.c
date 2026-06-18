@@ -1,28 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_exec.c                                         :+:      :+:    :+:   */
+/*   run_execve.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 12:01:30 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/18 12:14:32 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "expander.h"
 
 static char	**extract_path_from_envp(char **envp);
 static char	*exec_path_finder(char *cmd, char **dirs_path);
 static int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path);
 static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path);
+static int	run_execve(t_ctx *ctx, t_cmd *ast_node);
 
-int	run_exec(t_ctx *ctx, t_cmd *ast_node)
+int	run_execve_wrapper(t_ctx *ctx, t_cmd *ast_node)
+{
+	pid_t	child_pid;
+	int		status;
+	int		exit_code;
+
+	child_pid = fork();
+	if (child_pid == 0)
+	{
+		signals_reset();
+		exit(run_execve(ctx, ast_node));
+	}
+	waitpid(child_pid, &status, 0);
+	exit_code = convert_status_to_exitcode(status);
+	ctx->last_exit_status = exit_code;
+	return (exit_code);
+}
+
+static int	run_execve(t_ctx *ctx, t_cmd *ast_node)
 {
 	char	**args;
 	char	*exec_path;
 	char	**dirs_path;
-
+	
 	args = ast_node->u_cmd.exec.argv;
 	if (!args || !args[0])
 		return (ctx->last_exit_status = 0, 0);

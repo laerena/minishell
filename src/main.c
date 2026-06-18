@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/15 15:43:04 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/16 13:30:05 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ static void	handle_line(t_ctx *ctx, char *line)
 		ast = parse_expression(tokens);
 	if (tokens && !ast)
 		ctx->last_exit_status = 1;
-	if (ast && expand_ast(ctx, ast) == 0)
-		executor(ctx, ast);
-	else if (ast)
-		ctx->last_exit_status = 1;
+	// if (ast && expand_ast(ctx, ast) == 0)
+	executor(ctx, ast);
+	// else if (ast)
+	// 	ctx->last_exit_status = 1;
 	cmd_clear(&ast);
 	token_clear(&tokens);
 }

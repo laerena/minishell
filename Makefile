@@ -31,7 +31,7 @@ SRC = src/main.c \
 		src/executor/heredoc.c\
 		src/executor/op_control_flow.c\
 		src/executor/helper.c\
-		src/executor/run_exec.c\
+		src/executor/run_execve.c\
 		src/executor/run_builtins.c \
 		src/wildcards/wildcards.c \
 		src/builtins/builtin_cd.c \

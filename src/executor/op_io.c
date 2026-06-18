@@ -1,19 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   op_io.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/03 15:08:50 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/26 17:52:12 by vabisco          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "executor.h"
 
 static t_redir_info	get_redir_info(t_redir_type type);
 static int			my_dup2(int oldfd, int newfd);
+static void	handle_left_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node);
+static void	handle_right_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node);
+
 
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node)
 {
@@ -23,23 +14,18 @@ int	run_pipe(t_ctx *ctx, t_cmd *ast_node)
 	int		status;
 	int		exit_code;
 
-	pipe(pipefd);
+	if (pipe(pipefd) == -1)
+	{
+		perror("pipe failed");
+		return (ctx->last_exit_status = 1, 1);
+	}
+	status = 0;
 	left_pid = fork();
 	if (left_pid == 0)
-	{
-		close(pipefd[0]);
-		my_dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		exit(executor(ctx, ast_node->u_cmd.binop.left));
-	}
+		handle_left_pid(ctx, pipefd, ast_node);
 	right_pid = fork();
 	if (right_pid == 0)
-	{
-		close(pipefd[1]);
-		my_dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[0]);
-		exit(executor(ctx, ast_node->u_cmd.binop.right));
-	}
+		handle_right_pid(ctx, pipefd, ast_node);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(left_pid, NULL, 0);
@@ -49,32 +35,20 @@ int	run_pipe(t_ctx *ctx, t_cmd *ast_node)
 	return (exit_code);
 }
 
-int	run_redir(t_ctx *ctx, t_cmd *ast_node)
+static void	handle_left_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node)
 {
-	t_redir_info	r_info;
-	int				fd;
-	int				exit_code;
+	close(pipefd[0]);
+	my_dup2(pipefd[1], STDOUT_FILENO);
+	close(pipefd[1]);
+	exit(executor(ctx, ast_node->u_cmd.binop.left));
+}
 
-	if (ast_node->u_cmd.redir.type == R_HEREDOC)
-		return (run_heredoc(ctx, ast_node));
-	r_info = get_redir_info(ast_node->u_cmd.redir.type);
-	fd = open(ast_node->u_cmd.redir.file, r_info.flags, r_info.mode);
-	if (fd < 0)
-	{
-		perror("open");
-		ctx->last_exit_status = 1;
-		return (1);
-	}
-	if (my_dup2(fd, r_info.fd) < 0)
-	{
-		perror("dup2");
-		close(fd);
-		ctx->last_exit_status = 1;
-		return (1);
-	}
-	close(fd);
-	exit_code = executor(ctx, ast_node->u_cmd.redir.cmd);
-	return (exit_code);
+static void	handle_right_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node)
+{
+	close(pipefd[1]);
+	my_dup2(pipefd[0], STDIN_FILENO);
+	close(pipefd[0]);
+	exit(executor(ctx, ast_node->u_cmd.binop.right));
 }
 
 //helper ft for redir operator
@@ -106,8 +80,39 @@ static t_redir_info	get_redir_info(t_redir_type type)
 	return (info);
 }
 
-static int	my_dup2(int oldfd, int newfd)
+int	run_redir(t_ctx *ctx, t_cmd *ast_node)
 {
+	t_redir_info	r_info;
+	int				fd;
+	int				exit_code;
+
+	if (ast_node->u_cmd.redir.type == R_HEREDOC)
+		return (run_heredoc(ctx, ast_node));
+	r_info = get_redir_info(ast_node->u_cmd.redir.type);
+	fd = open(ast_node->u_cmd.redir.file, r_info.flags, r_info.mode);
+	if (fd < 0)
+	{
+		perror("open");
+		ctx->last_exit_status = 1;
+		return (1);
+	}
+	if (my_dup2(fd, r_info.fd) < 0)
+	{
+		perror("dup2");
+		close(fd);
+		ctx->last_exit_status = 1;
+		return (1);
+	}
+	close(fd);
+	exit_code = executor(ctx, ast_node->u_cmd.redir.cmd);
+	return (exit_code);
+}
+
+//!\ If oldfd == newfd, dup2 is a no-op; do not close oldfd (that would close the target).
+static int my_dup2(int oldfd, int newfd)
+{
+	if (oldfd == newfd)
+		return (0);
 	if (dup2(oldfd, newfd) < 0)
 	{
 		perror("dup2");

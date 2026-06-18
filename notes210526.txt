@@ -16,8 +16,9 @@ echo test test = testtest (suite a la suppression de l'espace en trop dans le bu
 
 may have found a problematic cmd:
 ls | grep *.txt && echo grep done && echo $SHLVL && (echo $SHLVL) && (export test1=1 && echo $test1)
+>> fixed
 
-
+ctrl + c problem, writing erratic char the next line
 
 
 test:

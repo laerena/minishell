@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/18 13:20:46 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/21 11:43:43 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,6 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-static void	handle_line(t_ctx *ctx, char *line)
-{
-	t_token	*tokens;
-	t_cmd	*ast;
-
-	tokens = lexer_tokenize(line);
-	ast = NULL;
-	if (tokens)
-		ast = parse_expression(tokens);
-	if (tokens && !ast)
-		ctx->last_exit_status = 1;
-	executor(ctx, ast);
-	cmd_clear(&ast);
-	token_clear(&tokens);
-}
-
 static void	shell_loop(t_ctx *ctx)
 {
 	char	*line;
@@ -70,4 +54,20 @@ static void	shell_loop(t_ctx *ctx)
 		handle_line(ctx, line);
 		free(line);
 	}
+}
+
+static void	handle_line(t_ctx *ctx, char *line)
+{
+	t_token	*tokens;
+	t_cmd	*ast;
+
+	tokens = lexer_tokenize(line);
+	ast = NULL;
+	if (tokens)
+		ast = parse_expression(tokens);
+	if (tokens && !ast)
+		ctx->last_exit_status = 1;
+	executor(ctx, ast);
+	cmd_clear(&ast);
+	token_clear(&tokens);
 }

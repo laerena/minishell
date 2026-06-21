@@ -4,6 +4,19 @@ SHELL_LV to hqndle/update
 multiples heredoc (<< t << t << t) took only the last eof to terminate ignroe the others
 ??heredoc signals sigint handle ??
 
+should not exit:
+./minishell
+minishell$ test.txt << eof
+> eof
+test.txt: command not found
+minishell$ exit
+
+infinite:
+minishell$ cat << eof
+> te
+> eof
+...
+
 signal handling to heredoc
 
 check multie heredoc into a file output
@@ -21,7 +34,7 @@ ls | grep *.txt && echo grep done && echo $SHLVL && (echo $SHLVL) && (export tes
 >> fixed
 
 ctrl + c problem, writing erratic char the next line
-
+>> fixed? may come from me
 
 test:
 valgrind --suppressions=a.supp --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --track-origins=yes ./minishell

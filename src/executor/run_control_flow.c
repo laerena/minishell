@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_control_flow.c                                  :+:      :+:    :+:   */
+/*   run_control_flow.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 13:11:17 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/16 13:50:31 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/20 17:03:57 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int	run_and(t_ctx *ctx, t_cmd *ast_node)
+// run '&&' operator
+int	run_and(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	int		exit_code;
 	t_cmd	*left;
@@ -20,14 +21,15 @@ int	run_and(t_ctx *ctx, t_cmd *ast_node)
 
 	left = ast_node->u_cmd.binop.left;
 	right = ast_node->u_cmd.binop.right;
-	exit_code = executor(ctx, left);
+	exit_code = run_ast(ctx, left, no_fork);
 	if (exit_code != 0)
 		return (exit_code);
-	exit_code = executor(ctx, right);
+	exit_code = run_ast(ctx, right, no_fork);
 	return (exit_code);
 }
 
-int	run_or(t_ctx *ctx, t_cmd *ast_node)
+// run '||' operator
+int	run_or(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	int		exit_code;
 	t_cmd	*left;
@@ -35,29 +37,17 @@ int	run_or(t_ctx *ctx, t_cmd *ast_node)
 
 	left = ast_node->u_cmd.binop.left;
 	right = ast_node->u_cmd.binop.right;
-	exit_code = executor(ctx, left);
+	exit_code = run_ast(ctx, left, no_fork);
 	if (exit_code == 0)
 		return (0);
-	exit_code = executor(ctx, right);
+	exit_code = run_ast(ctx, right, no_fork);
 	return (exit_code);
 }
 
 //create a child to run the next ast_node inside and wait for it
 //return the exit code (int: 0-255)
-int	run_subshell(t_ctx *ctx, t_cmd *ast_node)
+int	run_subshell(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
-	pid_t	child_pid;
-	int		status;
-	int		exit_code;
-
-	child_pid = fork();
-	if (child_pid == 0)
-	{
-		signals_reset();
-		exit(executor(ctx, ast_node->u_cmd.subshell.child));
-	}
-	waitpid(child_pid, &status, 0);
-	exit_code = convert_status_to_exitcode(status);
-	ctx->last_exit_status = exit_code;
-	return (exit_code);
+	(void)no_fork;
+	return (fork_and_run(ctx, ast_node->u_cmd.subshell.child));
 }

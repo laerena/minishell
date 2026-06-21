@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/26 17:09:24 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/20 16:53:57 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,23 @@
 // ◦ exit with no options
 
 //main ft to handle builtin cmds
-//expand wildcards then exec the correct builtin cmds
+//expand wildcards then cmd the correct builtin cmds
 //propagate the error return;
-int	run_builtin(t_ctx *ctx, t_cmd *ast_node)
+int	run_builtin(t_ctx *ctx, t_execmd *cmd)
 {
-	t_execmd	*exec;
-
-	exec = &ast_node->u_cmd.exec;
-	if (expand_wildcards(&exec->argv) == 1)
-		return (ctx->last_exit_status = 1, 1);
-	if (exec->builtin == BUILTIN_ECHO)
-		return (builtin_echo(ctx, exec->argv + 1));
-	else if (exec->builtin == BUILTIN_CD)
-		return (builtin_cd(ctx, exec->argv + 1));
-	else if (exec->builtin == BUILTIN_PWD)
+	if (cmd->builtin == BUILTIN_ECHO)
+		return (builtin_echo(ctx, cmd->argv + 1));
+	else if (cmd->builtin == BUILTIN_CD)
+		return (builtin_cd(ctx, cmd->argv + 1));
+	else if (cmd->builtin == BUILTIN_PWD)
 		return (builtin_pwd(ctx));
-	else if (exec->builtin == BUILTIN_EXPORT)
-		return (builtin_export(ctx, exec->argv + 1));
-	else if (exec->builtin == BUILTIN_UNSET)
-		return (builtin_unset(ctx, exec->argv + 1));
-	else if (exec->builtin == BUILTIN_ENV)
+	else if (cmd->builtin == BUILTIN_EXPORT)
+		return (builtin_export(ctx, cmd->argv + 1));
+	else if (cmd->builtin == BUILTIN_UNSET)
+		return (builtin_unset(ctx, cmd->argv + 1));
+	else if (cmd->builtin == BUILTIN_ENV)
 		return (builtin_env(ctx->envp));
-	else if (exec->builtin == BUILTIN_EXIT)
+	else if (cmd->builtin == BUILTIN_EXIT)
 		builtin_exit(ctx);
 	else
 		return (1);

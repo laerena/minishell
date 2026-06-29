@@ -4,7 +4,7 @@
 #include "minishell.h"
 
 //fts
-int	init_envp(t_ctx *ctx, char **envp);
+int	init(t_ctx *ctx, char **envp);
 int	update_shlvl(t_ctx *ctx);
 
 #endif

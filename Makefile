@@ -31,7 +31,7 @@ SRC = src/main.c \
 		src/executor/heredoc.c\
 		src/executor/op_control_flow.c\
 		src/executor/helper.c\
-		src/executor/run_exec.c\
+		src/executor/run_execve.c\
 		src/executor/run_builtins.c \
 		src/wildcards/wildcards.c \
 		src/builtins/builtin_cd.c \
@@ -42,7 +42,7 @@ SRC = src/main.c \
 		src/builtins/builtin_export_p.c \
 		src/builtins/builtin_pwd.c \
 		src/builtins/builtin_unset.c \
-		src/init/init_envp.c \
+		src/init/init.c \
 		src/init/update_SHLVL.c \
 		src/signals.c
 

@@ -27,7 +27,6 @@ typedef struct s_dynstrarr
 
 //fts
 int	executor(t_ctx *ctx, t_cmd *ast_node);
-int	run_in_child(t_ctx *ctx, t_cmd *ast_node);
 //	op_control_flow.c
 int	run_and(t_ctx *ctx, t_cmd *ast_node);
 int	run_or(t_ctx *ctx, t_cmd *ast_node);
@@ -36,8 +35,8 @@ int	run_subshell(t_ctx *ctx, t_cmd *ast_node);
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node);
 int	run_heredoc(t_ctx *ctx, t_cmd *ast_node);
-//	run_exec.c
-int	run_exec(t_ctx *ctx, t_cmd *ast_node);
+//	run_execve.c
+int	run_execve_wrapper(t_ctx *ctx, t_cmd *ast_node);
 //	run_builtin.c
 int	run_builtin(t_ctx *ctx, t_cmd *ast_node);
 //	bonus_wildcards.c

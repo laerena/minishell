@@ -6,6 +6,16 @@ INCLUDE = -Iinclude -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
+LDFLAGS =
+
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+READLINE_DIR := $(shell brew --prefix readline)
+INCLUDE += -I$(READLINE_DIR)/include
+LDFLAGS += -L$(READLINE_DIR)/lib
+endif
+
 SRC = src/main.c \
 		src/lexer/lexer.c \
 		src/lexer/lexer_utils.c \
@@ -54,7 +64,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDFLAGS) -lreadline -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

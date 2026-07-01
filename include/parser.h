@@ -14,7 +14,8 @@ void			cmd_clear(t_cmd **cmd);
 int				is_redirection(t_token_type type);
 t_redir_type	token_to_redir_type(t_token_type type);
 
-t_token			*find_last_top_level(t_token *start, t_token *end, t_token_type type);
+t_token			*find_last_top_level(t_token *start,
+					t_token *end, t_token_type type);
 char			**tokens_to_argv(t_token *start, t_token *end);
 
 t_cmd			*new_exec_node(char **argv);

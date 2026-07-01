@@ -3,7 +3,10 @@
 
 # include <signal.h>
 
-void	handle_signals();
-void	signals_reset();
+extern volatile sig_atomic_t	g_signal;
+
+void	handle_signals(void);
+void	signals_reset(void);
+void	handle_heredoc_signals(void);
 
 #endif

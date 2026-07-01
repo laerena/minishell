@@ -16,7 +16,7 @@ typedef struct s_redir_info
 	int	fd;
 	int	flags;
 	int	mode;
-} t_redir_info;
+}	t_redir_info;
 
 typedef struct s_dynstrarr
 {

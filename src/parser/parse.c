@@ -6,11 +6,13 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 09:32:37 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 16:29:00 by leilai           ###   ########.fr       */
+/*   Updated: 2026/06/29 21:12:36 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+static t_token	*range_last(t_token *start, t_token *end);
 
 /*
 ** wraps an existing command tree with one redirection node
@@ -57,17 +59,16 @@ static t_cmd	*parse_command(t_token *start, t_token *end)
 	cmd = new_exec_node(argv);
 	if (!cmd)
 		return (free_split(argv), NULL);
-	cur = start;
-	while (cur && cur != end)
+	cur = range_last(start, end);
+	while (cur)
 	{
 		if (is_redirection(cur->type))
-		{
 			cmd = wrap_redir(cmd, cur);
-			if (!cmd)
-				return (NULL);
-			cur = cur->next;
-		}
-		cur = cur->next;
+		if (!cmd)
+			return (NULL);
+		if (cur == start)
+			break ;
+		cur = cur->prev;
 	}
 	return (cmd);
 }

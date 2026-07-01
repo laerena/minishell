@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/29 17:28:07 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/01 15:20:26 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,12 @@ int	run_execve_wrapper(t_ctx *ctx, t_cmd *ast_node)
 		signals_reset();
 		exit(run_execve(ctx, ast_node));
 	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(child_pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		write(1, "\n", 1);
+	handle_signals();
 	exit_code = convert_status_to_exitcode(status);
 	ctx->last_exit_status = exit_code;
 	return (exit_code);

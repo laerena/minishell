@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/20 17:11:38 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/01 14:18:59 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ static int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 		return (run_builtin(ctx, cmd));
 	else if(no_fork == 1)
 		return(run_execve(ctx, cmd));
+	//could simplify by just fork and call execve here instead of run_ast in fork_and_run
 	return (fork_and_run(ctx, ast_node));
 }

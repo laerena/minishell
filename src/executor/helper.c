@@ -29,33 +29,6 @@ int	exit_code_from_status(t_ctx *ctx, int status)
 	return (exit_code);
 }
 
-// restore fds to their original state
-int	restore_fds(t_ctx *ctx)
-{
-	if (ctx->saved_fds.save_stdin >= 0)
-	{
-		if (dup2(ctx->saved_fds.save_stdin, STDIN_FILENO) == -1)
-			return (1);
-		close(ctx->saved_fds.save_stdin);
-		ctx->saved_fds.save_stdin = -1;
-	}
-	if (ctx->saved_fds.save_stdout >= 0)
-	{
-		if (dup2(ctx->saved_fds.save_stdout, STDOUT_FILENO) == -1)
-			return (1);
-		close(ctx->saved_fds.save_stdout);
-		ctx->saved_fds.save_stdout = -1;
-	}
-	if (ctx->saved_fds.save_stderr >= 0)
-	{
-		if (dup2(ctx->saved_fds.save_stderr, STDERR_FILENO) == -1)
-			return (1);
-		close(ctx->saved_fds.save_stderr);
-		ctx->saved_fds.save_stderr = -1;
-	}
-	return (0);
-}
-
 int	fork_and_run(t_ctx *ctx, t_cmd *ast_node)
 {
 	pid_t	child_pid;

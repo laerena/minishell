@@ -35,7 +35,7 @@ int	run_subshell(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 //	op_io.c
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node, int no_fork);
-int	create_heredoc(t_ctx *ctx, t_cmd *ast_node, int no_fork);
+int	create_heredoc(t_ctx *ctx, t_cmd *ast_node);
 //		run_redir_helper.c
 int save_target_fd(int target_fd);
 int redirect_fd(int file_fd, int target_fd);
@@ -48,7 +48,6 @@ int	run_builtin(t_ctx *ctx, t_execmd *cmd);
 int	expand_wildcards(char ***args);
 //	helper.c
 int	exit_code_from_status(t_ctx *ctx, int status);
-int	restore_fds(t_ctx *ctx);
 int	fork_and_run(t_ctx *ctx, t_cmd *ast_node);
 
 #endif

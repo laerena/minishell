@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/18 13:47:47 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/20 17:11:38 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,34 @@
 #include "minishell.h"
 #include "expander.h"
 
-static int	run_node(t_ctx *ctx, t_cmd *ast_node);
-static int	run_cmd(t_ctx *ctx, t_cmd *ast_node);
-// static int	restore_fds(t_ctx *ctx);
+static int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 
-//wrapper : entry point of executor dir
-//start the execution of the ast
+//wrapper : entry point
+//start the recursive execution of the ast
 int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
-	return (run_node(ctx, ast_node));
+	int	no_fork;
+
+	no_fork = 0;
+	return (run_ast(ctx, ast_node, no_fork));
 }
 
-static int	run_node(t_ctx *ctx, t_cmd *ast_node)
+int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	if (!ast_node)
 		return (1);
 	if (ast_node->type == N_EXEC)
-		return (run_cmd(ctx, ast_node));
+		return (run_node(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_PIPE)
-		return (run_pipe(ctx, ast_node));
+		return (run_pipe(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_REDIR)
-		return (run_redir(ctx, ast_node));
+		return (run_redir(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_AND)
-		return (run_and(ctx, ast_node));
+		return (run_and(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_OR)
-		return (run_or(ctx, ast_node));
+		return (run_or(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_SUBSHELL)
-		return (run_subshell(ctx, ast_node));
+		return (run_subshell(ctx, ast_node, no_fork));
 	else
 	{
 		ft_eprintf("wrong node->type: %i\n", ast_node->type);
@@ -50,18 +51,18 @@ static int	run_node(t_ctx *ctx, t_cmd *ast_node)
 	}
 }
 
-static int	run_cmd(t_ctx *ctx, t_cmd *ast_node)
+static int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
-	int	ret;
+	t_execmd	*cmd;
 
-	if (expand_ast(ctx, ast_node))
-		return (1);
-	ret = 0;
-	if (ast_node->u_cmd.exec.builtin)
-	{
-		ret = run_builtin(ctx, ast_node);
-	}
-	else
-		ret = run_execve_wrapper(ctx, ast_node);
-	return (ret);
+	cmd = &ast_node->u_cmd.exec;
+	// what exactly does the expander ? is it usefull to expand redir pipe.. ?
+	// if (expand_ast(ctx, ast_node))
+	// 	return (1);
+	// may expand wildcards here isntead of inside builtin and execve wrap
+	if (cmd->builtin != BUILTIN_NONE)
+		return (run_builtin(ctx, cmd));
+	else if(no_fork == 1)
+		return(run_execve(ctx, cmd));
+	return (fork_and_run(ctx, ast_node));
 }

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 14:40:43 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 14:57:57 by leilai           ###   ########.fr       */
+/*   Updated: 2026/06/20 18:12:42 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
+#include "struct.h"
 
 int	syntax_error(char *msg)
 {
@@ -29,4 +30,12 @@ int	malloc_error(void)
 int	print_syntax_error(char *msg)
 {
 	return (syntax_error(msg));
+}
+
+int	fail(t_ctx *ctx, int code, char *msg)
+{
+	if (msg)
+		perror(msg);
+	ctx->last_exit_status = code;
+	return (code);
 }

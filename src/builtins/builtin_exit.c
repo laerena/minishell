@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:50:52 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/15 15:45:43 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:15:42 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	builtin_exit(t_ctx *ctx)
 {
-	write(2, "exit\n", 5);
+	if (write(2, "exit\n", 5) == -1)
+		ctx->last_exit_status = 1;
+	else
+		ctx->last_exit_status = 0;
 	exit(ctx->last_exit_status);
 }

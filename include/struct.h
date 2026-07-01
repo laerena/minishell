@@ -75,16 +75,6 @@ typedef struct s_subshellcmd
 	t_cmd		*child;
 }	t_subshellcmd;
 
-//suggestion new redircmd to fix redirs problem (should accumulate all successives redirs in ONE node)
-// typedef struct s_redircmd
-// {
-// 	t_cmd				*cmd;
-// 	t_redir_type		type;
-// 	char				*file; //will be limiter for heredoc (could rename it)
-// 	int					heredoc_expand;
-// 	struct s_redircmd	*next //used to chain successive redirs
-// }	t_redircmd;
-
 typedef struct s_redircmd
 {
 	t_cmd			*cmd;
@@ -105,19 +95,11 @@ typedef struct s_cmd
 	}	u_cmd;
 }	t_cmd;
 
-typedef struct s_save_fds
-{
-	int	save_stdin;
-	int	save_stdout;
-	int	save_stderr;
-}	t_save_fds;
-
 typedef struct s_ctx
 {
 	char		**envp;
 	t_cmd		*ast_head;
 	int			last_exit_status;
-	t_save_fds	saved_fds;
 }	t_ctx;
 
 #endif

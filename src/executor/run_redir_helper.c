@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 11:51:46 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/21 11:55:43 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/01 13:23:34 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,18 @@ int save_target_fd(int target_fd)
 
 	saved_fd = dup(target_fd);
 	if (saved_fd < 0)
-		return (perror("save_targer_fd"), -1);
+	{
+		perror("dup");
+		return (-1);
+	}
 	return (saved_fd);
 }
 
-int apply_redirection(int file_fd, int target_fd)
+int redirect_fd(int file_fd, int target_fd)
 {
 	if (dup2(file_fd, target_fd) == -1)
 	{
-		perror("dup2 apply redir");
+		perror("dup2");
 		close(file_fd);
 		return (-1);
 	}
@@ -36,14 +39,14 @@ int apply_redirection(int file_fd, int target_fd)
 
 int restore_saved_fd(int saved_fd, int target_fd)
 {
-	if (saved_fd >= 0)
+	if (dup2(saved_fd, target_fd) == -1)
 	{
-		if (dup2(saved_fd, target_fd) == -1)
-			perror("dup2 restore");
+		return (perror("dup2 restore"), 1);
 		close(saved_fd);
-		return (0);
+		return (1);
 	}
-	return (1);
+	close(saved_fd);
+	return (0);
 }
 
 //!\ If oldfd == newfd, dup2 is a no-op; do not close oldfd (that would close the target).

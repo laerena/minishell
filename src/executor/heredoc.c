@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 13:13:11 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/21 12:25:20 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/01 13:01:57 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,32 +66,18 @@ static int	fill_heredoc(t_ctx *ctx, int fd, t_cmd *ast_node)
 	return (ret);
 }
 
-int	run_heredoc(t_ctx *ctx, t_cmd *ast_node, int no_fork)
+int	create_heredoc(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	pipefd[2];
-	int	exit_code;
-	int	saved_fd;
 
 	if (pipe(pipefd) < 0)
-		return (ctx->last_exit_status = 1, 1);
+		return (-1);
 	if (fill_heredoc(ctx, pipefd[1], ast_node))
 	{
 		close(pipefd[0]);
 		close(pipefd[1]);
-		return (ctx->last_exit_status = 1, 1);
+		return (-1);
 	}
 	close(pipefd[1]);
-	saved_fd = save_target_fd(STDIN_FILENO);
-	if (apply_redirection(pipefd[0], STDIN_FILENO) == -1)
-	{
-		if (saved_fd >= 0)
-			close (saved_fd);
-		return (ctx->last_exit_status = 1, 1);
-	}
-	close(pipefd[0]);
-	exit_code = run_ast(ctx, ast_node->u_cmd.redir.cmd, no_fork);
-	if (restore_saved_fd(saved_fd, STDIN_FILENO) == 1)
-		return (fail(ctx, 1, "restore_save_fd"));
-	ctx->last_exit_status = exit_code;
-	return (exit_code);
+	return (pipefd[0]);
 }

@@ -35,10 +35,10 @@ int	run_subshell(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 //	op_io.c
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node, int no_fork);
-int	run_heredoc(t_ctx *ctx, t_cmd *ast_node, int no_fork);
+int	create_heredoc(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 //		run_redir_helper.c
 int save_target_fd(int target_fd);
-int apply_redirection(int file_fd, int target_fd);
+int redirect_fd(int file_fd, int target_fd);
 int restore_saved_fd(int saved_fd, int target_fd);
 //	run_execve.c
 int	run_execve(t_ctx *ctx, t_execmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 11:51:46 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/03 14:46:39 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/03 15:45:31 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	save_target_fd(int target_fd)
 
 int	redirect_fd(int file_fd, int target_fd)
 {
+	if (file_fd == target_fd)
+		return (0);
 	if (dup2(file_fd, target_fd) == -1)
 	{
 		perror("dup2");
@@ -65,9 +67,12 @@ int	save_redir_fds(int saved[2])
 
 int	restore_redir_fds(int saved[2])
 {
-	if (restore_saved_fd(saved[0], STDIN_FILENO) == 1)
-		return (1);
-	if (restore_saved_fd(saved[1], STDOUT_FILENO) == 1)
-		return (1);
-	return (0);
+	int	ret;
+
+	ret = 0;
+	if (saved[0] >= 0 && restore_saved_fd(saved[0], STDIN_FILENO) == 1)
+		ret = 1;
+	if (saved[1] >= 0 && restore_saved_fd(saved[1], STDOUT_FILENO) == 1)
+		ret = 1;
+	return (ret);
 }

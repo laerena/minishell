@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 18:05:22 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/03 14:36:18 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/03 15:51:39 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	run_redir(t_ctx *ctx, t_cmd *node, int no_fork)
 	if (apply_redirs(ctx, node->u_cmd.redir.redirs))
 	{
 		restore_redir_fds(saved);
+		ctx->last_exit_status = 1;
 		return (1);
 	}
 	exit_code = run_ast(ctx, node->u_cmd.redir.cmd, no_fork);
@@ -49,7 +50,10 @@ static int	apply_redirs(t_ctx *ctx, t_redir *redirs)
 		if (source_fd < 0)
 			return (1);
 		if (redirect_fd(source_fd, r_info.fd) == -1)
-			return (ctx->last_exit_status = 1, 1);
+		{
+			ctx->last_exit_status = 1;
+			return (1);
+		}
 		redirs = redirs->next;
 	}
 	return (0);
@@ -67,10 +71,6 @@ static int	get_redir_fd(t_ctx *ctx, t_redir *redir, t_redir_info *r_info)
 	return (fd);
 }
 
-//helper ft for redir operator
-//convert redir type into modes then store them in a binary code
-//open() ft use this binary code to know which modes are used
-//return redir_params (int*: mode, fd)
 static t_redir_info	get_redir_info(t_redir_type type)
 {
 	t_redir_info	info;

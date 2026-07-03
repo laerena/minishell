@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_pipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 14:49:17 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/21 11:47:13 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/03 15:30:36 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 // static int			my_dup2(int oldfd, int newfd);
 static void	handle_left_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node);
 static void	handle_right_pid(t_ctx *ctx, int pipefd[], t_cmd *ast_node);
-
 
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {

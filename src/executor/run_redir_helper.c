@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_redir_helper.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 11:51:46 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/01 13:23:34 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/03 12:17:11 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int restore_saved_fd(int saved_fd, int target_fd)
 {
 	if (dup2(saved_fd, target_fd) == -1)
 	{
-		return (perror("dup2 restore"), 1);
+		perror("dup2 restore");
 		close(saved_fd);
 		return (1);
 	}

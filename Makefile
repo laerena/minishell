@@ -1,10 +1,20 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -O0 -fno-omit-frame-pointer
+CFLAGS = -Wall -Wextra -Werror -g
 INCLUDE = -Iinclude -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
+
+LDFLAGS =
+
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+READLINE_DIR := $(shell brew --prefix readline)
+INCLUDE += -I$(READLINE_DIR)/include
+LDFLAGS += -L$(READLINE_DIR)/lib
+endif
 
 SRC = src/main.c \
 		src/lexer/lexer.c \
@@ -46,7 +56,8 @@ SRC = src/main.c \
 		src/builtins/builtin_unset.c \
 		src/init/init.c \
 		src/init/update_SHLVL.c \
-		src/signals.c
+		src/signals/signals.c \
+		src/signals/signals_modes.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -56,7 +67,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDFLAGS) -lreadline -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

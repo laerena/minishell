@@ -36,12 +36,18 @@ int	fork_and_run(t_ctx *ctx, t_cmd *ast_node)
 	int		status;
 
 	child_pid = fork();
+	if (child_pid == -1)
+		return (ctx->last_exit_status = 1, 1);
 	if (child_pid == 0)
 	{
 		signals_reset();
 		child_ctx = 1;
 		exit(run_ast(ctx, ast_node, child_ctx));
 	}
+	signals_ignore();
 	waitpid(child_pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		write(1, "\n", 1);
+	handle_signals();
 	return (exit_code_from_status(ctx, status));
 }

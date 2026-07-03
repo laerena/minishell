@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_execve.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/21 11:37:41 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/03 12:19:52 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	run_execve(t_ctx *ctx, t_execmd *cmd)
 	char	**args;
 	char	*exec_path;
 	char	**dirs_path;
-	
+
 	args = cmd->argv;
 	if (!args || !args[0])
 		return (ctx->last_exit_status = 0, 0);
@@ -79,6 +79,7 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 {
 	char	*exec_path;
 	char	**dirs_iter;
+	char	*tmp;
 
 	exec_path = NULL;
 	if (ft_strchr(cmd, '/'))
@@ -92,7 +93,14 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 	dirs_iter = dirs_path;
 	while (*dirs_iter)
 	{
-		ft_asprintf(&exec_path, "%s/%s", *dirs_iter, cmd);
+		//ft_asprintf(&exec_path, "%s/%s", *dirs_iter, cmc);
+		tmp = ft_strjoin(*dirs_iter, "/");
+		if (!tmp)
+			return (NULL);
+		exec_path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!exec_path)
+			return (NULL);
 		if (access(exec_path, X_OK) == 0)
 			break ;
 		free(exec_path);

@@ -75,12 +75,18 @@ typedef struct s_subshellcmd
 	t_cmd		*child;
 }	t_subshellcmd;
 
+typedef struct s_redir
+{
+	t_redir_type	type;
+	char			*file;
+	int				heredoc_expand;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_redircmd
 {
-	t_cmd			*cmd;
-	char			*file;
-	t_redir_type	type;
-	int				heredoc_expand;
+	t_cmd	*cmd;
+	t_redir	*redirs;
 }	t_redircmd;
 
 typedef struct s_cmd

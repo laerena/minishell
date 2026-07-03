@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 16:59:38 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/21 16:28:34 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/03 14:28:43 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	free_argv(char **argv)
 static void	clear_redir(t_cmd *cmd)
 {
 	cmd_clear(&cmd->u_cmd.redir.cmd);
-	free(cmd->u_cmd.redir.file);
+	redir_clear(&cmd->u_cmd.redir.redirs);
 }
 
 static void	clear_binop(t_cmd *cmd)
@@ -66,4 +66,22 @@ void	cmd_clear(t_cmd **cmd)
 		cmd_clear(&(*cmd)->u_cmd.subshell.child);
 	free(*cmd);
 	*cmd = NULL;
+}
+
+void	redir_clear(t_redir **list)
+{
+	t_redir	*cur;
+	t_redir	*next;
+
+	if (!list)
+		return ;
+	cur = *list;
+	while (cur)
+	{
+		next = cur->next;
+		free(cur->file);
+		free(cur);
+		cur = next;
+	}
+	*list = NULL;
 }

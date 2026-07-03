@@ -6,7 +6,7 @@
 /*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/28 13:17:45 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/03 14:15:54 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,25 @@ t_cmd	*new_binop_node(t_node_type type, t_cmd *left, t_cmd *right)
 	return (cmd);
 }
 
-t_cmd	*new_redir_node(t_cmd *child, char *file, t_redir_type type)
+t_cmd	*new_redir_node(t_cmd *child, t_redir *redirs)
 {
 	t_cmd	*cmd;
 
+	if (!child || !redirs)
+	{
+		cmd_clear(&child);
+		redir_clear(&redirs);
+		return (NULL);
+	}
 	cmd = cmd_alloc(N_REDIR);
 	if (!cmd)
 	{
 		cmd_clear(&child);
-		free(file);
+		redir_clear(&redirs);
 		return (NULL);
 	}
 	cmd->u_cmd.redir.cmd = child;
-	cmd->u_cmd.redir.file = file;
-	cmd->u_cmd.redir.type = type;
-	cmd->u_cmd.redir.heredoc_expand = 1;
+	cmd->u_cmd.redir.redirs = redirs;
 	return (cmd);
 }
 

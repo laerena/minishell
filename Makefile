@@ -26,6 +26,7 @@ SRC = src/main.c \
 		src/parser/parser_imple.c \
 		src/parser/parser_utils.c \
 		src/parser/parser_utils_redir.c\
+		src/parser/redir_list.c\
 		src/parser/cmd_new.c \
 		src/parser/cmd_free.c \
 		src/utils/free_split.c\

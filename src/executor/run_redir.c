@@ -3,67 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   run_redir.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 18:05:22 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/01 13:47:44 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/03 14:36:18 by leilai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "error.h"
 
-static int	get_redir_fd(t_ctx *ctx, t_cmd *node, t_redir_info *r_info);
-static int	setup_redirection(int source_fd, int target_fd, int *saved_fd);
+static int			apply_redirs(t_ctx *ctx, t_redir *redirs);
+static int			get_redir_fd(t_ctx *ctx, t_redir *redir,
+						t_redir_info *r_info);
 static t_redir_info	get_redir_info(t_redir_type type);
 
 int	run_redir(t_ctx *ctx, t_cmd *node, int no_fork)
 {
-	t_redir_info	r_info;
-	int				source_fd;
-	int				saved_fd;
-	int				exit_code;
+	int	saved[2];
+	int	exit_code;
 
-	r_info = get_redir_info(node->u_cmd.redir.type);
-	source_fd = get_redir_fd(ctx, node, &r_info);
-	if (source_fd < 0)
+	if (save_redir_fds(saved))
+		return (fail(ctx, 1, "save_redir_fds"));
+	if (apply_redirs(ctx, node->u_cmd.redir.redirs))
+	{
+		restore_redir_fds(saved);
 		return (1);
-	if (setup_redirection(source_fd, r_info.fd, &saved_fd))
-		return (1);
+	}
 	exit_code = run_ast(ctx, node->u_cmd.redir.cmd, no_fork);
-	if (restore_saved_fd(saved_fd, r_info.fd) == 1)
-		return (fail(ctx, 1, "restore_save_fd"));
+	if (restore_redir_fds(saved) == 1)
+		return (fail(ctx, 1, "restore_redir_fds"));
 	ctx->last_exit_status = exit_code;
 	return (exit_code);
 }
 
-static int	get_redir_fd(t_ctx *ctx, t_cmd *node, t_redir_info *r_info)
+static int	apply_redirs(t_ctx *ctx, t_redir *redirs)
+{
+	t_redir_info	r_info;
+	int				source_fd;
+
+	while (redirs)
+	{
+		r_info = get_redir_info(redirs->type);
+		source_fd = get_redir_fd(ctx, redirs, &r_info);
+		if (source_fd < 0)
+			return (1);
+		if (redirect_fd(source_fd, r_info.fd) == -1)
+			return (ctx->last_exit_status = 1, 1);
+		redirs = redirs->next;
+	}
+	return (0);
+}
+
+static int	get_redir_fd(t_ctx *ctx, t_redir *redir, t_redir_info *r_info)
 {
 	int	fd;
 
-	if (node->u_cmd.redir.type == R_HEREDOC)
-		return (create_heredoc(ctx, node));
-
-	fd = open(node->u_cmd.redir.file, r_info->flags, r_info->mode);
+	if (redir->type == R_HEREDOC)
+		return (create_heredoc(ctx, redir));
+	fd = open(redir->file, r_info->flags, r_info->mode);
 	if (fd == -1)
 		return (fail(ctx, 1, "open"));
 	return (fd);
-}
-
-static int	setup_redirection(int source_fd, int target_fd, int *saved_fd)
-{
-	*saved_fd = save_target_fd(target_fd);
-	if (*saved_fd < 0)
-	{
-		close(source_fd);
-		return (1);
-	}
-	if (redirect_fd(source_fd, target_fd) == -1)
-	{
-		close(*saved_fd);
-		return (1);
-	}
-	return (0);
 }
 
 //helper ft for redir operator

@@ -25,6 +25,8 @@ typedef struct s_dynstrarr
 	size_t	capacity;
 }	t_dynstrarr;
 
+typedef int	(*t_fork_and_run_in)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
+
 //fts
 int	executor(t_ctx *ctx, t_cmd *ast_node);
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork);
@@ -41,6 +43,7 @@ int save_target_fd(int target_fd);
 int redirect_fd(int file_fd, int target_fd);
 int restore_saved_fd(int saved_fd, int target_fd);
 //	run_execve.c
+int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork);
 int	run_execve(t_ctx *ctx, t_execmd *cmd);
 //	run_builtin.c
 int	run_builtin(t_ctx *ctx, t_execmd *cmd);
@@ -48,6 +51,6 @@ int	run_builtin(t_ctx *ctx, t_execmd *cmd);
 int	expand_wildcards(char ***args);
 //	helper.c
 int	exit_code_from_status(t_ctx *ctx, int status);
-int	fork_and_run(t_ctx *ctx, t_cmd *ast_node);
+int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_in run_ft, int no_fork);
 
 #endif

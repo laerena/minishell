@@ -29,10 +29,9 @@ int	exit_code_from_status(t_ctx *ctx, int status)
 	return (exit_code);
 }
 
-int	fork_and_run(t_ctx *ctx, t_cmd *ast_node)
+int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_in run_ft, int no_fork)
 {
 	pid_t	child_pid;
-	int		child_ctx;
 	int		status;
 
 	child_pid = fork();
@@ -41,8 +40,8 @@ int	fork_and_run(t_ctx *ctx, t_cmd *ast_node)
 	if (child_pid == 0)
 	{
 		signals_reset();
-		child_ctx = 1;
-		exit(run_ast(ctx, ast_node, child_ctx));
+		no_fork = 1;
+		exit(run_ft(ctx, ast_node, no_fork));
 	}
 	signals_ignore();
 	waitpid(child_pid, &status, 0);

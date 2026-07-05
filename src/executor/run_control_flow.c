@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 13:11:17 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/20 17:03:57 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/05 13:53:01 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,5 @@ int	run_or(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 //return the exit code (int: 0-255)
 int	run_subshell(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
-	(void)no_fork;
-	return (fork_and_run(ctx, ast_node->u_cmd.subshell.child));
+	return (fork_and_run_in(ctx, ast_node->u_cmd.subshell.child, run_ast, no_fork));
 }

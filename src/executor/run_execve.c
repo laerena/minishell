@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_execve.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/03 12:19:52 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/05 13:50:59 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@ static char	**extract_path_from_envp(char **envp);
 static char	*exec_path_finder(char *cmd, char **dirs_path);
 static int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path);
 static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path);
+
+int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork)
+{
+	(void)no_fork;
+	return (run_execve(ctx, &exec_node->u_cmd.exec));
+}
 
 int	run_execve(t_ctx *ctx, t_execmd *cmd)
 {

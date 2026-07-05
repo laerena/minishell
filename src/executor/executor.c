@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/05 16:01:01 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/05 16:51:01 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,10 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	cmd = &ast_node->u_cmd.exec;
 	if (expand_argv(ctx, cmd->argv) == 1)
 		return (1);
+	// // /*debug*/
+	// for (size_t i = 0; ast_node->u_cmd.exec.argv[i]; i++)
+	// 	printf("argv apres expand_var[%zu]=%s\n", i, ast_node->u_cmd.exec.argv[i]);
+	// // /*debug*/
 	if (expand_wildcards(&cmd->argv) == 1)
 		return (1);
 	finalize_argv(cmd->argv);

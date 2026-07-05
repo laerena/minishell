@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/05 13:50:59 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/05 15:49:55 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ int	run_execve(t_ctx *ctx, t_execmd *cmd)
 	exec_path = exec_path_finder(args[0], dirs_path);
 	if (!exec_path)
 		return (exec_not_found(ctx, args[0], dirs_path));
-	if (expand_wildcards(&args) == 1)
-		return (exec_error(ctx, exec_path, dirs_path));
 	if (execve(exec_path, args, ctx->envp) == -1)
 	{
 		perror("execve");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:31:49 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 15:34:04 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/05 15:47:18 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@ char	*expand_str(t_ctx *ctx, char *s)
 	while (s[i])
 	{
 		if (handle_quote(s[i], &quote))
+		{
+			res = append_char(res, s[i]);
 			i++;
+		}
 		else if (s[i] == '$' && quote != '\'')
 			res = expand_var(ctx, s, &i, res);
 		else

@@ -30,6 +30,7 @@ typedef int	(*t_fork_and_run_in)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 //fts
 int	executor(t_ctx *ctx, t_cmd *ast_node);
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork);
+int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 //	op_control_flow.c
 int	run_and(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_or(t_ctx *ctx, t_cmd *ast_node, int no_fork);

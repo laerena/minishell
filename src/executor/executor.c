@@ -6,15 +6,13 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/05 13:48:36 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/05 16:01:01 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "expander.h"
 #include "executor.h"
 #include "minishell.h"
-#include "expander.h"
-
-static int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 
 //wrapper : entry point
 //start the recursive execution of the ast
@@ -30,15 +28,13 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	if (!ast_node)
 		return (1);
-	/*debug*/
-	if (ast_node->type == N_EXEC)
-	{
-		for (size_t i = 0; ast_node->u_cmd.exec.argv[i]; i++)
-			printf("argv[%zu]=%s\n", i, ast_node->u_cmd.exec.argv[i]);
-	}
-	/*debug*/
-	if (expand_ast(ctx, ast_node))
-		return (1);
+	// /*debug*/
+	// if (ast_node->type == N_EXEC)
+	// {
+	// 	for (size_t i = 0; ast_node->u_cmd.exec.argv[i]; i++)
+	// 		printf("argv[%zu]=%s\n", i, ast_node->u_cmd.exec.argv[i]);
+	// }
+	// /*debug*/
 	if (ast_node->type == N_EXEC)
 		return (run_node(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_PIPE)
@@ -60,11 +56,53 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	}
 }
 
-static int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
+static char	*remove_quotes(char *s)
+{
+	char	*res;
+	char	quote;
+	size_t	i;
+
+	res = ft_strdup("");
+	quote = 0;
+	i = 0;
+	while (s[i])
+	{
+		if ((s[i] == '\'' || s[i] == '"') && quote == 0)
+			quote = s[i];
+		else if (s[i] == quote)
+			quote = 0;
+		else
+			res = append_char(res, s[i]);
+		i++;
+	}
+	return (res);
+}
+
+static void	finalize_argv(char **argv)
+{
+	size_t	i;
+	char	*tmp;
+	
+	i = 0;
+	while (argv[i])
+	{
+		tmp = remove_quotes(argv[i]);
+		free(argv[i]);
+		argv[i] = tmp;
+		i++;
+	}
+}
+
+int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	t_execmd	*cmd;
 
 	cmd = &ast_node->u_cmd.exec;
+	if (expand_argv(ctx, cmd->argv) == 1)
+		return (1);
+	if (expand_wildcards(&cmd->argv) == 1)
+		return (1);
+	finalize_argv(cmd->argv);
 	// may expand wildcards here isntead of inside builtin and execve wrap
 	if (cmd->builtin != BUILTIN_NONE)
 		return (run_builtin(ctx, cmd));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 13:09:26 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/28 13:21:39 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/05 15:47:36 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** if SUBSHELL: expand child
 */
 
-static int	expand_argv(t_ctx *ctx, char **argv)
+int	expand_argv(t_ctx *ctx, char **argv)
 {
 	int		i;
 	char	*new;

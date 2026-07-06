@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_str.c                                       :+:      :+:    :+:   */
+/*   expand_argv.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:31:49 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/05 15:47:18 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/06 17:29:58 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,6 @@
 static int	is_var_char(char c)
 {
 	return (ft_isalnum(c) || c == '_');
-}
-
-static int	handle_quote(char c, char *quote)
-{
-	if ((c == '\'' || c == '"') && *quote == 0)
-	{
-		*quote = c;
-		return (1);
-	}
-	if (c == *quote)
-	{
-		*quote = 0;
-		return (1);
-	}
-	return (0);
 }
 
 static char	*append_status(t_ctx *ctx, int *i, char *res)
@@ -99,4 +84,22 @@ char	*expand_str(t_ctx *ctx, char *s)
 			return (NULL);
 	}
 	return (res);
+}
+
+int	expand_argv(t_ctx *ctx, char **argv)
+{
+	int		i;
+	char	*new;
+
+	i = 0;
+	while (argv && argv[i])
+	{
+		new = expand_str(ctx, argv[i]);
+		if (!new)
+			return (1);
+		free(argv[i]);
+		argv[i] = new;
+		i++;
+	}
+	return (0);
 }

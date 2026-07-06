@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/05 16:51:01 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/06 17:06:34 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static char	*remove_quotes(char *s)
 			quote = 0;
 		else
 			res = append_char(res, s[i]);
+		if (!res)
+			return (NULL);
 		i++;
 	}
 	return (res);

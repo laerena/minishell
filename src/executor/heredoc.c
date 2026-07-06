@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 13:13:11 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/03 12:57:08 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/06 17:20:27 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	write_heredoc_line(t_ctx *ctx, int fd, char *line, int do_expand)
 	return (0);
 }
 
-static int	fill_heredoc(t_ctx *ctx, int fd, t_cmd *ast_node)
+static int	fill_heredoc(t_ctx *ctx, int fd, t_redircmd *n_redir)
 {
 	char	*line;
 	int		ret;
@@ -52,13 +52,13 @@ static int	fill_heredoc(t_ctx *ctx, int fd, t_cmd *ast_node)
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (is_limiter(line, ast_node->u_cmd.redir.file))
+		if (is_limiter(line, n_redir->file))
 		{
 			free(line);
 			break ;
 		}
 		ret = write_heredoc_line(ctx, fd, line,
-				ast_node->u_cmd.redir.heredoc_expand);
+				n_redir->heredoc_expand);
 		free(line);
 		if (ret)
 			break ;
@@ -92,7 +92,9 @@ int	create_heredoc(t_ctx *ctx, t_cmd *ast_node)
 		return (close(pipefd[0]), close(pipefd[1]), -1);
 	g_signal = 0;
 	handle_heredoc_signals();
-	if (fill_heredoc(ctx, pipefd[1], ast_node))
+	if (update_delimiter(&ast_node->u_cmd.redir))
+		return (heredoc_abort(ctx, pipefd, saved_stdin, 1));
+	if (fill_heredoc(ctx, pipefd[1], &ast_node->u_cmd.redir))
 		return (heredoc_abort(ctx, pipefd, saved_stdin, 1));
 	if (g_signal == SIGINT)
 		return (heredoc_abort(ctx, pipefd, saved_stdin, 130));

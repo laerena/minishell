@@ -31,11 +31,11 @@ SRC = src/main.c \
 		src/utils/free_split.c\
 		src/utils/error.c \
 		src/utils/find_var_in_envp.c \
-		src/expander/expand_ast.c \
-		src/expander/expand_str.c \
+		src/expander/expand_argv.c \
 		src/expander/expand_env.c \
 		src/expander/expand_append.c \
 		src/expander/expand_heredoc.c \
+		src/expander/expand_utils.c \
 		src/executor/executor.c\
 		src/executor/heredoc.c\
 		src/executor/run_control_flow.c\

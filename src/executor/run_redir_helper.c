@@ -3,29 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   run_redir_helper.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 11:51:46 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/03 12:17:11 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/15 15:17:23 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int save_target_fd(int target_fd)
+static int	save_target_fd(int target_fd);
+
+int	save_fds(int fd, t_redir_save_fds *saved_fds)
+{
+	if (fd == STDIN_FILENO
+		&& saved_fds->saved_stdin == -1)
+	{
+		saved_fds->saved_stdin = save_target_fd(STDIN_FILENO);
+		if (saved_fds->saved_stdin == -1)
+			return (1);
+	}
+	if (fd == STDOUT_FILENO
+		&& saved_fds->saved_stdout == -1)
+	{
+		saved_fds->saved_stdout = save_target_fd(STDOUT_FILENO);
+		if (saved_fds->saved_stdout == -1)
+			return (1);
+	}
+	return (0);
+}
+
+static int save_target_fd(int target_fd)
 {
 	int saved_fd;
 
 	saved_fd = dup(target_fd);
 	if (saved_fd < 0)
 	{
-		perror("dup");
+		perror("dup: save_target_fd");
 		return (-1);
 	}
 	return (saved_fd);
 }
 
-int redirect_fd(int file_fd, int target_fd)
+int	redirect_fd(int file_fd, int target_fd)
 {
 	if (dup2(file_fd, target_fd) == -1)
 	{
@@ -37,16 +58,28 @@ int redirect_fd(int file_fd, int target_fd)
 	return (0);
 }
 
-int restore_saved_fd(int saved_fd, int target_fd)
+int	restore_fds(t_redir_save_fds *saved_fds)
 {
-	if (dup2(saved_fd, target_fd) == -1)
+	int	ret;
+
+	ret = 0;
+	if (saved_fds->saved_stdin != -1)
 	{
-		perror("dup2 restore");
-		close(saved_fd);
-		return (1);
+		if (dup2(saved_fds->saved_stdin, STDIN_FILENO) == -1)
+			ret = -1;
+		close(saved_fds->saved_stdin);
+		saved_fds->saved_stdin = -1;
 	}
-	close(saved_fd);
-	return (0);
+	if (saved_fds->saved_stdout != -1)
+	{
+		if (dup2(saved_fds->saved_stdout, STDOUT_FILENO) == -1)
+			ret = -1;
+		close(saved_fds->saved_stdout);
+		saved_fds->saved_stdout = -1;
+	}
+	if (ret == -1)
+		perror("dup2: restore_fds");
+	return (ret);
 }
 
 //!\ If oldfd == newfd, dup2 is a no-op; do not close oldfd (that would close the target).

@@ -11,12 +11,18 @@
 # include <dirent.h>
 
 //struct
+typedef struct s_redir_save_fds
+{
+	int	saved_stdin;
+	int	saved_stdout;
+}	t_redir_save_fds;
+
 typedef struct s_redir_info
 {
 	int	fd;
 	int	flags;
 	int	mode;
-} t_redir_info;
+}	t_redir_info;
 
 typedef struct s_dynstrarr
 {
@@ -40,9 +46,10 @@ int	run_pipe(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	create_heredoc(t_ctx *ctx, t_cmd *ast_node);
 //		run_redir_helper.c
-int save_target_fd(int target_fd);
-int redirect_fd(int file_fd, int target_fd);
-int restore_saved_fd(int saved_fd, int target_fd);
+int	save_fds(int fd, t_redir_save_fds *saved_fds);
+int	redirect_fd(int file_fd, int target_fd);
+int	restore_fds(t_redir_save_fds *saved_fds);
+
 //	run_execve.c
 int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork);
 int	run_execve(t_ctx *ctx, t_execmd *cmd);

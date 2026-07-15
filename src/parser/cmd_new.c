@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_new.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:51:50 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/28 13:17:45 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/15 16:09:08 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ t_cmd	*new_redir_node(t_cmd *child, char *file, t_redir_type type)
 	cmd->u_cmd.redir.file = file;
 	cmd->u_cmd.redir.type = type;
 	cmd->u_cmd.redir.heredoc_expand = 1;
+	cmd->u_cmd.redir.heredoc_fd = -1;
 	return (cmd);
 }
 

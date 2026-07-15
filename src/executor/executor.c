@@ -6,13 +6,15 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/06 17:06:34 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/15 16:56:43 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
 #include "executor.h"
 #include "minishell.h"
+
+static int	process_heredocs(t_ctx *ctx, t_cmd *node);
 
 //wrapper : entry point
 //start the recursive execution of the ast
@@ -21,7 +23,67 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 	int	no_fork;
 
 	no_fork = 0;
+	if (process_heredocs(ctx, ast_node))
+		return (1);
 	return (run_ast(ctx, ast_node, no_fork));
+}
+
+// static int	process_heredocs(t_ctx *ctx, t_cmd *node)
+// {
+// 	int	fd;
+
+// 	if (!node || node->type != N_REDIR)
+// 		return (0);
+
+// 	if (node->u_cmd.redir.type == R_HEREDOC)
+// 	{
+// 		fd = create_heredoc(ctx, node);
+// 		if (fd < 0)
+// 			return (1);
+
+// 		node->u_cmd.redir.heredoc_fd = fd;
+// 	}
+
+// 	return (process_heredocs(ctx, node->u_cmd.redir.cmd));
+// }
+
+static int process_heredocs(t_ctx *ctx, t_cmd *node)
+{
+    if (!node)
+        return 0;
+
+    if (node->type == N_REDIR)
+    {
+        if (node->u_cmd.redir.type == R_HEREDOC)
+        {
+            node->u_cmd.redir.heredoc_fd =
+                create_heredoc(ctx, node);
+        }
+
+        return process_heredocs(
+            ctx,
+            node->u_cmd.redir.cmd);
+    }
+
+    if (node->type == N_PIPE
+        || node->type == N_AND
+        || node->type == N_OR)
+    {
+        if (process_heredocs(ctx, node->u_cmd.binop.left))
+            return 1;
+
+        if (process_heredocs(ctx, node->u_cmd.binop.right))
+            return 1;
+
+        return 0;
+    }
+
+    if (node->type == N_SUBSHELL)
+        return process_heredocs(
+            ctx,
+            node->u_cmd.subshell.child);
+
+    return 0;
 }
 
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)

@@ -81,6 +81,7 @@ typedef struct s_redircmd
 	char			*file;
 	t_redir_type	type;
 	int				heredoc_expand;
+	int				heredoc_fd;
 }	t_redircmd;
 
 typedef struct s_cmd

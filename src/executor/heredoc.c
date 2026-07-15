@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 13:13:11 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/15 15:52:31 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/15 16:52:13 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,25 @@ static int	fill_heredoc(t_ctx *ctx, int fd, t_redircmd *n_redir)
 {
 	char	*line;
 	int		ret;
+	int		found_delimiter;
 
 	ret = 0;
+	found_delimiter = 0;
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			if (found_delimiter == 0)
+				ft_eprintf(
+					"warning: here-document delimited by EOF "
+					"(wanted `%s')\n",
+					n_redir->file);
 			break ;
+		}
 		if (is_limiter(line, n_redir->file))
 		{
+			found_delimiter = 1;
 			free(line);
 			break ;
 		}

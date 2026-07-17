@@ -9,6 +9,7 @@
 # include <unistd.h>
 # include <signal.h>
 # include <dirent.h>
+# include <sys/stat.h>
 
 //struct
 typedef struct s_redir_save_fds

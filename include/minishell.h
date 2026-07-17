@@ -19,5 +19,6 @@
 # include "../libft/include/ft_printf.h"
 # include "ms_signals.h"
 # include "struct.h"
+# include <errno.h>
 
 #endif

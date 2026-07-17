@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/15 17:33:07 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/17 19:55:04 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,19 @@
 #include "minishell.h"
 
 static int	process_heredocs(t_ctx *ctx, t_cmd *node);
+static void	close_heredoc_fds(t_cmd *node);
 
 //wrapper : entry point
 //start the recursive execution of the ast
 int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
-	int	no_fork;
+	int	ret;
 
-	no_fork = 0;
-	if (process_heredocs(ctx, ast_node))
-		return (1);
-	return (run_ast(ctx, ast_node, no_fork));
+	ret = process_heredocs(ctx, ast_node);
+	if (ret == 0)
+		ret = run_ast(ctx, ast_node, 0);
+	close_heredoc_fds(ast_node);
+	return (ret);
 }
 
 //old one that worked by branch
@@ -74,6 +76,31 @@ static int	process_heredocs(t_ctx *ctx, t_cmd *node)
 	if (node->type == N_SUBSHELL)
 		return (process_heredocs(ctx, node->u_cmd.subshell.child));
 	return (0);
+}
+
+static void	close_heredoc_fds(t_cmd *node)
+{
+	if (!node)
+		return ;
+	if (node->type == N_REDIR)
+	{
+		if (node->u_cmd.redir.type == R_HEREDOC
+			&& node->u_cmd.redir.heredoc_fd >= 0)
+		{
+			close(node->u_cmd.redir.heredoc_fd);
+			node->u_cmd.redir.heredoc_fd = -1;
+		}
+		close_heredoc_fds(node->u_cmd.redir.cmd);
+	}
+	else if (node->type == N_PIPE
+		|| node->type == N_AND
+		|| node->type == N_OR)
+	{
+		close_heredoc_fds(node->u_cmd.binop.left);
+		close_heredoc_fds(node->u_cmd.binop.right);
+	}
+	else if (node->type == N_SUBSHELL)
+		close_heredoc_fds(node->u_cmd.subshell.child);
 }
 
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)

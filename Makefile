@@ -82,4 +82,26 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+# Debug build:
+# Adds debug symbols and disables optimizations for easier debugging with gdb.
+# Usage: make debug
+debug: CFLAGS += -O0 -DDEBUG
+debug: re
+
+# Sanitizer build:
+# Enables AddressSanitizer and UndefinedBehaviorSanitizer to detect memory errors,
+# invalid accesses, use-after-free, and undefined behavior during execution.
+# Usage: make sanitize
+sanitize: CFLAGS := -Wall -Wextra -Werror -g -fsanitize=address,undefined -O0
+sanitize: LDFLAGS := -Wall -Wextra -Werror -g -fsanitize=address,undefined
+sanitize: re
+
+
+# Valgrind:
+# Runs the program with Valgrind to check memory leaks and file descriptor leaks.
+# Useful for detecting forgotten frees, open pipes, or heredoc file descriptors.
+# Usage: make valgrind
+valgrind: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./$(NAME)
+
+.PHONY: all clean fclean re debug sanitize valgrind

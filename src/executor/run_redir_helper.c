@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 11:51:46 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/15 15:17:23 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/18 15:08:43 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static int save_target_fd(int target_fd)
 
 int	redirect_fd(int file_fd, int target_fd)
 {
+	if (file_fd == target_fd)
+		return (0);
 	if (dup2(file_fd, target_fd) == -1)
 	{
 		perror("dup2");
@@ -81,18 +83,3 @@ int	restore_fds(t_redir_save_fds *saved_fds)
 		perror("dup2: restore_fds");
 	return (ret);
 }
-
-//!\ If oldfd == newfd, dup2 is a no-op; do not close oldfd (that would close the target).
-// int my_dup2(int oldfd, int newfd)
-// {
-// 	if (oldfd == newfd)
-// 		return (0);
-// 	if (dup2(oldfd, newfd) < 0)
-// 	{
-// 		perror("dup2");
-// 		close(oldfd);
-// 		return (1);
-// 	}
-// 	close(oldfd);
-// 	return (0);
-// }

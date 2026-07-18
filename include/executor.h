@@ -32,12 +32,14 @@ typedef struct s_dynstrarr
 	size_t	capacity;
 }	t_dynstrarr;
 
-typedef int	(*t_fork_and_run_in)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
+typedef int	(*t_fork_and_run_ft)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 
 //fts
 int	executor(t_ctx *ctx, t_cmd *ast_node);
+int	process_heredocs(t_ctx *ctx, t_cmd *node);
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork);
+void	close_heredoc_fds(t_cmd *node);
 //	op_control_flow.c
 int	run_and(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_or(t_ctx *ctx, t_cmd *ast_node, int no_fork);
@@ -60,6 +62,8 @@ int	run_builtin(t_ctx *ctx, t_execmd *cmd);
 int	expand_wildcards(char ***args);
 //	helper.c
 int	exit_code_from_status(t_ctx *ctx, int status);
-int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_in run_ft, int no_fork);
+int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_ft run_ft, int no_fork);
+void	fclean_child(t_ctx *ctx);
+void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork);
 
 #endif

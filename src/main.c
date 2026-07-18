@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/21 11:43:43 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/18 15:16:43 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	ctx.last_exit_status = 0;
 	ft_bzero(&ctx, sizeof(t_ctx));
-	if (init(&ctx, envp) == 1) //fatal error check, if init_envp fails it will compromise the program
-		return (1);
+	if (init(&ctx, envp) != 0) //fatal error check, if init_envp fails it will compromise the program
+		return (EXIT_FAILURE);
 	shell_loop(&ctx);
 	ft_strarr_free(ctx.envp);
 	return (0);
@@ -54,20 +53,21 @@ static void	shell_loop(t_ctx *ctx)
 		handle_line(ctx, line);
 		free(line);
 	}
+	rl_clear_history();
 }
 
 static void	handle_line(t_ctx *ctx, char *line)
 {
 	t_token	*tokens;
-	t_cmd	*ast;
 
 	tokens = lexer_tokenize(line);
-	ast = NULL;
 	if (tokens)
-		ast = parse_expression(tokens);
-	if (tokens && !ast)
-		ctx->last_exit_status = 1;
-	executor(ctx, ast);
-	cmd_clear(&ast);
-	token_clear(&tokens);
+	{
+		ctx->ast_head = parse_expression(tokens);
+		if (!ctx->ast_head)
+			ctx->last_exit_status = 1;
+		token_clear(&tokens);
+	}
+	executor(ctx, ctx->ast_head);
+	cmd_clear(&ctx->ast_head);
 }

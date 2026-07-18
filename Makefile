@@ -31,6 +31,7 @@ SRC = src/main.c \
 		src/utils/free_split.c\
 		src/utils/error.c \
 		src/utils/find_var_in_envp.c \
+		src/utils/wrapper_cmd_ext.c \
 		src/expander/expand_argv.c \
 		src/expander/expand_env.c \
 		src/expander/expand_append.c \
@@ -38,6 +39,7 @@ SRC = src/main.c \
 		src/expander/expand_utils.c \
 		src/executor/executor.c\
 		src/executor/heredoc.c\
+		src/executor/heredoc_create.c \
 		src/executor/run_control_flow.c\
 		src/executor/run_pipe.c \
 		src/executor/run_redir.c \

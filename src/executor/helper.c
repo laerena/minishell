@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "parser.h"
 
 //helper ft for parent process that fork into child (/doc/signal_exit_status.txt)
 //convert the raw exit status from waitpid into an exit code
@@ -29,7 +30,7 @@ int	exit_code_from_status(t_ctx *ctx, int status)
 	return (exit_code);
 }
 
-int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_in run_ft, int no_fork)
+int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_ft run_ft, int no_fork)
 {
 	pid_t	child_pid;
 	int		status;
@@ -38,15 +39,29 @@ int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_in run_ft, int n
 	if (child_pid == -1)
 		return (ctx->last_exit_status = 1, 1);
 	if (child_pid == 0)
-	{
-		signals_reset();
-		no_fork = 1;
-		exit(run_ft(ctx, ast_node, no_fork));
-	}
+		run_child(ctx, ast_node, run_ft, no_fork);
 	signals_ignore();
 	waitpid(child_pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		write(1, "\n", 1);
 	handle_signals();
 	return (exit_code_from_status(ctx, status));
+}
+
+void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork)
+{
+	int	status;
+
+	signals_reset();
+	no_fork = 1;
+	status = run_ft(ctx, node, no_fork);
+	fclean_child(ctx);
+	exit(status);
+}
+
+void	fclean_child(t_ctx *ctx)
+{
+	cmd_clear(&ctx->ast_head);
+	ft_strarr_free(ctx->envp);
+	rl_clear_history();
 }

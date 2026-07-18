@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 14:40:43 by leilai            #+#    #+#             */
-/*   Updated: 2026/06/20 18:12:42 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/18 14:43:04 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int	print_syntax_error(char *msg)
 	return (syntax_error(msg));
 }
 
+/*
+Update ctx->last_exit_status to the code
+Transmit the msg to perror
+Return the code
+*/
 int	fail(t_ctx *ctx, int code, char *msg)
 {
 	if (msg)

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 16:08:39 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/14 16:28:38 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/18 11:00:57 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,17 @@
 static int	export_p_print(char **cpy, size_t n);
 static void	ft_strarr_sort(char **args);
 
+/*
+Flag "-p", export shall write to the standard output
+the names and values of all exported variables, in the following
+format:
+
+	"export %s=%s\n", <name>, <value>
+
+if name is set, and:
+
+	"export %s\n", <name>
+*/
 int	export_p(char **envp)
 {
 	size_t	n;

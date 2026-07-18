@@ -103,7 +103,18 @@ sanitize: re
 # Runs the program with Valgrind to check memory leaks and file descriptor leaks.
 # Useful for detecting forgotten frees, open pipes, or heredoc file descriptors.
 # Usage: make valgrind
-valgrind: all
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./$(NAME)
+VALGRIND_SUPP = readline.supp
 
-.PHONY: all clean fclean re debug sanitize valgrind
+valgrind: all
+	valgrind \
+		--leak-check=full \
+		--show-leak-kinds=all \
+		--suppressions=$(VALGRIND_SUPP) \
+		./$(NAME)
+
+valgrind-fd: all
+	valgrind \
+		--track-fds=yes \
+		./$(NAME)
+
+.PHONY: all clean fclean re debug sanitize valgrind valgrind-fd

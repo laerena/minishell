@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 09:32:37 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/15 15:48:35 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 12:56:30 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ static t_cmd	*wrap_redir(t_cmd *child, t_token *redir)
 		cmd_clear(&child);
 		return (NULL);
 	}
-	printf("REDIR type=%d file=%s\n",
-		redir->type,
-		redir->next->value);
 	return (new_node);
 }
 

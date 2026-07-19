@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 13:13:11 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/18 11:41:11 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 12:57:07 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,7 @@ int	create_heredoc(t_ctx *ctx, t_cmd *ast_node)
 	handle_heredoc_signals();
 	if (update_delimiter(&ast_node->u_cmd.redir))
 		return (heredoc_abort(ctx, pipefd, saved_stdin, 1));
-	printf("HEREDOC delimiter=%s\n", ast_node->u_cmd.redir.file);
-		if (fill_heredoc(ctx, pipefd[1], &ast_node->u_cmd.redir))
+	if (fill_heredoc(ctx, pipefd[1], &ast_node->u_cmd.redir))
 		return (heredoc_abort(ctx, pipefd, saved_stdin, 1));
 	if (g_signal == SIGINT)
 		return (heredoc_abort(ctx, pipefd, saved_stdin, 130));

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/18 11:43:49 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 17:41:26 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,27 @@ static void	finalize_argv(char **argv)
 	}
 }
 
+
+// static void	remove_empty_expanded_args(char **argv)
+// {
+// 	int	i;
+// 	int	j;
+
+// 	i = 0;
+// 	j = 0;
+// 	while (argv[i])
+// 	{
+// 		if (argv[i][0] == '\0')
+// 		{
+// 			free(argv[i]);
+// 			i++;
+// 			continue ;
+// 		}
+// 		argv[j++] = argv[i++];
+// 	}
+// 	argv[j] = NULL;
+// }
+
 int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	t_execmd	*cmd;
@@ -105,12 +126,11 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	cmd = &ast_node->u_cmd.exec;
 	if (expand_argv(ctx, cmd->argv) == 1)
 		return (1);
-	// // /*debug*/
-	// for (size_t i = 0; ast_node->u_cmd.exec.argv[i]; i++)
-	// 	printf("argv apres expand_var[%zu]=%s\n", i, ast_node->u_cmd.exec.argv[i]);
-	// // /*debug*/
-	if (expand_wildcards(&cmd->argv) == 1)
-		return (1);
+	if (cmd->argv && cmd->argv[0])
+	{
+		if (expand_wildcards(&cmd->argv) == 1)
+			return (1);
+	}
 	finalize_argv(cmd->argv);
 	if (cmd->builtin != BUILTIN_NONE)
 		return (run_builtin(ctx, cmd));

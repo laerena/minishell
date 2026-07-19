@@ -12,4 +12,6 @@ char	**find_var_in_envp(char **envp, char *args);
 
 int 	my_dup2(int oldfd, int newfd);
 
+void	malloc_error_exit(t_ctx *ctx);
+
 #endif

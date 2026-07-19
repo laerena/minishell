@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/18 15:16:43 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 17:05:29 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ static void	handle_line(t_ctx *ctx, char *line)
 			ctx->last_exit_status = 1;
 		token_clear(&tokens);
 	}
-	executor(ctx, ctx->ast_head);
+	if (ctx->ast_head)
+		executor(ctx, ctx->ast_head);
+	else
+		ctx->last_exit_status = 1;
 	cmd_clear(&ctx->ast_head);
 }

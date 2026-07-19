@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/17 18:40:26 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 15:22:52 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	run_execve(t_ctx *ctx, t_execmd *cmd)
 
 	if (!cmd->argv || !cmd->argv[0])
 		return (ctx->last_exit_status = 0, 0);
+	if (cmd->argv[0][0] == '\0')
+		return (exec_not_found(ctx, cmd->argv[0], NULL));
 	dirs_path = extract_path_from_envp(ctx->envp);
 	exec_path = exec_path_finder(cmd->argv[0], dirs_path);
 	if (!exec_path)
@@ -95,7 +97,8 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path)
 {
 	ft_eprintf("%s: command not found\n", cmd);
-	ft_strarr_free(dirs_path);
+	if (dirs_path)
+		ft_strarr_free(dirs_path);
 	ctx->last_exit_status = 127;
 	return (127);
 }

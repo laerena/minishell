@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 18:05:22 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/15 16:35:06 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 17:33:42 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	get_redir_fd(t_ctx *ctx, t_cmd *node, t_redir_info *r_info)
 
 	fd = open(node->u_cmd.redir.file, r_info->flags, r_info->mode);
 	if (fd == -1)
-		return (fail(ctx, -1, "open"));
+		return (perror("open"), ctx->last_exit_status = 1, -1);
 	return (fd);
 }
 

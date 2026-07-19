@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_wildcards.c                                  :+:      :+:    :+:   */
+/*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 19:52:15 by vabisco           #+#    #+#             */
-/*   Updated: 2026/05/24 15:03:35 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/19 17:30:16 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	expand_wildcards(char ***args)
 	size_t			i;
 	t_dynstrarr		w_args;
 
+	if (!args || !*args || !(*args)[0])
+		return (0);
 	i = 0;
 	ft_memset(&w_args, 0 , sizeof(w_args));
 	if (ft_strarr_apnd(&w_args, (*args)[i++]) == 1)

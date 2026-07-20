@@ -63,7 +63,6 @@ int	expand_wildcards(char ***args);
 //	helper.c
 int	exit_code_from_status(t_ctx *ctx, int status);
 int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_ft run_ft, int no_fork);
-void	fclean_child(t_ctx *ctx);
 void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork);
 
 #endif

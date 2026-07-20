@@ -33,6 +33,7 @@ SRC = src/main.c \
 		src/utils/find_var_in_envp.c \
 		src/utils/wrapper_cmd_ext.c \
 		src/utils/malloc_error.c \
+		src/utils/fcleanup.c \
 		src/expander/expand_argv.c \
 		src/expander/expand_env.c \
 		src/expander/expand_append.c \

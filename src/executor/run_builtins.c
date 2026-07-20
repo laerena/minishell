@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/19 13:12:52 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/20 13:31:28 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	run_builtin(t_ctx *ctx, t_execmd *cmd)
 	else if (cmd->builtin == BUILTIN_ENV)
 		return (builtin_env(ctx, ctx->envp));
 	else if (cmd->builtin == BUILTIN_EXIT)
-		builtin_exit(ctx);
+		builtin_exit(ctx, cmd->argv + 1);
 	else
 		return (1);
 	return(0);

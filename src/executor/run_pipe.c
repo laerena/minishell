@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 14:49:17 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/18 15:00:22 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/20 15:40:44 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ static pid_t	fork_left_child(t_ctx *ctx, int *pipefd, t_cmd *ast_node)
 		if (my_dup2(pipefd[1], STDOUT_FILENO) == -1)
 		{
 			close_pipefd(pipefd);
-			fclean_child(ctx);
+			ctx_cleanup(ctx);
 			exit(1);
 		}
 		close_pipefd(pipefd);
 		status = run_ast(ctx, ast_node->u_cmd.binop.left, 1);
-		fclean_child(ctx);
+		ctx_cleanup(ctx);
 		exit(status);
 	}
 	return (pid);
@@ -84,12 +84,12 @@ static pid_t	fork_right_child(t_ctx *ctx, int *pipefd, t_cmd *ast_node)
 		if (my_dup2(pipefd[0], STDIN_FILENO) == -1)
 		{
 			close_pipefd(pipefd);
-			fclean_child(ctx);
+			ctx_cleanup(ctx);
 			exit (1);
 		}
 		close_pipefd(pipefd);
 		status = run_ast(ctx, ast_node->u_cmd.binop.right, 1);
-		fclean_child(ctx);
+		ctx_cleanup(ctx);
 		exit(status);
 	}
 	return (pid);

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "parser.h"
+#include "utils.h"
 
 //helper ft for parent process that fork into child (/doc/signal_exit_status.txt)
 //convert the raw exit status from waitpid into an exit code
@@ -55,13 +55,6 @@ void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork)
 	signals_reset();
 	no_fork = 1;
 	status = run_ft(ctx, node, no_fork);
-	fclean_child(ctx);
+	ctx_cleanup(ctx);
 	exit(status);
-}
-
-void	fclean_child(t_ctx *ctx)
-{
-	cmd_clear(&ctx->ast_head);
-	ft_strarr_free(ctx->envp);
-	rl_clear_history();
 }

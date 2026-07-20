@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/20 13:43:35 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/20 19:19:08 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	ret;
 
-	ret = process_heredocs(ctx, ast_node);
+	ret = prepare_redirs(ctx, ast_node);
 	if (ret == 0)
 		ret = run_ast(ctx, ast_node, 0);
 	close_heredoc_fds(ast_node);
@@ -59,31 +59,34 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	}
 }
 
-static char	*remove_quotes(char *s)
-{
-	char	*res;
-	char	quote;
-	size_t	i;
-
-	if (!*s)
-		return (NULL);
-	res = ft_strdup("");
-	quote = 0;
-	i = 0;
-	while (s[i])
-	{
-		if ((s[i] == '\'' || s[i] == '"') && quote == 0)
-			quote = s[i];
-		else if (s[i] == quote)
-			quote = 0;
-		else
-			res = append_char(res, s[i]);
-		if (!res)
-			return (NULL);
-		i++;
-	}
-	return (res);
-}
+// static int	prepare_redirs(t_ctx *ctx, t_cmd *node)
+// {
+// 	if (!node)
+// 		return (0);
+// 	if (node->type == N_REDIR)
+// 	{
+// 		if (node->u_cmd.redir.type == R_HEREDOC)
+// 		{
+// 			node->u_cmd.redir.heredoc_fd = create_heredoc(ctx, node);
+// 			if (node->u_cmd.redir.heredoc_fd < 0)
+// 				return (1);
+// 		}
+// 		else
+// 			if (remove_quotes(&node->u_cmd.redir.file))
+// 				return (1);
+// 		return (prepare_redirs(ctx, node->u_cmd.redir.cmd));
+// 	}
+// 	if (node->type == N_PIPE || node->type == N_AND
+// 		|| node->type == N_OR)
+// 	{
+// 		if (prepare_redirs(ctx, node->u_cmd.binop.left))
+// 			return (1);
+// 		return (prepare_redirs(ctx, node->u_cmd.binop.right));
+// 	}
+// 	if (node->type == N_SUBSHELL)
+// 		return (prepare_redirs(ctx, node->u_cmd.subshell.child));
+// 	return (0);
+// }
 
 static void	finalize_argv(char **argv)
 {
@@ -94,32 +97,13 @@ static void	finalize_argv(char **argv)
 	while (argv[i])
 	{
 		tmp = remove_quotes(argv[i]);
+		if (!tmp)
+			return ;
 		free(argv[i]);
 		argv[i] = tmp;
 		i++;
 	}
 }
-
-
-// static void	remove_empty_expanded_args(char **argv)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	j = 0;
-// 	while (argv[i])
-// 	{
-// 		if (argv[i][0] == '\0')
-// 		{
-// 			free(argv[i]);
-// 			i++;
-// 			continue ;
-// 		}
-// 		argv[j++] = argv[i++];
-// 	}
-// 	argv[j] = NULL;
-// }
 
 int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {

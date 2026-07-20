@@ -49,6 +49,7 @@ SRC = src/main.c \
 		src/executor/helper.c\
 		src/executor/run_execve.c\
 		src/executor/run_builtins.c \
+		src/executor/prepare_redirs.c \
 		src/wildcards/wildcards.c \
 		src/builtins/builtin_cd.c \
 		src/builtins/builtin_echo.c \

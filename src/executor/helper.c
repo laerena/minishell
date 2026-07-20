@@ -12,6 +12,7 @@
 
 #include "executor.h"
 #include "utils.h"
+#include "expander.h"
 
 //helper ft for parent process that fork into child (/doc/signal_exit_status.txt)
 //convert the raw exit status from waitpid into an exit code
@@ -57,4 +58,32 @@ void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork)
 	status = run_ft(ctx, node, no_fork);
 	ctx_cleanup(ctx);
 	exit(status);
+}
+
+char	*remove_quotes(char *s)
+{
+	char	*res;
+	char	quote;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	res = ft_strdup("");
+	if (!res)
+		return (NULL);
+	quote = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (is_quote(s[i]) && quote == 0)
+			quote = s[i];
+		else if (s[i] == quote)
+			quote = 0;
+		else
+			res = append_char(res, s[i]);
+		if (!res)
+			return (NULL);
+		i++;
+	}
+	return (res);
 }

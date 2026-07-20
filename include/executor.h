@@ -36,7 +36,8 @@ typedef int	(*t_fork_and_run_ft)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 
 //fts
 int	executor(t_ctx *ctx, t_cmd *ast_node);
-int	process_heredocs(t_ctx *ctx, t_cmd *node);
+// int	process_heredocs(t_ctx *ctx, t_cmd *node);
+int	prepare_redirs(t_ctx *ctx, t_cmd *node);
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 void	close_heredoc_fds(t_cmd *node);
@@ -52,7 +53,6 @@ int	create_heredoc(t_ctx *ctx, t_cmd *ast_node);
 int	save_fds(int fd, t_redir_save_fds *saved_fds);
 int	redirect_fd(int file_fd, int target_fd);
 int	restore_fds(t_redir_save_fds *saved_fds);
-
 //	run_execve.c
 int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork);
 int	run_execve(t_ctx *ctx, t_execmd *cmd);
@@ -64,5 +64,6 @@ int	expand_wildcards(char ***args);
 int	exit_code_from_status(t_ctx *ctx, int status);
 int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_ft run_ft, int no_fork);
 void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork);
+char	*remove_quotes(char *s);
 
 #endif

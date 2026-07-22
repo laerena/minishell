@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/22 19:44:58 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/22 20:14:34 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "expander.h"
 #include "executor.h"
 #include "minishell.h"
+
+static void	remove_empty_unquoted_args(char **argv);
+static void	finalize_argv(char **argv);
 
 //wrapper : entry point
 //start the recursive execution of the ast
@@ -60,23 +63,6 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	}
 }
 
-static void	finalize_argv(char **argv)
-{
-	size_t	i;
-	char	*tmp;
-	
-	i = 0;
-	while (argv[i])
-	{
-		tmp = remove_quotes(argv[i]);
-		if (!tmp)
-			return ;
-		free(argv[i]);
-		argv[i] = tmp;
-		i++;
-	}
-}
-
 int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	t_execmd	*cmd;
@@ -88,12 +74,13 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	// 	printf("[%d] = %s\n", i, cmd->argv[i]);
 	//debug
 	if (expand_argv(ctx, cmd->argv) == 1)
-	return (1);
+		return (1);
 	//debug
 	// printf("AFTER EXPAND:\n");
 	// for (int i = 0; cmd->argv[i]; i++)
 	// 	printf("[%d] = %s\n", i, cmd->argv[i]);
 	//debug
+	remove_empty_unquoted_args(cmd->argv);
 	if (cmd->argv && cmd->argv[0])
 	{
 		if (expand_wildcards(&cmd->argv) == 1)
@@ -110,4 +97,42 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	else if(no_fork == 1)
 		return(run_execve(ctx, cmd));
 	return (fork_and_run_in(ctx, ast_node, run_execve_wrapper, no_fork));
+}
+
+static void	remove_empty_unquoted_args(char **argv)
+{
+	size_t	i;
+	size_t	j;
+
+	if (!argv)
+		return ;
+	i = 0;
+	j = 0;
+	while (argv[i])
+	{
+		if (argv[i][0] != '\0')
+			argv[j++] = argv[i];
+		else
+			free(argv[i]);
+		i++;
+	}
+	argv[j] = NULL;
+}
+
+
+static void	finalize_argv(char **argv)
+{
+	size_t	i;
+	char	*tmp;
+	
+	i = 0;
+	while (argv[i])
+	{
+		tmp = remove_quotes(argv[i]);
+		if (!tmp)
+			return ;
+		free(argv[i]);
+		argv[i] = tmp;
+		i++;
+	}
 }

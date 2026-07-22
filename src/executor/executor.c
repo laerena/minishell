@@ -6,10 +6,11 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/22 18:39:45 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/22 19:44:58 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "wildcards.h"
 #include "expander.h"
 #include "executor.h"
 #include "minishell.h"

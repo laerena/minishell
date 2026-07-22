@@ -8,7 +8,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <signal.h>
-# include <dirent.h>
 # include <sys/stat.h>
 
 //struct
@@ -24,13 +23,6 @@ typedef struct s_redir_info
 	int	flags;
 	int	mode;
 }	t_redir_info;
-
-typedef struct s_dynstrarr
-{
-	char	**strarr;
-	size_t	size;
-	size_t	capacity;
-}	t_dynstrarr;
 
 typedef int	(*t_fork_and_run_ft)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 
@@ -58,8 +50,6 @@ int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork);
 int	run_execve(t_ctx *ctx, t_execmd *cmd);
 //	run_builtin.c
 int	run_builtin(t_ctx *ctx, t_execmd *cmd);
-//	bonus_wildcards.c
-int	expand_wildcards(char ***args);
 //	helper.c
 int	exit_code_from_status(t_ctx *ctx, int status);
 int	fork_and_run_in(t_ctx *ctx, t_cmd *ast_node, t_fork_and_run_ft run_ft, int no_fork);

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 19:52:15 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/19 17:30:16 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/22 18:26:59 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,20 @@
 static int	expand_single_wildcard(t_dynstrarr *w_args, const char *arg);
 static int	ft_fnmatch_minishell(const char *pattern, const char *arg);
 static int	ft_strarr_apnd(t_dynstrarr *w_args, const char *arg);
-static void	ft_strarr_sort(char **args);
+static void ft_strarr_sort_range(char **args, size_t start);
 
-int	expand_wildcards(char ***args)
+/*
+** Expands wildcard patterns in the argv array.
+** The command name (argv[0]) is kept unchanged.
+** Every argument containing '*' is expanded into matching filenames.
+** Arguments without wildcards are copied as-is.
+** If no match is found, the original pattern is preserved.
+*/
+int expand_wildcards(char ***args)
 {
-	size_t			i;
-	t_dynstrarr		w_args;
+	size_t		i;
+	t_dynstrarr	w_args;
+	size_t		start;
 
 	if (!args || !*args || !(*args)[0])
 		return (0);
@@ -30,19 +38,35 @@ int	expand_wildcards(char ***args)
 		return (1);
 	while ((*args)[i])
 	{
-		if (expand_single_wildcard(&w_args, (*args)[i]) == 1)
-			return (1);
+		if (!ft_strchr((*args)[i], '*'))
+		{
+			if (ft_strarr_apnd(&w_args, (*args)[i]) == 1)
+				return (1);
+		}
+		else
+		{
+			start = w_args.size;
+			if (expand_single_wildcard(&w_args, (*args)[i]) == 1)
+				return (1);
+			ft_strarr_sort_range(w_args.strarr, start);
+		}
 		i++;
 	}
 	if (!w_args.strarr)
 		return (1);
 	ft_strarr_free(*args);
 	(*args) = w_args.strarr;
-	ft_strarr_sort(*args + 1);
 	return (0);
 }
 
-static int	expand_single_wildcard(t_dynstrarr *w_args, const char *arg)
+/*
+** Expands a single wildcard pattern.
+** Scans the current directory and appends every matching filename
+** to the destination array. Hidden files are ignored unless the
+** pattern starts with '.'. If no match is found, the original
+** pattern is appended unchanged.
+*/
+static int expand_single_wildcard(t_dynstrarr *w_args, const char *arg)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -79,8 +103,12 @@ static int	expand_single_wildcard(t_dynstrarr *w_args, const char *arg)
 	return (0);
 }
 
-//tested, working
-static int	ft_fnmatch_minishell(const char *pattern, const char *arg)
+/*
+** Minimal fnmatch implementation supporting only '*'.
+** Returns 0 when the filename matches the pattern,
+** and 1 otherwise.
+*/
+static int ft_fnmatch_minishell(const char *pattern, const char *arg)
 {
 	if (!*pattern && !*arg)
 		return (0);
@@ -99,8 +127,12 @@ static int	ft_fnmatch_minishell(const char *pattern, const char *arg)
 	return (1);
 }
 
-//tested, working
-static int	ft_strarr_apnd(t_dynstrarr *w_args, const char *arg)
+/*
+** Appends a copy of a string to a dynamic string array.
+** The array is automatically resized when needed.
+** Returns 0 on success and 1 on allocation failure.
+*/
+static int ft_strarr_apnd(t_dynstrarr *w_args, const char *arg)
 {
 	char	**old_arr;
 
@@ -123,8 +155,12 @@ static int	ft_strarr_apnd(t_dynstrarr *w_args, const char *arg)
 	return (0);
 }
 
-//tested 50%
-static void	ft_strarr_sort(char **args)
+/*
+** Sorts a NULL-terminated string array in lexicographical order.
+** Used to reproduce Bash's behavior, where wildcard matches are
+** returned in alphabetical order.
+*/
+static void ft_strarr_sort_range(char **args, size_t start)
 {
 	size_t	i;
 	char	*tmp;
@@ -134,10 +170,10 @@ static void	ft_strarr_sort(char **args)
 	while (swapped)
 	{
 		swapped = 0;
-		i = 0;
+		i = start;
 		while (args[i] && args[i + 1])
 		{
-			if (ft_strncmp(args[i], args[i + 1], 1) > 0)
+			if (ft_strcmp(args[i], args[i + 1]) > 0)
 			{
 				tmp = args[i];
 				args[i] = args[i + 1];

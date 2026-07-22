@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/20 19:19:08 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/22 18:39:45 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,35 +59,6 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	}
 }
 
-// static int	prepare_redirs(t_ctx *ctx, t_cmd *node)
-// {
-// 	if (!node)
-// 		return (0);
-// 	if (node->type == N_REDIR)
-// 	{
-// 		if (node->u_cmd.redir.type == R_HEREDOC)
-// 		{
-// 			node->u_cmd.redir.heredoc_fd = create_heredoc(ctx, node);
-// 			if (node->u_cmd.redir.heredoc_fd < 0)
-// 				return (1);
-// 		}
-// 		else
-// 			if (remove_quotes(&node->u_cmd.redir.file))
-// 				return (1);
-// 		return (prepare_redirs(ctx, node->u_cmd.redir.cmd));
-// 	}
-// 	if (node->type == N_PIPE || node->type == N_AND
-// 		|| node->type == N_OR)
-// 	{
-// 		if (prepare_redirs(ctx, node->u_cmd.binop.left))
-// 			return (1);
-// 		return (prepare_redirs(ctx, node->u_cmd.binop.right));
-// 	}
-// 	if (node->type == N_SUBSHELL)
-// 		return (prepare_redirs(ctx, node->u_cmd.subshell.child));
-// 	return (0);
-// }
-
 static void	finalize_argv(char **argv)
 {
 	size_t	i;
@@ -110,12 +81,27 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	t_execmd	*cmd;
 
 	cmd = &ast_node->u_cmd.exec;
+	//debug
+	// printf("ARGV BEFORE EXPAND:\n");
+	// for (int i = 0; cmd->argv[i]; i++)
+	// 	printf("[%d] = %s\n", i, cmd->argv[i]);
+	//debug
 	if (expand_argv(ctx, cmd->argv) == 1)
-		return (1);
+	return (1);
+	//debug
+	// printf("AFTER EXPAND:\n");
+	// for (int i = 0; cmd->argv[i]; i++)
+	// 	printf("[%d] = %s\n", i, cmd->argv[i]);
+	//debug
 	if (cmd->argv && cmd->argv[0])
 	{
 		if (expand_wildcards(&cmd->argv) == 1)
 			return (1);
+		//debug
+		// printf("AFTER WILDCARD:\n");
+		// for (int i = 0; cmd->argv[i]; i++)
+		// 	printf("[%d] = %s\n", i, cmd->argv[i]);
+		//debug
 	}
 	finalize_argv(cmd->argv);
 	if (cmd->builtin != BUILTIN_NONE)

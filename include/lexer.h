@@ -8,7 +8,7 @@
 # include "minishell.h"
 # include "error.h"
 
-t_token	*lexer_tokenize(const char *input);
+t_token	*lexer_tokenize(const char *input, int *lexer_error);
 void	token_clear(t_token **lst);
 
 /* internal */

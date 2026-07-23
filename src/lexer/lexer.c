@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 14:08:19 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 14:48:54 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/23 18:54:06 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ static int	add_next_token(t_token **tokens, const char *input, int *i)
 }
 
 /* turn input into a linked list of tokens */
-t_token	*lexer_tokenize(const char *input)
+t_token	*lexer_tokenize(const char *input, int *lexer_error)
 {
 	t_token	*tokens;
+	*lexer_error = 0;
 	int		i;
 
 	tokens = NULL;
@@ -70,7 +71,11 @@ t_token	*lexer_tokenize(const char *input)
 		if (!input[i])
 			break ;
 		if (add_next_token(&tokens, input, &i))
-			return (token_clear(&tokens), NULL);
+		{
+			*lexer_error = 2;
+			token_clear(&tokens);
+			return (NULL);
+		}
 	}
 	return (tokens);
 }

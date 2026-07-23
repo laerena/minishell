@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/23 18:41:15 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/23 18:54:53 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,18 @@ static void	shell_loop(t_ctx *ctx)
 static void	handle_line(t_ctx *ctx, char *line)
 {
 	t_token	*tokens;
+	int		lexer_error;
 	int		syntax_error;
 
+	lexer_error = 0;
 	syntax_error = 0;
-	tokens = lexer_tokenize(line);
+	tokens = lexer_tokenize(line, &lexer_error);
 	if (!tokens)
-		return;
+	{
+		if (lexer_error)
+			ctx->last_exit_status = 2;
+		return ;
+	}
 	ctx->ast_head = parse_expression(tokens, &syntax_error);
 	token_clear(&tokens);
 	if (syntax_error)
@@ -74,3 +80,4 @@ static void	handle_line(t_ctx *ctx, char *line)
 		executor(ctx, ctx->ast_head);
 	cmd_clear(&ctx->ast_head);
 }
+

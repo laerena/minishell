@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/19 17:05:29 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/23 18:41:15 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static void	shell_loop(t_ctx *ctx)
 		line = readline("minishell$ ");
 		if (!line)
 		{
-			write(2, "exit\n", 5);
+			if (isatty(STDIN_FILENO))
+				write(2, "exit\n", 5);
 			break ;
 		}
 		if (*line)
@@ -59,18 +60,17 @@ static void	shell_loop(t_ctx *ctx)
 static void	handle_line(t_ctx *ctx, char *line)
 {
 	t_token	*tokens;
+	int		syntax_error;
 
+	syntax_error = 0;
 	tokens = lexer_tokenize(line);
-	if (tokens)
-	{
-		ctx->ast_head = parse_expression(tokens);
-		if (!ctx->ast_head)
-			ctx->last_exit_status = 1;
-		token_clear(&tokens);
-	}
-	if (ctx->ast_head)
+	if (!tokens)
+		return;
+	ctx->ast_head = parse_expression(tokens, &syntax_error);
+	token_clear(&tokens);
+	if (syntax_error)
+		ctx->last_exit_status = 2;
+	else if (ctx->ast_head)
 		executor(ctx, ctx->ast_head);
-	else
-		ctx->last_exit_status = 1;
 	cmd_clear(&ctx->ast_head);
 }

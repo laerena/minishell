@@ -8,7 +8,7 @@
 int				check_syntax(t_token *tokens);
 t_cmd			*parse_or(t_token *start, t_token *end);
 t_cmd			*parse_primary(t_token *start, t_token *end);
-t_cmd			*parse_expression(t_token *tokens);
+t_cmd			*parse_expression(t_token *tokens, int *syntax_error);
 void			cmd_clear(t_cmd **cmd);
 
 int				is_redirection(t_token_type type);

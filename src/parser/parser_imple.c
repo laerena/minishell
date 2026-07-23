@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_imple.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leilai <leilai@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:58:35 by leilai            #+#    #+#             */
-/*   Updated: 2026/05/26 15:02:38 by leilai           ###   ########.fr       */
+/*   Updated: 2026/07/23 18:29:57 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,14 @@ t_cmd	*parse_or(t_token *start, t_token *end)
 }
 
 /* public parser entry point */
-t_cmd	*parse_expression(t_token *tokens)
+t_cmd *parse_expression(t_token *tokens, int *syntax_error)
 {
-	if (check_syntax(tokens))
-		return (NULL);
 	if (!tokens)
+		return (NULL);	
+	if (check_syntax(tokens))
+	{
+		*syntax_error = 1;
 		return (NULL);
+	}	
 	return (parse_or(tokens, NULL));
 }

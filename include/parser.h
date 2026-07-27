@@ -24,4 +24,6 @@ t_cmd			*new_subshell_node(t_cmd *child);
 
 int				is_builtin_cmd(char *cmd_name);
 
+t_cmd	*parse_command(t_token *start, t_token *end);
+
 #endif

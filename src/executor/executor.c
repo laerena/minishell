@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/27 17:51:00 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/27 19:23:21 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	ret;
 
-	// print_ast(ast_node);
+	print_ast(ast_node);
 	ret = prepare_redirs(ctx, ast_node);
 	// print_ast(ast_node);
 	if (ret == 0)

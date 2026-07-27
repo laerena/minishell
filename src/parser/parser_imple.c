@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:58:35 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/23 18:29:57 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/27 19:50:33 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ static t_cmd	*parse_pipeline(t_token *start, t_token *end)
 
 	op = find_last_top_level(start, end, T_PIPE);
 	if (!op)
-		return (parse_primary(start, end));
+		return (parse_command(start, end));
 	left = parse_pipeline(start, op);
-	right = parse_primary(op->next, end);
+	right = parse_command(op->next, end);
 	if (!left || !right)
 	{
 		cmd_clear(&left);

@@ -63,7 +63,8 @@ SRC = src/main.c \
 		src/init/init.c \
 		src/init/update_SHLVL.c \
 		src/signals/signals.c \
-		src/signals/signals_modes.c
+		src/signals/signals_modes.c \
+		src/utils/debug_ast.c
 
 OBJ = $(SRC:.c=.o)
 

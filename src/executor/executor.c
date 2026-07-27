@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/22 20:14:34 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/27 17:51:00 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,17 @@
 static void	remove_empty_unquoted_args(char **argv);
 static void	finalize_argv(char **argv);
 
+void	print_ast(t_cmd *cmd);
+
 //wrapper : entry point
 //start the recursive execution of the ast
 int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	ret;
 
+	// print_ast(ast_node);
 	ret = prepare_redirs(ctx, ast_node);
+	// print_ast(ast_node);
 	if (ret == 0)
 		ret = run_ast(ctx, ast_node, 0);
 	close_heredoc_fds(ast_node);
@@ -35,13 +39,9 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 {
 	if (!ast_node)
 		return (1);
-	// /*debug*/
-	// if (ast_node->type == N_EXEC)
-	// {
-	// 	for (size_t i = 0; ast_node->u_cmd.exec.argv[i]; i++)
-	// 		printf("argv[%zu]=%s\n", i, ast_node->u_cmd.exec.argv[i]);
-	// }
-	// /*debug*/
+	/*debug*/
+	// printf("node type = %i\n", ast_node->type);
+	/*debug*/
 	if (ast_node->type == N_EXEC)
 		return (run_node(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_PIPE)
@@ -93,7 +93,7 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	}
 	finalize_argv(cmd->argv);
 	if (cmd->builtin != BUILTIN_NONE)
-		return (run_builtin(ctx, cmd));
+		return (run_builtin(ctx, cmd, no_fork));
 	else if(no_fork == 1)
 		return(run_execve(ctx, cmd));
 	return (fork_and_run_in(ctx, ast_node, run_execve_wrapper, no_fork));

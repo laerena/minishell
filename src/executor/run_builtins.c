@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/23 19:02:47 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/23 19:22:44 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 //main ft to handle builtin cmds
 //expand wildcards then cmd the correct builtin cmds
 //propagate the error return;
-int	run_builtin(t_ctx *ctx, t_execmd *cmd)
+int	run_builtin(t_ctx *ctx, t_execmd *cmd, int no_fork)
 {
 	if (cmd->builtin == BUILTIN_ECHO)
 		return (builtin_echo(ctx, cmd->argv + 1));
@@ -40,7 +40,7 @@ int	run_builtin(t_ctx *ctx, t_execmd *cmd)
 		return (builtin_env(ctx, cmd, ctx->envp));
 	else if (cmd->builtin == BUILTIN_EXIT)
 	{
-		builtin_exit(ctx, cmd->argv + 1);
+		builtin_exit(ctx, cmd->argv + 1, no_fork);
 		return (ctx->last_exit_status);
 	}
 	else

@@ -13,6 +13,6 @@ int		builtin_env(t_ctx *ctx, t_execmd *cmd, char **envp);
 int		builtin_export(t_ctx *ctx, char **args);
 int		export_p(char **envp);
 int		builtin_unset(t_ctx *ctx, char **args);
-void	builtin_exit(t_ctx *ctx, char **argv);
+void	builtin_exit(t_ctx *ctx, char **argv, int no_fork);
 
 #endif

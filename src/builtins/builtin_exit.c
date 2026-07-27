@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:50:52 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/20 15:46:45 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/23 19:34:13 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 
 static int	get_exit_code(long long value);
 
-void	builtin_exit(t_ctx *ctx, char **argv)
+void	builtin_exit(t_ctx *ctx, char **argv, int no_fork)
 {
 	long long	value;
 	char		*end;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
+	printf("exit pid=%d\n", getpid());
+	if (no_fork == 0)
+		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!argv[0])
 		exit_clean(ctx, ctx->last_exit_status);
 	errno = 0;

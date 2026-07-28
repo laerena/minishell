@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/21 15:54:55 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/23 18:54:53 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:45:38 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ft_bzero(&ctx, sizeof(t_ctx));
-	if (init(&ctx, envp) != 0) //fatal error check, if init_envp fails it will compromise the program
+	if (init(&ctx, envp) != 0)
 		return (EXIT_FAILURE);
 	shell_loop(&ctx);
 	ft_strarr_free(ctx.envp);
@@ -80,4 +80,3 @@ static void	handle_line(t_ctx *ctx, char *line)
 		executor(ctx, ctx->ast_head);
 	cmd_clear(&ctx->ast_head);
 }
-

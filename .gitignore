@@ -2,6 +2,8 @@
 # Project binary
 minishell
 
+minishell_tester/
+
 # *.txt
 *.log
 # *.pdf

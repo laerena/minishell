@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 16:08:39 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/18 11:00:57 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:27:22 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	export_p_print(char **cpy, size_t n)
 	char	*sep;
 	char	*name;
 	char	*value;
-	
+
 	if (!cpy || n == 0)
 		return (0);
 	i = 0;

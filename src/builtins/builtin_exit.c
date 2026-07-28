@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 16:50:52 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/28 15:28:58 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:26:56 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	builtin_exit(t_ctx *ctx, char **argv)
 static int	get_exit_code(long long value)
 {
 	int	exit_code;
-	
+
 	exit_code = value % 256;
 	if (exit_code < 0)
 		exit_code += 256;

@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 17:03:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/06/14 11:59:32 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:40:25 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	builtin_cd(t_ctx *ctx, char **args)
 {
-	char *path;
+	char	*path;
 
 	if (args[0] == NULL)
 		path = expand_str(ctx, "$HOME");

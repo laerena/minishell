@@ -65,8 +65,7 @@ SRC = src/main.c \
 		src/init/init.c \
 		src/init/update_SHLVL.c \
 		src/signals/signals.c \
-		src/signals/signals_modes.c \
-		src/utils/debug_ast.c
+		src/signals/signals_modes.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -94,6 +93,8 @@ re: fclean all
 # Debug build:
 # Adds debug symbols and disables optimizations for easier debugging with gdb.
 # Usage: make debug
+debug: SRC += src/debug/debug.c src/debug/debug_ast.c
+debug: OBJ := $(SRC:.c=.o)
 debug: CFLAGS += -O0 -DDEBUG
 debug: re
 

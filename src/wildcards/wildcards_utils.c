@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 19:39:00 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/22 19:53:35 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:43:28 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	handle_entry(t_dynstrarr *w_args, const char *arg,
 ** Returns 0 when the filename matches the pattern,
 ** and 1 otherwise.
 */
-int ft_fnmatch_minishell(const char *pattern, const char *arg)
+int	ft_fnmatch_minishell(const char *pattern, const char *arg)
 {
 	if (!*pattern && !*arg)
 		return (0);
@@ -60,7 +60,7 @@ int ft_fnmatch_minishell(const char *pattern, const char *arg)
 ** The array is automatically resized when needed.
 ** Returns 0 on success and 1 on allocation failure.
 */
-int ft_strarr_apnd(t_dynstrarr *w_args, const char *arg)
+int	ft_strarr_apnd(t_dynstrarr *w_args, const char *arg)
 {
 	char	**old_arr;
 

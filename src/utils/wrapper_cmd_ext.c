@@ -6,13 +6,13 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 14:53:10 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/18 15:03:47 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:39:38 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-int 	my_dup2(int oldfd, int newfd)
+int	my_dup2(int oldfd, int newfd)
 {
 	if (oldfd == newfd)
 		return (0);

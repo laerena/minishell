@@ -6,15 +6,15 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 19:52:15 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/22 19:54:15 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:44:08 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wildcards.h"
 
 static int	expand_arg(t_dynstrarr *w_args, char *arg);
-static int expand_single_wildcard(t_dynstrarr *w_args,
-			const char *arg, size_t start);
+static int	expand_single_wildcard(t_dynstrarr *w_args,
+				const char *arg, size_t start);
 
 /*
 ** Expands wildcard patterns in the argv array.
@@ -23,14 +23,14 @@ static int expand_single_wildcard(t_dynstrarr *w_args,
 ** Arguments without wildcards are copied as-is.
 ** If no match is found, the original pattern is preserved.
 */
-int expand_wildcards(char ***args)
+int	expand_wildcards(char ***args)
 {
 	size_t		i;
 	t_dynstrarr	w_args;
 
 	if (!args || !*args || !(*args)[0])
 		return (0);
-	ft_memset(&w_args, 0 , sizeof(w_args));
+	ft_memset(&w_args, 0, sizeof(w_args));
 	if (ft_strarr_apnd(&w_args, (*args)[0]) == 1)
 		return (1);
 	i = 1;
@@ -100,5 +100,3 @@ static int	expand_single_wildcard(t_dynstrarr *w_args,
 		return (ft_strarr_apnd(w_args, arg));
 	return (0);
 }
-
-

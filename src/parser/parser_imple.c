@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 15:58:35 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/27 19:50:33 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:31:01 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,14 @@ t_cmd	*parse_or(t_token *start, t_token *end)
 }
 
 /* public parser entry point */
-t_cmd *parse_expression(t_token *tokens, int *syntax_error)
+t_cmd	*parse_expression(t_token *tokens, int *syntax_error)
 {
 	if (!tokens)
-		return (NULL);	
+		return (NULL);
 	if (check_syntax(tokens))
 	{
 		*syntax_error = 1;
 		return (NULL);
-	}	
+	}
 	return (parse_or(tokens, NULL));
 }

@@ -23,6 +23,7 @@ SRC = src/main.c \
 		src/lexer/token_list.c \
 		src/parser/syntax_check.c\
 		src/parser/parse.c \
+		src/parser/parse_utils.c \
 		src/parser/parser_imple.c \
 		src/parser/parser_utils.c \
 		src/parser/parser_utils_redir.c\

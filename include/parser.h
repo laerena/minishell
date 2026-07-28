@@ -26,4 +26,9 @@ int				is_builtin_cmd(char *cmd_name);
 
 t_cmd	*parse_command(t_token *start, t_token *end);
 
+//		parse_utils.c
+t_token	*range_last(t_token *start, t_token *end);
+t_token	*find_matching_rparen(t_token *start);
+t_token	*get_subshell_end(t_token *start);
+
 #endif

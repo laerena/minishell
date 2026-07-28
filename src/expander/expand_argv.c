@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:31:49 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/06 17:29:58 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:28:35 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,7 @@ char	*expand_str(t_ctx *ctx, char *s)
 	while (s[i])
 	{
 		if (handle_quote(s[i], &quote))
-		{
-			res = append_char(res, s[i]);
-			i++;
-		}
+			res = append_char(res, s[i++]);
 		else if (s[i] == '$' && quote != '\'')
 			res = expand_var(ctx, s, &i, res);
 		else

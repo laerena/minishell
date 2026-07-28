@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 13:16:42 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/06 17:36:25 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:29:02 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*strip_heredoc_quotes(t_redircmd *n_redir)
 	return (res);
 }
 
-int update_delimiter(t_redircmd *n_redir)
+int	update_delimiter(t_redircmd *n_redir)
 {
 	char	*new_delimiter;
 

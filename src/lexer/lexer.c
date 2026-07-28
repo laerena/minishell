@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/14 14:08:19 by leilai            #+#    #+#             */
-/*   Updated: 2026/07/23 18:54:06 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 18:29:56 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ static int	add_next_token(t_token **tokens, const char *input, int *i)
 t_token	*lexer_tokenize(const char *input, int *lexer_error)
 {
 	t_token	*tokens;
-	*lexer_error = 0;
 	int		i;
 
+	*lexer_error = 0;
 	tokens = NULL;
 	i = 0;
 	while (input[i])

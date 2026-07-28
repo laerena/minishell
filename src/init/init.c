@@ -16,6 +16,7 @@ static int	init_envp(t_ctx *ctx, char **envp);
 
 int	init(t_ctx *ctx, char **envp)
 {
+	ctx->is_main_shell = 1;
 	if (init_envp(ctx, envp) == 1)
 		return (perror("init_envp"), 1);
 	if (update_shlvl(ctx) == 1)

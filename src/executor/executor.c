@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 12:32:04 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/27 19:23:21 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 15:36:28 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,8 @@ int	executor(t_ctx *ctx, t_cmd *ast_node)
 {
 	int	ret;
 
-	print_ast(ast_node);
-	ret = prepare_redirs(ctx, ast_node);
 	// print_ast(ast_node);
+	ret = prepare_redirs(ctx, ast_node);
 	if (ret == 0)
 		ret = run_ast(ctx, ast_node, 0);
 	close_heredoc_fds(ast_node);
@@ -53,7 +52,7 @@ int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	else if (ast_node->type == N_OR)
 		return (run_or(ctx, ast_node, no_fork));
 	else if (ast_node->type == N_SUBSHELL)
-		return (run_subshell(ctx, ast_node, no_fork));
+		return (run_subshell(ctx, ast_node));
 	else
 	{
 		ft_eprintf("wrong node->type: %i\n", ast_node->type);
@@ -93,7 +92,7 @@ int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork)
 	}
 	finalize_argv(cmd->argv);
 	if (cmd->builtin != BUILTIN_NONE)
-		return (run_builtin(ctx, cmd, no_fork));
+		return (run_builtin(ctx, cmd));
 	else if(no_fork == 1)
 		return(run_execve(ctx, cmd));
 	return (fork_and_run_in(ctx, ast_node, run_execve_wrapper, no_fork));

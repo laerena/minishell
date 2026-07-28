@@ -54,7 +54,7 @@ void	run_child(t_ctx *ctx, t_cmd *node, t_fork_and_run_ft run_ft, int no_fork)
 	int	status;
 
 	signals_reset();
-	no_fork = 1;
+	ctx->is_main_shell = 0;
 	status = run_ft(ctx, node, no_fork);
 	ctx_cleanup(ctx);
 	exit(status);

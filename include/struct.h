@@ -100,6 +100,7 @@ typedef struct s_ctx
 {
 	char		**envp;
 	t_cmd		*ast_head;
+	int			is_main_shell;
 	int			last_exit_status;
 }	t_ctx;
 

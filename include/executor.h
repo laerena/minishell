@@ -28,7 +28,6 @@ typedef int	(*t_fork_and_run_ft)(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 
 //fts
 int	executor(t_ctx *ctx, t_cmd *ast_node);
-// int	process_heredocs(t_ctx *ctx, t_cmd *node);
 int	prepare_redirs(t_ctx *ctx, t_cmd *node);
 int	run_ast(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_node(t_ctx *ctx, t_cmd *ast_node, int no_fork);
@@ -40,13 +39,22 @@ int	run_subshell(t_ctx *ctx, t_cmd *ast_node);
 //	op_io.c
 int	run_pipe(t_ctx *ctx, t_cmd *ast_node, int no_fork);
 int	run_redir(t_ctx *ctx, t_cmd *ast_node, int no_fork);
-int	create_heredoc(t_ctx *ctx, t_cmd *ast_node);
 //		run_redir_helper.c
 int	save_fds(int fd, t_redir_save_fds *saved_fds);
 int	redirect_fd(int file_fd, int target_fd);
 int	restore_fds(t_redir_save_fds *saved_fds);
+//	heredoc.
+int	create_heredoc(t_ctx *ctx, t_cmd *ast_node);
+//		heredoc_cleanup.c
+int	heredoc_abort(t_ctx *ctx, int pipefd[2],
+	int saved_stdin, int status);
+int	restore_heredoc(t_ctx *ctx, int saved_stdin, int pipefd[2]);
 //	run_execve.c
 int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork);
+//		run_execve_error.c
+int	check_exec_path(t_ctx *ctx, char *path);
+int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path);
+int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path);
 int	run_execve(t_ctx *ctx, t_execmd *cmd);
 //	run_builtin.c
 int	run_builtin(t_ctx *ctx, t_execmd *cmd);

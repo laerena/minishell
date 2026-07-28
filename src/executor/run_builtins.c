@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 15:30:45 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/28 15:31:46 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:55:20 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ int	run_builtin(t_ctx *ctx, t_execmd *cmd)
 	}
 	else
 		return (1);
-	return(0);
+	return (0);
 }

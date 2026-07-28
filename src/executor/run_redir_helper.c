@@ -6,7 +6,7 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 11:51:46 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/18 15:08:43 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:42:00 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	save_fds(int fd, t_redir_save_fds *saved_fds)
 	return (0);
 }
 
-static int save_target_fd(int target_fd)
+static int	save_target_fd(int target_fd)
 {
-	int saved_fd;
+	int	saved_fd;
 
 	saved_fd = dup(target_fd);
 	if (saved_fd < 0)

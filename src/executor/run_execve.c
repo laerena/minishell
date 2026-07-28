@@ -6,18 +6,14 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:49:02 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/19 15:22:52 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:54:14 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "expander.h"
 
 static char	**extract_path_from_envp(char **envp);
 static char	*exec_path_finder(char *cmd, char **dirs_path);
-static int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path);
-static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path);
-static int	check_exec_path(t_ctx *ctx, char *path);
 
 int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork)
 {
@@ -25,7 +21,6 @@ int	run_execve_wrapper(t_ctx *ctx, t_cmd *exec_node, int no_fork)
 	return (run_execve(ctx, &exec_node->u_cmd.exec));
 }
 
-//note: if 'unset PATH', exec_path will be NULL and return the wrong error "cmd not found"
 int	run_execve(t_ctx *ctx, t_execmd *cmd)
 {
 	char	*exec_path;
@@ -92,46 +87,4 @@ static char	*exec_path_finder(char *cmd, char **dirs_path)
 		dirs_iter++;
 	}
 	return (exec_path);
-}
-
-static int	exec_not_found(t_ctx *ctx, char *cmd, char **dirs_path)
-{
-	ft_eprintf("%s: command not found\n", cmd);
-	if (dirs_path)
-		ft_strarr_free(dirs_path);
-	ctx->last_exit_status = 127;
-	return (127);
-}
-
-static int	check_exec_path(t_ctx *ctx, char *path)
-{
-	struct stat	st;
-
-	if (stat(path, &st) == -1)
-		return (0);
-	if (S_ISDIR(st.st_mode))
-	{
-		ft_eprintf("%s: Is a directory\n", path);
-		ctx->last_exit_status = 126;
-		return (1);
-	}
-	return (0);
-}
-
-static int	exec_error(t_ctx *ctx, char *exec_path, char **dirs_path)
-{
-	int	error;
-	int	status;
-
-	error = errno;
-	status = 1;
-	ft_eprintf("%s: %s\n", exec_path, strerror(error));
-	if (error == ENOENT)
-		status = 127;
-	else if (error == EACCES || error == ENOEXEC)
-		status = 126;
-	free(exec_path);
-	ft_strarr_free(dirs_path);
-	ctx->last_exit_status = status;
-	return (status);
 }

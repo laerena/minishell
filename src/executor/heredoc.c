@@ -5,68 +5,107 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/18 11:37:51 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/20 19:18:03 by vabisco          ###   ########.fr       */
+/*   Created: 2026/05/28 13:13:11 by leilai            #+#    #+#             */
+/*   Updated: 2026/07/28 18:20:03 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "minishell.h"
+#include "expander.h"
+#include "utils.h"
+#include "error.h"
 
-/*
-Parse the ast to handle heredoc inputs and store fd
-*/
-// int	process_heredocs(t_ctx *ctx, t_cmd *node)
-// {
-// 	if (!node)
-// 		return (0);
-// 	if (node->type == N_REDIR)
-// 	{
-// 		if (node->u_cmd.redir.type == R_HEREDOC)
-// 		{
-// 			node->u_cmd.redir.heredoc_fd = create_heredoc(ctx, node);
-// 			if (node->u_cmd.redir.heredoc_fd < 0)
-// 				return (1);
-// 		}
-// 		return (process_heredocs(ctx, node->u_cmd.redir.cmd));
-// 	}
-// 	if (node->type == N_PIPE
-// 		|| node->type == N_AND
-// 		|| node->type == N_OR)
-// 	{
-// 		if (process_heredocs(ctx, node->u_cmd.binop.left))
-// 			return (1);
-// 		return (process_heredocs(ctx, node->u_cmd.binop.right));
-// 	}
-// 	if (node->type == N_SUBSHELL)
-// 		return (process_heredocs(ctx, node->u_cmd.subshell.child));
-// 	return (0);
-// }
-
-/*
-Parse the ast to clear heredoc s fds
-*/
-void	close_heredoc_fds(t_cmd *node)
+static int	is_limiter(char *line, char *limiter)
 {
-	if (!node)
-		return ;
-	if (node->type == N_REDIR)
+	size_t	len;
+
+	len = ft_strlen(limiter);
+	return (ft_strncmp(line, limiter, len + 1) == 0);
+}
+
+static int	write_heredoc_line(t_ctx *ctx, int fd,
+	char *line, int do_expand)
+{
+	char	*expanded;
+
+	expanded = line;
+	if (do_expand)
 	{
-		if (node->u_cmd.redir.type == R_HEREDOC
-			&& node->u_cmd.redir.heredoc_fd >= 0)
+		expanded = expand_str(ctx, line);
+		if (!expanded)
+			return (1);
+	}
+	if (write(fd, expanded, ft_strlen(expanded)) == -1
+		|| write(fd, "\n", 1) == -1)
+	{
+		if (do_expand)
+			free(expanded);
+		return (1);
+	}
+	if (do_expand)
+		free(expanded);
+	return (0);
+}
+
+/*
+0  : continue heredoc
+1  : delimiter found
+-1 : error
+*/
+static int	process_heredoc_line(t_ctx *ctx, int fd,
+		char *line, t_redircmd *redir)
+{
+	if (is_limiter(line, redir->file))
+		return (1);
+	if (write_heredoc_line(ctx, fd, line, redir->heredoc_expand))
+		return (-1);
+	return (0);
+}
+
+static int	fill_heredoc(t_ctx *ctx, int fd, t_redircmd *redir)
+{
+	char	*line;
+	int		ret;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
 		{
-			close(node->u_cmd.redir.heredoc_fd);
-			node->u_cmd.redir.heredoc_fd = -1;
+			if (g_signal == SIGINT)
+				return (130);
+			ft_eprintf(
+				"warning: here-document delimited by end-of-file "
+				"(wanted `%s')\n",
+				redir->file);
+			return (0);
 		}
-		close_heredoc_fds(node->u_cmd.redir.cmd);
+		ret = process_heredoc_line(ctx, fd, line, redir);
+		free(line);
+		if (ret == 1)
+			return (0);
+		if (ret == -1)
+			return (1);
 	}
-	else if (node->type == N_PIPE
-		|| node->type == N_AND
-		|| node->type == N_OR)
-	{
-		close_heredoc_fds(node->u_cmd.binop.left);
-		close_heredoc_fds(node->u_cmd.binop.right);
-	}
-	else if (node->type == N_SUBSHELL)
-		close_heredoc_fds(node->u_cmd.subshell.child);
+}
+
+int	create_heredoc(t_ctx *ctx, t_cmd *ast_node)
+{
+	int	pipefd[2];
+	int	saved_stdin;
+	int	ret;
+
+	if (pipe(pipefd) < 0)
+		return (-1);
+	saved_stdin = dup(STDIN_FILENO);
+	if (saved_stdin < 0)
+		return (close(pipefd[0]), close(pipefd[1]), -1);
+	g_signal = 0;
+	handle_heredoc_signals();
+	if (update_delimiter(&ast_node->u_cmd.redir))
+		return (heredoc_abort(ctx, pipefd, saved_stdin, 1));
+	ret = fill_heredoc(ctx, pipefd[1], &ast_node->u_cmd.redir);
+	if (ret)
+		return (heredoc_abort(ctx, pipefd, saved_stdin, ret));
+	return (restore_heredoc(ctx, saved_stdin, pipefd));
 }

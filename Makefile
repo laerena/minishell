@@ -41,13 +41,14 @@ SRC = src/main.c \
 		src/expander/expand_utils.c \
 		src/executor/executor.c\
 		src/executor/heredoc.c\
-		src/executor/heredoc_create.c \
+		src/executor/heredoc_cleanup.c \
 		src/executor/run_control_flow.c\
 		src/executor/run_pipe.c \
 		src/executor/run_redir.c \
 		src/executor/run_redir_helper.c \
 		src/executor/helper.c\
 		src/executor/run_execve.c\
+		src/executor/run_execve_error.c \
 		src/executor/run_builtins.c \
 		src/executor/prepare_redirs.c \
 		src/wildcards/wildcards.c \

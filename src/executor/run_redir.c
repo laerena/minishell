@@ -6,14 +6,14 @@
 /*   By: vabisco <vabisco@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/20 18:05:22 by vabisco           #+#    #+#             */
-/*   Updated: 2026/07/19 17:33:42 by vabisco          ###   ########.fr       */
+/*   Updated: 2026/07/28 17:55:50 by vabisco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "error.h"
 
-static int	get_redir_fd(t_ctx *ctx, t_cmd *node, t_redir_info *r_info);
+static int			get_redir_fd(t_ctx *ctx, t_cmd *node, t_redir_info *r_info);
 static t_redir_info	get_redir_info(t_redir_type type);
 
 int	run_redir(t_ctx *ctx, t_cmd *node, int no_fork)
@@ -50,7 +50,6 @@ static int	get_redir_fd(t_ctx *ctx, t_cmd *node, t_redir_info *r_info)
 
 	if (node->u_cmd.redir.type == R_HEREDOC)
 		return (node->u_cmd.redir.heredoc_fd);
-
 	fd = open(node->u_cmd.redir.file, r_info->flags, r_info->mode);
 	if (fd == -1)
 		return (perror("open"), ctx->last_exit_status = 1, -1);

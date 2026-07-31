@@ -5,7 +5,6 @@ CFLAGS = -Wall -Wextra -Werror -g
 INCLUDE = -Iinclude -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
-
 LDFLAGS =
 
 UNAME_S := $(shell uname -s)
@@ -69,7 +68,7 @@ SRC = src/main.c \
 
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME)
+all: import_submodule $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
@@ -89,6 +88,9 @@ fclean: clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
+
+import_submodule:
+	git submodule update --init --recursive
 
 # Debug build:
 # Adds debug symbols and disables optimizations for easier debugging with gdb.
